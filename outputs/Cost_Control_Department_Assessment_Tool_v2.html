@@ -4,65 +4,76 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Cost Control Assessment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f4f7fb;
+      --bg: #eef1fa;
       --panel: #ffffff;
-      --ink: #0f2742;
-      --muted: #5a6d83;
-      --line: #d7e2ee;
-      --nav: #005baa;
-      --nav-2: #063f78;
-      --nav-3: #0d74c9;
-      --brand-navy: #032f5f;
-      --brand-deep: #05284d;
-      --brand-sky: #dceeff;
-      --brand-ice: #f3f9ff;
-      --blue: #005baa;
-      --cyan: #0d8fbd;
-      --green: #17803d;
-      --amber: #b7791f;
-      --red: #bf2f2f;
-      --soft-blue: #eef5ff;
-      --soft-green: #ecfdf3;
-      --soft-amber: #fff7e5;
-      --soft-red: #fff0f0;
-      --shadow: 0 10px 26px rgba(2, 47, 95, .08);
+      --ink: #0d1b3e;
+      --muted: #5b6b86;
+      --line: #d9e0f2;
+      --nav: #0031eb;
+      --nav-2: #001559;
+      --nav-3: #336aea;
+      --brand-navy: #001559;
+      --brand-deep: #000f3d;
+      --brand-sky: #dde6ff;
+      --brand-ice: #f2f5ff;
+      --blue: #0031eb;
+      --cyan: #336aea;
+      --green: #0b7d73;
+      --amber: #d97706;
+      --red: #d23c22;
+      --soft-blue: #eaefff;
+      --soft-green: #e3f7f4;
+      --soft-amber: #fff3e0;
+      --soft-red: #fdece8;
+      --shadow: 0 12px 28px rgba(0, 21, 89, .12);
+      /* Madkour division accent system */
+      --accent-projects: #336aea;
+      --accent-utilities: #ff9203;
+      --accent-industries: #ea5a3f;
+      --accent-technology: #ae4dd1;
+      --accent-academy: #17d1c6;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       background: var(--bg);
       color: var(--ink);
-      font-family: "Inter", "Segoe UI", Arial, sans-serif;
+      font-family: "Manrope", "Segoe UI", Arial, sans-serif;
       line-height: 1.45;
+      zoom: 0.9;
     }
+    @media print { body { zoom: 1; } }
     button, input, select, textarea { font: inherit; }
-    .app { min-height: 100vh; display: grid; grid-template-columns: 280px 1fr; }
+    .app { min-height: calc(100vh / 0.9); display: grid; grid-template-columns: 280px 1fr; }
     body.sidebar-collapsed .app { grid-template-columns: 1fr; }
     body.sidebar-collapsed .sidebar { display: none; }
     .sidebar {
-      background: linear-gradient(180deg, var(--brand-navy) 0%, var(--nav) 48%, #003d74 100%);
+      background: linear-gradient(180deg, #001559 0%, #001e8f 52%, #0031eb 100%);
       color: #fff;
       padding: 22px 16px 18px;
       position: sticky;
       top: 0;
-      height: 100vh;
+      height: calc(100vh / 0.9);
       overflow: auto;
     }
     .brand { display: grid; gap: 8px; align-items: start; margin-bottom: 24px; padding-right: 42px; }
     .brand-wrap { position: relative; }
     .mark {
-      width: 156px;
-      height: 48px;
-      display: grid;
-      place-items: center;
+      width: 204px;
+      height: auto;
+      display: block;
       border-radius: 0;
       background: transparent;
       color: #fff;
       overflow: visible;
+      margin: 6px 0 4px;
     }
-    .mark img { width: 148px; height: auto; display: block; }
+    .mark img { width: 204px; height: auto; display: block; }
     .brand h1 { margin: 0; font-size: 17px; line-height: 1.12; letter-spacing: 0; }
     .brand p { margin: 5px 0 0; color: #d7ebff; font-size: 11px; text-transform: uppercase; letter-spacing: .07em; }
     .sidebar-icon-btn, .sidebar-restore {
@@ -101,8 +112,8 @@
       border: 1px solid transparent;
       background: transparent;
       color: #eaf5ff;
-      border-radius: 8px;
-      padding: 11px 12px;
+      border-radius: 999px;
+      padding: 11px 14px;
       cursor: pointer;
       position: relative;
       display: flex;
@@ -161,15 +172,44 @@
       border: 1px solid var(--line);
       background: #fff;
       color: var(--ink);
-      border-radius: 8px;
-      padding: 9px 12px;
+      border-radius: 999px;
+      padding: 9px 16px;
       cursor: pointer;
       min-height: 38px;
     }
     .btn.primary { background: var(--blue); color: #fff; border-color: var(--blue); }
-    .btn.primary:hover { background: #004f95; border-color: #004f95; }
+    .btn.primary:hover { background: #0026c4; border-color: #0026c4; }
     .btn.danger { color: var(--red); border-color: #f0b4b4; background: #fff7f7; }
     .btn.small { padding: 6px 9px; min-height: 30px; font-size: 13px; }
+    .menu-wrap { position: relative; }
+    .menu {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 6px);
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      min-width: 224px;
+      padding: 6px;
+      z-index: 40;
+      display: grid;
+      gap: 2px;
+    }
+    .menu[hidden] { display: none; }
+    .menu button {
+      text-align: left;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      border-radius: 9px;
+      padding: 9px 12px;
+      cursor: pointer;
+    }
+    .menu button:hover { background: var(--soft-blue); }
+    .menu button.danger-item { color: var(--red); }
+    .menu button.danger-item:hover { background: var(--soft-red); }
+    .menu hr { border: 0; border-top: 1px solid var(--line); margin: 4px 6px; }
     .view { display: none; }
     .view.active { display: block; }
     .grid { display: grid; gap: 14px; }
@@ -998,11 +1038,14 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      color: var(--blue);
+      color: #fff;
       font-weight: 900;
       letter-spacing: .06em;
+      background: linear-gradient(135deg, #001559 0%, #0031eb 100%);
+      padding: 10px 16px;
+      border-radius: 12px;
     }
-    .report-logo img { width: 150px; height: auto; display: block; }
+    .report-logo img { width: 160px; height: auto; display: block; }
     .warning { background: #fff7e5; color: #7a4a00; border: 1px solid #f1d092; border-radius: 8px; padding: 10px; margin-bottom: 12px; }
     .empty { color: var(--muted); background: #fbfcfe; border: 1px dashed var(--line); border-radius: 8px; padding: 16px; }
     @media (max-width: 1180px) {
@@ -1033,7 +1076,7 @@
       <div class="brand-wrap">
         <div class="brand">
           <div class="mark" aria-label="Madkour">
-            <img alt="Madkour" src="assets/madkour-logo.png">
+            <img alt="Madkour" src="data:image/png;base64,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">
           </div>
           <div>
             <h1>Cost Control Assessment</h1>
@@ -1078,7 +1121,17 @@
         <div class="toolbar">
           <button class="btn" id="saveBtn">Save</button>
           <button class="btn" id="copyGapBtn">Copy Gaps</button>
-          <button class="btn primary" id="reportBtn">Save HTML Report</button>
+          <div class="menu-wrap">
+            <button class="btn" id="backupMenuBtn" aria-haspopup="true" aria-expanded="false">Backup &#9662;</button>
+            <div class="menu" id="backupMenu" hidden>
+              <button id="jsonBtn">Export Backup JSON</button>
+              <button id="loadJsonBtn">Load Backup JSON</button>
+              <hr>
+              <button id="resetBtn" class="danger-item">Reset All Data</button>
+            </div>
+            <input id="jsonFile" type="file" accept="application/json,.json" style="display:none;">
+          </div>
+          <button class="btn primary" id="reportBtn">Executive Brief</button>
         </div>
       </div>
 
@@ -1328,23 +1381,21 @@
       <section class="view" id="reportView">
         <div class="grid three">
           <div class="panel">
-            <h3>Management Report</h3>
-            <p class="metric-note">Save a standalone HTML report with dashboard, gaps, roadmap, answers, notes, and evidence status.</p>
-            <button class="btn primary" id="reportBtn2">Save HTML Report</button>
+            <h3>Executive Brief</h3>
+            <p class="metric-note">One-page executive report: KPIs, domain maturity, top risks, strategic insights, and roadmap highlights. Open it and use Print &rarr; Save as PDF for a boardroom PDF.</p>
+            <button class="btn primary" id="execBriefBtn">Save Executive Brief</button>
           </div>
           <div class="panel">
-            <h3>Copy To Excel</h3>
-            <p class="metric-note">Copy table data and paste it directly into Excel.</p>
+            <h3>Operational Appendix</h3>
+            <p class="metric-note">Full working-team detail: dashboard, gaps, roadmap, answers, notes, and evidence status.</p>
+            <button class="btn" id="reportBtn2">Save Detailed Report</button>
+          </div>
+          <div class="panel">
+            <h3>Data Export</h3>
+            <p class="metric-note">Flat data for Excel, Power BI, or any analytics tool. Copy buttons paste directly into Excel.</p>
+            <button class="btn" id="csvBtn">Download CSV</button>
             <button class="btn" id="copyAssessmentBtn">Copy Assessment</button>
             <button class="btn" id="copyRoadmapBtn">Copy Roadmap</button>
-          </div>
-          <div class="panel">
-            <h3>Backup</h3>
-            <p class="metric-note">JSON is kept only as a technical backup for reloading this tool.</p>
-            <button class="btn" id="jsonBtn">Export Backup JSON</button>
-            <input id="jsonFile" type="file" accept="application/json,.json" style="display:none;">
-            <button class="btn" id="loadJsonBtn">Load Backup JSON</button>
-            <button class="btn danger" id="resetBtn">Reset</button>
           </div>
         </div>
         <div class="panel" style="margin-top:14px;">
@@ -1463,7 +1514,9 @@
       domainWeights: Object.fromEntries(domains.map(d => [d.id, d.weight])),
       questionWeights: Object.fromEntries(questions.map((q, i) => [i, q.weight])),
       settings: { defaultTarget: 4, roadmapStart: "2026-07", roadmapEnd: "2027-12", duration: 6, zoom: "quarter", sidebarCollapsed: false },
-      selectedInitiative: ""
+      selectedInitiative: "",
+      history: [],
+      schemaVersion: "2.1"
     };
 
     const $ = (id) => document.getElementById(id);
@@ -2226,7 +2279,7 @@
           Domain total is ${pct(domainTotal, 1)}. ${badDomains.length ? `Question totals need review in: ${badDomains.map(d => esc(d.name)).join(", ")}.` : ""}
         </div>` : `<div class="info-box"><strong>Weights Valid</strong><span>Domain weights total 100% and each domain question set totals 100%.</span></div>`;
       $("weightSummaryChart").innerHTML = `<div class="weight-summary-bars">${domains.map((d, i) => {
-        const colors = ["var(--blue)", "var(--nav-3)", "var(--cyan)", "#2878b8", "#4b94ca"];
+        const colors = ["var(--blue)", "var(--accent-projects)", "var(--accent-technology)", "var(--accent-utilities)", "var(--accent-industries)", "var(--accent-academy)", "var(--nav-2)", "var(--nav-3)", "var(--cyan)"];
         const weight = Number(state.domainWeights[d.id] || 0);
         return `<div class="weight-summary-row">
           <strong>${esc(d.name)}</strong>
@@ -2314,6 +2367,7 @@
         state.domainWeights = { ...state.domainWeights, ...(data.domainWeights || {}) };
         state.questionWeights = { ...state.questionWeights, ...(data.questionWeights || {}) };
         state.settings = { ...state.settings, ...(data.settings || {}) };
+        state.history = Array.isArray(data.history) ? data.history : [];
       } catch (err) {}
     }
 
@@ -2346,6 +2400,7 @@
           state.domainWeights = { ...state.domainWeights, ...(next.domainWeights || {}) };
           state.questionWeights = { ...state.questionWeights, ...(next.questionWeights || {}) };
           state.settings = { ...state.settings, ...(next.settings || {}) };
+          state.history = Array.isArray(next.history) ? next.history : (state.history || []);
           renderAll();
           alert("Backup loaded.");
         } catch (err) {
@@ -2384,6 +2439,227 @@
       } catch (err) {
         download("copied-table.tsv", text, "text/tab-separated-values;charset=utf-8");
       }
+    }
+
+    function recordSnapshot() {
+      const c = calculations();
+      if (!c.answered) return;
+      const counts = countSeverities(c.rows.filter(r => r.level));
+      const snap = {
+        ts: new Date().toISOString(),
+        maturity: Math.round(c.overallMaturity * 100) / 100,
+        achievementPct: Math.round(c.achievementPct * 10) / 10,
+        weightedGapPct: Math.round(c.weightedGapPct * 10) / 10,
+        answered: c.answered,
+        critical: counts.Critical,
+        major: counts.Major
+      };
+      state.history = state.history || [];
+      const day = snap.ts.slice(0, 10);
+      state.history = state.history.filter(s => (s.ts || "").slice(0, 10) !== day);
+      state.history.push(snap);
+      if (state.history.length > 60) state.history = state.history.slice(-60);
+    }
+
+    function exportCsv() {
+      const c = calculations();
+      const header = ["Domain", "Domain Weight %", "Category", "Question", "Question Weight %", "Current Level", "Target Level", "Maturity Gap", "Severity", "Priority Score", "Priority", "Business Impact", "Evidence Status", "Notes"];
+      const body = c.rows.map(r => [r.domainName, r.domainWeight, r.category, r.text, r.questionWeight, r.level || "", r.target, r.level ? r.maturityGap : "", r.severity, Math.round(r.priorityScore * 100) / 100, r.priority, r.impact || "", r.evidenceStatus || "", r.notes || ""]);
+      const csvField = v => { v = String(v ?? ""); return /[",\n\r]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v; };
+      const csvText = [header, ...body].map(row => row.map(csvField).join(",")).join("\r\n");
+      download("cost-control-assessment-data.csv", "﻿" + csvText, "text/csv;charset=utf-8");
+    }
+
+    function buildExecutiveBrief() {
+      const c = calculations();
+      const answeredRows = c.rows.filter(r => r.level);
+      const counts = countSeverities(answeredRows);
+      const roadmap = generateRoadmap();
+      const logoSrc = document.querySelector(".mark img")?.src || "";
+      const generated = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+      const answeredDomains = c.domainList.filter(d => d.answered);
+      const priorityGaps = c.rows.filter(r => r.level && r.maturityGap > 0).sort((a, b) => b.priorityScore - a.priorityScore).slice(0, 5);
+      const strengths = [...answeredDomains].sort((a, b) => b.maturity - a.maturity).slice(0, 3);
+      const coveragePct = c.total ? c.answered / c.total * 100 : 0;
+      const sevColors = { Critical: "#d23c22", Major: "#d97706", Moderate: "#0031eb", Minor: "#0b7d73", "No Gap": "#94a3b8" };
+      const sevTotal = Object.values(counts).reduce((a, b) => a + b, 0);
+      let acc = 0;
+      const segs = Object.entries(counts).filter(([, n]) => n > 0).map(([k, n]) => {
+        const from = acc / Math.max(sevTotal, 1) * 360;
+        acc += n;
+        const to = acc / Math.max(sevTotal, 1) * 360;
+        return `${sevColors[k]} ${from.toFixed(1)}deg ${to.toFixed(1)}deg`;
+      }).join(", ");
+      const donutStyle = sevTotal ? `background:conic-gradient(${segs});` : "background:#e2e8f0;";
+      const chip = s => `<span class="chip" style="color:${sevColors[s] || "#5b6b86"};background:${(sevColors[s] || "#5b6b86")}18;">${esc(s)}</span>`;
+
+      const insights = [];
+      if (!c.answered) {
+        insights.push("The assessment has not been started yet - complete the questionnaire to generate strategic insights.");
+      } else {
+        const weakest = [...answeredDomains].sort((a, b) => a.maturity - b.maturity)[0];
+        const strongest = strengths[0];
+        if (strongest) insights.push(`<strong>${esc(strongest.name)}</strong> is the strongest capability at ${fmt(strongest.maturity, 2)}/5 - protect this discipline and use it as the internal benchmark.`);
+        if (weakest && weakest !== strongest) insights.push(`<strong>${esc(weakest.name)}</strong> is the weakest domain at ${fmt(weakest.maturity, 2)}/5 and should anchor the first improvement wave.`);
+        const gapDriver = c.domainList.map(d => ({ name: d.name, share: d.potential - d.achieved })).sort((a, b) => b.share - a.share)[0];
+        const totalGap = Math.max(c.totalPotential - c.achieved, 0.0001);
+        if (gapDriver && gapDriver.share > 0) insights.push(`<strong>${esc(gapDriver.name)}</strong> drives ${pct(gapDriver.share / totalGap * 100, 0)} of the total weighted gap - the single largest lever for improving achievement.`);
+        const quickWins = c.rows.filter(r => r.level && r.maturityGap === 1).length;
+        if (quickWins) insights.push(`${quickWins} question${quickWins > 1 ? "s are" : " is"} one maturity level from target - quick wins that can lift achievement with limited investment.`);
+        if (counts.Critical + counts.Major > 0) insights.push(`${counts.Critical + counts.Major} critical or major gaps require management ownership; the roadmap sequences them into ${roadmap.length} initiatives.`);
+        if (c.answered < c.total) insights.push(`Coverage is ${pct(coveragePct, 0)} (${c.answered}/${c.total} questions answered) - findings will firm up as the remaining areas are assessed.`);
+      }
+
+      const history = (state.history || []).slice(-12);
+      let trendHtml = "";
+      if (history.length >= 2) {
+        const w = 560, h = 110, padX = 16, padY = 16;
+        const pts = history.map((s, i) => {
+          const x = padX + i * (w - padX * 2) / (history.length - 1);
+          const y = h - padY - clamp(s.maturity, 0, 5) / 5 * (h - padY * 2);
+          return [x, y];
+        });
+        const line = pts.map(p => p.map(n => n.toFixed(1)).join(",")).join(" ");
+        trendHtml = `<section class="panel"><h2>Maturity Trend</h2>
+          <svg viewBox="0 0 ${w} ${h}" style="width:100%;height:auto;display:block">
+            <polyline points="${line}" fill="none" stroke="#0031eb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            ${pts.map(p => `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="4" fill="#001559"/>`).join("")}
+          </svg>
+          <div class="trend-labels">${history.map(s => `<span>${esc((s.ts || "").slice(0, 10))}<br><strong>${fmt(s.maturity, 2)}</strong></span>`).join("")}</div>
+        </section>`;
+      }
+
+      const domainRows = c.domainList.map(d => {
+        const fill = clamp(d.maturity / 5 * 100, 0, 100);
+        const targetVal = d.answered ? d.maturity + d.gap : d.gap;
+        const marker = clamp(targetVal / 5 * 100, 0, 100);
+        return `<div class="dom-row">
+          <span class="dom-name">${esc(d.name)}</span>
+          <div class="dom-track"><span class="dom-fill" style="width:${fill.toFixed(1)}%"></span><span class="dom-target" style="left:${marker.toFixed(1)}%"></span></div>
+          <span class="dom-val">${d.answered ? fmt(d.maturity, 2) : "-"}</span>
+        </div>`;
+      }).join("");
+
+      const legend = Object.entries(counts).map(([k, n]) => `<div class="leg-row"><span class="leg-dot" style="background:${sevColors[k]}"></span>${esc(k)}<strong>${n}</strong></div>`).join("");
+
+      const prCounts = { High: 0, Medium: 0, Low: 0 };
+      roadmap.forEach(r => { if (prCounts[r.priority] !== undefined) prCounts[r.priority] += 1; });
+
+      return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cost Control Executive Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #eef1fa; color: #0d1b3e; font-family: "Manrope", "Segoe UI", Arial, sans-serif; line-height: 1.45; padding: 26px; }
+  .wrap { max-width: 1040px; margin: 0 auto; display: grid; gap: 14px; }
+  .brief-head { display: flex; justify-content: space-between; align-items: center; gap: 18px; background: linear-gradient(120deg, #001559 0%, #0031eb 100%); color: #fff; border-radius: 16px; padding: 22px 26px; }
+  .brief-head img { width: 190px; height: auto; display: block; }
+  .brief-head h1 { margin: 8px 0 2px; font-size: 24px; }
+  .brief-head p { margin: 0; color: #cfe0ff; font-size: 13px; }
+  .brief-head .date { text-align: right; color: #cfe0ff; font-size: 13px; white-space: nowrap; }
+  .kpis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .kpi { background: #fff; border: 1px solid #d9e0f2; border-radius: 14px; padding: 14px; }
+  .kpi span { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #5b6b86; }
+  .kpi strong { display: block; font-size: 24px; margin-top: 4px; color: #001559; }
+  .kpi em { font-style: normal; font-size: 12px; color: #5b6b86; }
+  .cols { display: grid; grid-template-columns: 3fr 2fr; gap: 14px; }
+  .cols.even { grid-template-columns: 1fr 1fr; }
+  .panel { background: #fff; border: 1px solid #d9e0f2; border-radius: 14px; padding: 18px; }
+  h2 { margin: 0 0 12px; font-size: 15px; color: #000f3d; }
+  h2:after { content: ""; display: block; width: 34px; height: 3px; border-radius: 999px; background: #0031eb; margin-top: 6px; }
+  .dom-row { display: grid; grid-template-columns: 1fr 160px 44px; gap: 10px; align-items: center; padding: 5px 0; font-size: 13px; }
+  .dom-track { position: relative; height: 10px; border-radius: 999px; background: #e8edf9; }
+  .dom-fill { position: absolute; inset: 0 auto 0 0; border-radius: 999px; background: linear-gradient(90deg, #0031eb, #336aea); }
+  .dom-target { position: absolute; top: -3px; bottom: -3px; width: 3px; border-radius: 2px; background: #001559; }
+  .dom-val { text-align: right; font-weight: 700; }
+  .donut-wrap { display: flex; gap: 18px; align-items: center; }
+  .donut { width: 130px; height: 130px; border-radius: 50%; position: relative; flex: 0 0 130px; }
+  .donut:after { content: ""; position: absolute; inset: 26px; border-radius: 50%; background: #fff; }
+  .leg-row { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 3px 0; }
+  .leg-row strong { margin-left: auto; }
+  .legend { flex: 1; }
+  .leg-dot { width: 10px; height: 10px; border-radius: 50%; flex: 0 0 10px; }
+  ul.insights { margin: 0; padding-left: 18px; display: grid; gap: 8px; font-size: 13.5px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; color: #5b6b86; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; padding: 6px 8px; border-bottom: 1px solid #d9e0f2; }
+  td { padding: 7px 8px; border-bottom: 1px solid #eef1f8; vertical-align: top; }
+  .chip { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 11.5px; font-weight: 700; }
+  .muted { color: #5b6b86; font-size: 12px; }
+  .strength { display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px solid #eef1f8; font-size: 13.5px; }
+  .strength strong { color: #0b7d73; white-space: nowrap; }
+  .pr-band { display: flex; gap: 10px; margin-bottom: 12px; font-size: 12.5px; }
+  .pr-band span { background: #eef3ff; border-radius: 999px; padding: 4px 12px; font-weight: 700; color: #001559; }
+  .trend-labels { display: flex; justify-content: space-between; font-size: 11px; color: #5b6b86; text-align: center; margin-top: 6px; }
+  footer { color: #5b6b86; font-size: 11.5px; text-align: center; padding: 4px 0 10px; }
+  @page { size: A4; margin: 11mm; }
+  @media print {
+    body { background: #fff; padding: 0; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .wrap { max-width: none; gap: 10px; }
+    .panel, .kpi, .brief-head { break-inside: avoid; }
+  }
+  @media (max-width: 760px) { .kpis { grid-template-columns: repeat(2, 1fr); } .cols, .cols.even { grid-template-columns: 1fr; } }
+</style></head><body><div class="wrap">
+  <header class="brief-head">
+    <div>
+      ${logoSrc ? `<img alt="Madkour" src="${esc(logoSrc)}">` : ""}
+      <h1>Cost Control Executive Brief</h1>
+      <p>Cost Control Department - maturity, risk, and roadmap summary for management</p>
+    </div>
+    <div class="date">Generated<br><strong>${esc(generated)}</strong></div>
+  </header>
+  <section class="kpis">
+    <div class="kpi"><span>Overall Maturity</span><strong>${fmt(c.overallMaturity, 2)} / 5</strong><em>${esc(maturityLabel(c.overallMaturity))}</em></div>
+    <div class="kpi"><span>Achievement</span><strong>${pct(c.achievementPct, 1)}</strong><em>vs configured targets</em></div>
+    <div class="kpi"><span>Weighted Gap</span><strong>${pct(c.weightedGapPct, 1)}</strong><em>lost achievement</em></div>
+    <div class="kpi"><span>Critical / Major</span><strong>${counts.Critical + counts.Major}</strong><em>priority gaps</em></div>
+    <div class="kpi"><span>Coverage</span><strong>${pct(coveragePct, 0)}</strong><em>${c.answered} / ${c.total} answered</em></div>
+  </section>
+  <div class="cols">
+    <section class="panel">
+      <h2>Domain Maturity vs Target</h2>
+      ${domainRows}
+      <p class="muted" style="margin:10px 0 0">Bars show current maturity; the navy marker is the target level.</p>
+    </section>
+    <section class="panel">
+      <h2>Severity Mix</h2>
+      <div class="donut-wrap">
+        <div class="donut" style="${donutStyle}"></div>
+        <div class="legend">${legend || '<p class="muted">No questions answered yet.</p>'}</div>
+      </div>
+    </section>
+  </div>
+  <div class="cols even">
+    <section class="panel">
+      <h2>Key Strengths</h2>
+      ${strengths.length ? strengths.map(d => `<div class="strength"><span>${esc(d.name)}</span><strong>${fmt(d.maturity, 2)} / 5</strong></div>`).join("") : '<p class="muted">Not enough data yet.</p>'}
+    </section>
+    <section class="panel">
+      <h2>Top Risks &amp; Priority Gaps</h2>
+      ${priorityGaps.length ? `<table><thead><tr><th>Area</th><th>Gap</th><th>Severity</th></tr></thead><tbody>
+        ${priorityGaps.map(r => `<tr><td><strong>${esc(r.category)}</strong><br><span class="muted">${esc(r.domainName)} - ${esc(r.impact)}</span></td><td>${fmt(r.maturityGap, 1)}</td><td>${chip(r.severity)}</td></tr>`).join("")}
+      </tbody></table>` : '<p class="muted">No priority gaps identified yet.</p>'}
+    </section>
+  </div>
+  <section class="panel">
+    <h2>Strategic Insights</h2>
+    <ul class="insights">${insights.map(i => `<li>${i}</li>`).join("")}</ul>
+  </section>
+  ${trendHtml}
+  <section class="panel">
+    <h2>Roadmap at a Glance</h2>
+    <div class="pr-band"><span>${roadmap.length} initiatives</span><span>${prCounts.High} high</span><span>${prCounts.Medium} medium</span><span>${prCounts.Low} low priority</span></div>
+    ${roadmap.length ? `<table><thead><tr><th>Initiative</th><th>Domain</th><th>Priority</th><th>Owner</th><th>Window</th></tr></thead><tbody>
+      ${roadmap.slice(0, 5).map(r => `<tr><td><strong>${esc(r.name)}</strong></td><td>${esc(r.domainName)}</td><td>${esc(r.priority)}</td><td>${esc(r.owner)}</td><td>${esc(r.start)} &rarr; ${esc(r.finish)}</td></tr>`).join("")}
+    </tbody></table>${roadmap.length > 5 ? `<p class="muted" style="margin:8px 0 0">+ ${roadmap.length - 5} further initiatives in the detailed roadmap.</p>` : ""}` : '<p class="muted">The roadmap is generated once gaps are identified.</p>'}
+  </section>
+  <footer>Madkour - Cost Control Department Assessment - maturity scored 1-5 per question, weighted by domain and question importance. For full detail see the Operational Appendix report.</footer>
+</div></body></html>`;
+    }
+
+    function saveExecutiveBrief() {
+      download("cost-control-executive-brief.html", buildExecutiveBrief(), "text/html;charset=utf-8");
     }
 
     function buildReportHtml() {
@@ -2449,11 +2725,26 @@
       state.settings.sidebarCollapsed = false;
       renderAll();
     });
-    $("saveBtn").addEventListener("click", () => { saveSilent(); alert("Progress saved in this browser."); });
-    $("reportBtn").addEventListener("click", saveReport);
+    $("saveBtn").addEventListener("click", () => { recordSnapshot(); saveSilent(); alert("Progress saved in this browser."); });
+    $("reportBtn").addEventListener("click", saveExecutiveBrief);
+    $("execBriefBtn").addEventListener("click", saveExecutiveBrief);
     $("reportBtn2").addEventListener("click", saveReport);
+    $("csvBtn").addEventListener("click", exportCsv);
     $("jsonBtn").addEventListener("click", exportJson);
     $("loadJsonBtn").addEventListener("click", () => $("jsonFile").click());
+    $("backupMenuBtn").addEventListener("click", (e) => {
+      e.stopPropagation();
+      const menu = $("backupMenu");
+      menu.hidden = !menu.hidden;
+      $("backupMenuBtn").setAttribute("aria-expanded", String(!menu.hidden));
+    });
+    $("backupMenu").addEventListener("click", () => { $("backupMenu").hidden = true; });
+    document.addEventListener("click", (e) => {
+      if (!$("backupMenu").hidden && !e.target.closest(".menu-wrap")) {
+        $("backupMenu").hidden = true;
+        $("backupMenuBtn").setAttribute("aria-expanded", "false");
+      }
+    });
     $("jsonFile").addEventListener("change", e => e.target.files[0] && loadJson(e.target.files[0]));
     $("copyAssessmentBtn").addEventListener("click", () => copyRows(assessmentRowsForCopy()));
     $("copyGapBtn").addEventListener("click", () => copyRows(gapRowsForCopy()));
