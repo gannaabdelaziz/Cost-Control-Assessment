@@ -1,4 +1,28 @@
-# Cost Control Department Assessment Tool
+# Madkour Department Assessment Portal
+
+The primary deliverable is now [`publish/index.html`](publish/index.html), a single local web app containing five independent department assessments:
+
+- Cost Control
+- Document Control
+- Planning and Controlling
+- Project Procurement
+- Technical Office
+
+The portal opens with one card per department. Every department has 60 questions, independent browser storage, its own dashboard/gaps/roadmap/report, question-specific maturity descriptions, and individual exports. The portal also provides all-department CSV, printable dashboard, and JSON backup exports.
+
+Run the app by opening `publish/index.html` in a browser. For local browser testing, serve `publish/` with any static web server.
+
+## Rebuilding the combined app
+
+The combined deliverable is generated from the five original HTML assessments plus the approved additions in `work/build_combined_assessment_app.mjs`:
+
+```powershell
+node work/build_combined_assessment_app.mjs
+```
+
+The original department HTML files under `Inputs/Departments/` remain reference sources and are not overwritten.
+
+## Legacy Cost Control deliverables
 
 A self-contained maturity assessment for a company's Cost Control function. It scores
 nine weighted domains, surfaces the biggest gaps, and generates a prioritized

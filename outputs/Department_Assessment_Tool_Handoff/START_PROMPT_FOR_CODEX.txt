@@ -1,0 +1,47 @@
+I need your help to create an assessment tool for [DEPARTMENT NAME].
+
+Read these files completely before doing anything:
+- README.md
+- INSTRUCTIONS_FOR_CODEX.md
+- DEPARTMENT_INFORMATION.md
+- TESTING_CHECKLIST.md
+
+Study the application in:
+reference/Cost_Control_Assessment_Tool_REFERENCE_ONLY.html
+
+The only application file you may eventually edit is:
+working/Department_Assessment_Tool_EDITABLE.html
+
+Do not modify any file yet.
+
+First, review the department information and the reference tool. Then give me:
+1. Any important information that is missing
+2. Your proposed assessment domains
+3. The categories under each domain
+4. Recommended domain weights totaling 100%
+5. Recommended number of questions
+6. A short explanation of why this framework fits the department
+
+Clearly identify every assumption. Do not invent company policies, systems, or facts.
+Wait for my approval before drafting the full questions.
+
+After I approve the framework, prepare the full assessment-question register for review. For every question include:
+- Domain
+- Category
+- Question weight
+- Assessment question
+- Evidence requested
+- Process reference
+- Business impact
+- Suggested owner
+- Recommended improvement action
+
+Wait for my second approval before editing the HTML.
+
+After my second approval, update only the editable working HTML. Keep the same design, dashboard, scoring, gap analysis, roadmap, reports, exports, backup, history, and print features. Replace all Cost Control-specific content with approved content for [DEPARTMENT NAME]. Give the new tool its own browser storage key.
+
+Finally, test it using TESTING_CHECKLIST.md and tell me:
+- What you changed
+- What you tested
+- Any remaining assumptions or issues
+
