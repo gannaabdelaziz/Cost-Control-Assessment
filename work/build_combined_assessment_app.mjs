@@ -782,4 +782,6 @@ html = html.slice(0, endScript) + portalScript + `    $("homeBtn").addEventListe
 const outputPath = path.join(root, "publish", "index.html");
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 fs.writeFileSync(outputPath, html, "utf8");
-console.log(`Built ${path.relative(root, outputPath)} with ${Object.keys(departments).length} departments and ${Object.values(departments).reduce((sum, d) => sum + d.questions.length, 0)} questions.`);
+const siteEntryPath = path.join(root, "index.html");
+fs.writeFileSync(siteEntryPath, html, "utf8");
+console.log(`Built ${path.relative(root, outputPath)} and ${path.relative(root, siteEntryPath)} with ${Object.keys(departments).length} departments and ${Object.values(departments).reduce((sum, d) => sum + d.questions.length, 0)} questions.`);
