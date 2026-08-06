@@ -1,0 +1,929 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cost Control Department Assessment Tool</title>
+  <style>
+    :root {
+      --bg: #f4f7fa;
+      --panel: #ffffff;
+      --ink: #162033;
+      --muted: #607089;
+      --line: #d9e1ea;
+      --navy: #17365d;
+      --blue: #1f6fb2;
+      --teal: #1d8a8a;
+      --green: #25805a;
+      --amber: #b87418;
+      --red: #b94343;
+      --shadow: 0 14px 34px rgba(22, 32, 51, 0.11);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Segoe UI", Arial, sans-serif;
+      line-height: 1.45;
+    }
+
+    button, input, textarea, select { font: inherit; }
+
+    .app-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+    }
+
+    .sidebar {
+      background: #10233b;
+      color: #fff;
+      padding: 22px 18px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: auto;
+    }
+
+    .brand {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 12px;
+      align-items: center;
+      padding-bottom: 18px;
+      border-bottom: 1px solid rgba(255,255,255,.16);
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.25);
+      background: #1f6fb2;
+      border-radius: var(--radius);
+      font-weight: 800;
+      letter-spacing: .02em;
+    }
+
+    .brand-title {
+      font-weight: 750;
+      line-height: 1.18;
+      font-size: 15px;
+    }
+
+    .brand-subtitle {
+      color: rgba(255,255,255,.72);
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+    .nav {
+      margin-top: 20px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .nav button {
+      width: 100%;
+      border: 0;
+      color: rgba(255,255,255,.82);
+      background: transparent;
+      padding: 10px 11px;
+      text-align: left;
+      border-radius: var(--radius);
+      cursor: pointer;
+    }
+
+    .nav button.active,
+    .nav button:hover {
+      background: rgba(255,255,255,.11);
+      color: #fff;
+    }
+
+    .side-block {
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255,255,255,.16);
+      color: rgba(255,255,255,.78);
+      font-size: 12px;
+    }
+
+    .mini-stat {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+
+    .main {
+      min-width: 0;
+      padding: 26px;
+    }
+
+    .topbar {
+      display: flex;
+      gap: 18px;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 25px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 7px 0 0;
+      color: var(--muted);
+      max-width: 840px;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+      min-width: 280px;
+    }
+
+    .btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      border-radius: var(--radius);
+      padding: 9px 11px;
+      cursor: pointer;
+      font-weight: 650;
+      min-height: 38px;
+    }
+
+    .btn:hover { border-color: #aebccd; }
+    .btn.primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .btn.danger { color: var(--red); }
+    .btn.ghost { background: transparent; }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(150px, 1fr));
+      gap: 12px;
+      margin: 16px 0 18px;
+    }
+
+    .metric {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 15px;
+      box-shadow: 0 4px 16px rgba(22,32,51,.04);
+      min-height: 98px;
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .metric-value {
+      font-size: 28px;
+      font-weight: 800;
+      margin-top: 8px;
+      line-height: 1.1;
+    }
+
+    .metric-note {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 9px;
+      border-radius: 99px;
+      background: #dfe7ef;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--teal);
+      transition: width .2s ease;
+    }
+
+    .view { display: none; }
+    .view.active { display: block; }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grid.two { grid-template-columns: minmax(0, 1.25fr) minmax(320px, .75fr); }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      min-width: 0;
+    }
+
+    .panel h2, .panel h3 {
+      margin: 0 0 12px;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    .question-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 28px;
+      padding: 5px 8px;
+      border: 1px solid var(--line);
+      background: #f7f9fb;
+      border-radius: var(--radius);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .question-text {
+      font-size: 21px;
+      font-weight: 750;
+      margin: 0 0 14px;
+      line-height: 1.3;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .info-box {
+      border: 1px solid var(--line);
+      background: #f9fbfd;
+      border-radius: var(--radius);
+      padding: 12px;
+    }
+
+    .info-box strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 13px;
+      color: var(--navy);
+    }
+
+    .choices {
+      display: grid;
+      gap: 9px;
+    }
+
+    .choice {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 12px;
+      display: grid;
+      grid-template-columns: 30px 1fr;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .choice:hover { border-color: #9eb0c4; }
+    .choice.selected {
+      border-color: var(--blue);
+      box-shadow: inset 4px 0 0 var(--blue);
+      background: #f5f9fd;
+    }
+
+    .choice input { margin-top: 4px; }
+    .choice-title { font-weight: 750; margin-bottom: 3px; }
+    .choice-desc { color: var(--muted); font-size: 13px; }
+
+    textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 10px;
+      background: #fff;
+      color: var(--ink);
+    }
+
+    textarea { min-height: 96px; resize: vertical; }
+
+    .question-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 10px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--navy);
+      font-size: 12px;
+      text-transform: uppercase;
+      background: #f7f9fb;
+    }
+
+    .bar-cell {
+      min-width: 150px;
+    }
+
+    .score-bar {
+      height: 8px;
+      border-radius: 99px;
+      background: #dfe7ef;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+
+    .score-bar span {
+      display: block;
+      height: 100%;
+      background: var(--teal);
+      width: 0%;
+    }
+
+    .priority-high { color: var(--red); font-weight: 800; }
+    .priority-medium { color: var(--amber); font-weight: 800; }
+    .priority-low { color: var(--green); font-weight: 800; }
+
+    .heatmap {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+
+    .heat-tile {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 12px;
+      background: #fff;
+      min-height: 110px;
+    }
+
+    .heat-name { font-weight: 750; min-height: 38px; }
+    .heat-score { font-size: 24px; font-weight: 850; margin-top: 8px; }
+
+    .empty-state {
+      color: var(--muted);
+      padding: 18px;
+      border: 1px dashed #b8c5d3;
+      border-radius: var(--radius);
+      background: #fbfcfe;
+    }
+
+    .hidden-file { display: none; }
+
+    @media (max-width: 1100px) {
+      .app-shell { grid-template-columns: 1fr; }
+      .sidebar { position: static; height: auto; }
+      .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid.two, .grid.three { grid-template-columns: 1fr; }
+      .topbar { display: grid; }
+      .toolbar { justify-content: flex-start; }
+    }
+
+    @media (max-width: 620px) {
+      .main { padding: 16px; }
+      .metrics { grid-template-columns: 1fr; }
+      .info-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 21px; }
+      .question-text { font-size: 18px; }
+      .toolbar { min-width: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">CC</div>
+        <div>
+          <div class="brand-title">Cost Control Assessment</div>
+          <div class="brand-subtitle">Business Plan 2026-2027</div>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Main views">
+        <button class="active" data-view-button="dashboard">Executive Dashboard</button>
+        <button data-view-button="assessment">Assessment</button>
+        <button data-view-button="results">Results</button>
+        <button data-view-button="exports">Export / Import</button>
+      </nav>
+
+      <div class="side-block">
+        <div class="mini-stat"><span>Questions</span><strong id="sideQuestions">30</strong></div>
+        <div class="mini-stat"><span>Answered</span><strong id="sideAnswered">0</strong></div>
+        <div class="mini-stat"><span>Overall Maturity</span><strong id="sideMaturity">0.00</strong></div>
+        <div class="mini-stat"><span>High Priority</span><strong id="sideHigh">0</strong></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div>
+          <h1>Cost Control Department Dynamic Assessment Tool</h1>
+          <p class="subtitle">Executive maturity diagnostic for EPC project controls, cost control, interfaces, reporting, systems, risk, and continuous improvement.</p>
+        </div>
+        <div class="toolbar">
+          <button class="btn" id="saveBtn">Save Progress</button>
+          <button class="btn" id="jsonBtn">Export JSON</button>
+          <button class="btn primary" id="csvBtn">Export Results CSV</button>
+        </div>
+      </div>
+
+      <section class="metrics" aria-label="Executive summary metrics">
+        <div class="metric">
+          <div class="metric-label">Overall Maturity</div>
+          <div class="metric-value" id="overallMaturity">0.00 / 5</div>
+          <div class="metric-note" id="maturityLabel">Not started</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Weighted Score</div>
+          <div class="metric-value" id="overallScore">0.0%</div>
+          <div class="metric-note">Target: 100%</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Completion</div>
+          <div class="metric-value" id="completion">0%</div>
+          <div class="progress-track"><div class="progress-bar" id="completionBar"></div></div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">High Priority Gaps</div>
+          <div class="metric-value" id="highPriorityCount">0</div>
+          <div class="metric-note">Gap of 3 or more</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Weakest Domain</div>
+          <div class="metric-value" id="weakestDomain">-</div>
+          <div class="metric-note">Based on answered questions</div>
+        </div>
+      </section>
+
+      <section class="view active" id="dashboardView">
+        <div class="grid two">
+          <div class="panel">
+            <h2>Domain Maturity Scorecard</h2>
+            <div id="domainTable"></div>
+          </div>
+          <div class="panel">
+            <h2>Top Improvement Priorities</h2>
+            <div id="priorityList"></div>
+          </div>
+        </div>
+        <div class="panel" style="margin-top:14px;">
+          <h2>Priority Heat Map</h2>
+          <div class="heatmap" id="heatmap"></div>
+        </div>
+      </section>
+
+      <section class="view" id="assessmentView">
+        <div class="grid two">
+          <div class="panel">
+            <div class="question-meta" id="questionMeta"></div>
+            <p class="question-text" id="questionText"></p>
+            <div class="info-grid">
+              <div class="info-box"><strong>Assessment Objective</strong><span id="objectiveText"></span></div>
+              <div class="info-box"><strong>Why This Matters</strong><span id="mattersText"></span></div>
+            </div>
+            <div class="choices" id="choices"></div>
+            <div class="question-actions">
+              <button class="btn" id="prevBtn">Previous</button>
+              <button class="btn primary" id="nextBtn">Next</button>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="panel">
+              <h3>Question Notes</h3>
+              <label for="evidenceSelect">Evidence available</label>
+              <select id="evidenceSelect">
+                <option value="">Not selected</option>
+                <option>Yes</option>
+                <option>Partial</option>
+                <option>No</option>
+              </select>
+              <label for="notesText" style="display:block;margin-top:12px;">Custom answer / notes</label>
+              <textarea id="notesText" placeholder="Add context, exceptions, current documents, or management comments."></textarea>
+            </div>
+            <div class="panel">
+              <h3>Best Practice</h3>
+              <p id="bestPracticeText"></p>
+              <h3>Evidence Requested</h3>
+              <p id="evidenceText"></p>
+            </div>
+            <div class="panel">
+              <h3>Live Question Score</h3>
+              <table>
+                <tbody>
+                  <tr><td>Selected Level</td><td id="liveLevel">-</td></tr>
+                  <tr><td>Weighted Score</td><td id="liveWeighted">0.00%</td></tr>
+                  <tr><td>Gap to Target</td><td id="liveGap">-</td></tr>
+                  <tr><td>Priority</td><td id="livePriority">-</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="resultsView">
+        <div class="grid two">
+          <div class="panel">
+            <h2>Answered Assessment Results</h2>
+            <div id="answeredTable"></div>
+          </div>
+          <div class="panel">
+            <h2>Roadmap Input Summary</h2>
+            <div id="roadmapSummary"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="exportsView">
+        <div class="grid three">
+          <div class="panel">
+            <h2>Save and Continue</h2>
+            <p>Save progress in this browser, or export a JSON backup that can be loaded later into this same tool.</p>
+            <button class="btn primary" id="saveBtn2">Save Progress</button>
+            <button class="btn" id="jsonBtn2">Export JSON Backup</button>
+            <input class="hidden-file" id="jsonFile" type="file" accept="application/json,.json">
+            <button class="btn" id="loadBtn">Load JSON Backup</button>
+          </div>
+          <div class="panel">
+            <h2>Management Exports</h2>
+            <p>Export CSV files that open in Excel and can be sent for management review or roadmap development.</p>
+            <button class="btn primary" id="csvBtn2">Export Full Results CSV</button>
+            <button class="btn" id="summaryBtn">Export Executive Summary CSV</button>
+          </div>
+          <div class="panel">
+            <h2>Reset</h2>
+            <p>Clear all answers, notes, and evidence selections from this browser.</p>
+            <button class="btn danger" id="resetBtn">Reset Assessment</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const questions = [
+      {domain:"Strategy & Governance",category:"Department Mandate",weight:.035,objective:"Assess whether the department has a clear authorized role.",matters:"Unclear mandate creates duplicated effort, weak authority, and inconsistent project control.",question:"Is the Cost Control Department mandate formally defined, approved, and understood by project stakeholders?",evidence:"Department charter, authority matrix, organization manual.",best:"A management-approved charter should define scope, authority, interfaces, expected outputs, and accountability."},
+      {domain:"Strategy & Governance",category:"Objectives & Alignment",weight:.035,objective:"Assess strategic alignment.",matters:"Unlinked objectives make cost control reactive rather than business-driven.",question:"Are cost control objectives linked to company strategy, project delivery priorities, and executive expectations?",evidence:"Department objectives, annual plan, management KPIs.",best:"Objectives should cascade from business strategy into measurable department and project controls targets."},
+      {domain:"Strategy & Governance",category:"Governance & Decision Rights",weight:.035,objective:"Assess governance clarity.",matters:"Weak decision rights delay approvals and reduce accountability.",question:"Are governance forums and decision rights for cost-related matters clearly defined?",evidence:"Governance calendar, approval matrix, meeting minutes.",best:"Cost governance should define escalation paths, approval levels, and recurring review forums."},
+      {domain:"Strategy & Governance",category:"Stakeholder Management",weight:.030,objective:"Assess stakeholder engagement maturity.",matters:"Cost control depends on timely inputs from project, procurement, finance, planning, and construction teams.",question:"Does the department actively manage stakeholder expectations across projects and functions?",evidence:"Stakeholder map, communication plan, review minutes.",best:"Stakeholders should be mapped, engaged through structured routines, and measured through service expectations."},
+      {domain:"Organization & People",category:"Organization Structure",weight:.035,objective:"Assess organization design.",matters:"Under-designed structures create overload, unclear ownership, and inconsistent project support.",question:"Is the cost control organization structure fit for the project portfolio size and complexity?",evidence:"Organization chart, portfolio workload analysis.",best:"Structure should reflect project complexity, portfolio scale, governance needs, and required interfaces."},
+      {domain:"Organization & People",category:"Roles & Responsibilities",weight:.035,objective:"Assess role clarity.",matters:"Unclear responsibilities cause gaps in forecasting, reporting, change control, and data ownership.",question:"Are cost control roles, responsibilities, and accountabilities clearly documented?",evidence:"Job descriptions, RACI, responsibility matrix.",best:"Each role should have defined outputs, authorities, interfaces, and competency requirements."},
+      {domain:"Organization & People",category:"Competency & Training",weight:.030,objective:"Assess capability development.",matters:"EPC cost control needs strong technical, commercial, systems, and analytical capability.",question:"Is there a structured competency and training framework for cost control staff?",evidence:"Competency matrix, training plan, certification records.",best:"Competencies should be assessed periodically and linked to targeted development plans."},
+      {domain:"Organization & People",category:"Performance Management",weight:.030,objective:"Assess performance alignment.",matters:"Teams perform better when expectations are measurable and tied to business value.",question:"Are individual and team performance measures linked to cost control outcomes?",evidence:"KPIs, appraisal forms, team scorecards.",best:"Performance should include quality, timeliness, forecast accuracy, reporting discipline, and improvement contribution."},
+      {domain:"Cost Control Core Processes",category:"Cost Breakdown & Coding",weight:.040,objective:"Assess cost structure standardization.",matters:"Poor coding prevents reliable reporting, benchmarking, and portfolio analysis.",question:"Is there a standardized Cost Breakdown Structure and cost coding system used consistently across projects?",evidence:"CBS, code of accounts, coding procedure.",best:"A controlled CBS and code of accounts should align estimating, budget, commitments, actuals, and forecasts."},
+      {domain:"Cost Control Core Processes",category:"Budget Development",weight:.040,objective:"Assess budget control discipline.",matters:"Weak budget baselines reduce the credibility of variance analysis and forecasting.",question:"Are project budgets developed, reviewed, approved, and baselined through a controlled process?",evidence:"Budget procedure, approved baseline, budget review records.",best:"Budgets should be traceable, approved, version-controlled, and linked to scope and schedule."},
+      {domain:"Cost Control Core Processes",category:"Baseline Management",weight:.035,objective:"Assess baseline control.",matters:"Uncontrolled baseline changes hide true project performance.",question:"Are cost baselines formally maintained with controlled revisions and audit trail?",evidence:"Baseline change log, approvals, revision history.",best:"Baseline changes should require approved scope, change, or management authorization."},
+      {domain:"Cost Control Core Processes",category:"Commitments & Actuals",weight:.040,objective:"Assess cost data reliability.",matters:"Incomplete actuals and commitments distort forecasts and cash flow visibility.",question:"Are commitments, actual costs, accruals, and liabilities captured accurately and on time?",evidence:"ERP reports, commitment register, accrual process.",best:"Commitments and actuals should be integrated with procurement, contracts, finance, and project controls."},
+      {domain:"Cost Control Core Processes",category:"Forecasting",weight:.045,objective:"Assess forecast maturity.",matters:"Forecast quality is central to executive decision-making and project recovery.",question:"Is Estimate at Completion prepared using a structured, evidence-based forecasting method?",evidence:"Forecast procedure, EAC files, trend logs.",best:"EAC should combine actuals, commitments, productivity, trends, risks, changes, and remaining scope."},
+      {domain:"Cost Control Core Processes",category:"Change & Trend Management",weight:.040,objective:"Assess change control maturity.",matters:"Late recognition of change erodes margin and weakens commercial recovery.",question:"Are changes, trends, claims, and potential cost impacts identified and controlled early?",evidence:"Change register, trend register, approval workflow.",best:"Potential changes should be logged early, evaluated, approved, and reflected in forecast scenarios."},
+      {domain:"Cost Control Core Processes",category:"Cash Flow & Funding",weight:.030,objective:"Assess cash flow control.",matters:"Cash flow visibility supports liquidity planning and project financing decisions.",question:"Are project cash flow forecasts prepared and reconciled with cost, schedule, procurement, and finance data?",evidence:"Cash flow reports, finance reconciliation.",best:"Cash flow should be derived from approved schedule, procurement plan, payment terms, and current forecast."},
+      {domain:"Integration with Planning / Procurement / Finance",category:"Planning Integration",weight:.035,objective:"Assess planning-cost integration.",matters:"Cost performance cannot be interpreted properly without progress and schedule context.",question:"Are cost control outputs integrated with project schedule, progress measurement, and planning updates?",evidence:"Integrated reports, schedule-cost mapping, progress files.",best:"Cost, schedule, progress, and forecast processes should share aligned WBS/CBS structures and cut-off dates."},
+      {domain:"Integration with Planning / Procurement / Finance",category:"Progress & EVM",weight:.035,objective:"Assess performance measurement.",matters:"Progress-based cost control provides early warning of productivity and cost overruns.",question:"Is earned value or equivalent progress-based performance measurement used for major EPC projects?",evidence:"EV reports, progress rules of credit, S-curves.",best:"EVM should use approved baselines, objective progress measurement, and consistent variance analysis."},
+      {domain:"Integration with Planning / Procurement / Finance",category:"Procurement Interface",weight:.030,objective:"Assess procurement-cost integration.",matters:"Procurement commitments are a major driver of EPC cost exposure.",question:"Is procurement cost status integrated into cost reports, forecasts, and cash flow projections?",evidence:"Procurement status report, PO log, expediting input.",best:"Procurement data should feed commitments, delivery timing, payment timing, and forecast exposure."},
+      {domain:"Integration with Planning / Procurement / Finance",category:"Finance Reconciliation",weight:.030,objective:"Assess finance alignment.",matters:"Unreconciled numbers damage management confidence and create competing versions of truth.",question:"Are cost control reports reconciled regularly with finance actuals and accounting records?",evidence:"Reconciliation logs, finance sign-off, ERP extracts.",best:"Cost control and finance should agree monthly cut-off, actuals, accruals, and reporting definitions."},
+      {domain:"Systems, Data & Digitalization",category:"Systems Landscape",weight:.035,objective:"Assess system adequacy.",matters:"Fragmented tools create manual work, errors, and delayed reporting.",question:"Are cost control systems clearly defined, fit for purpose, and consistently used across projects?",evidence:"System map, ERP configuration, tool list.",best:"Systems should support budget, actuals, commitments, forecasts, changes, and reporting workflows."},
+      {domain:"Systems, Data & Digitalization",category:"Data Quality",weight:.035,objective:"Assess data governance.",matters:"Poor data quality makes dashboards and forecasts unreliable.",question:"Are data ownership, validation rules, and data quality checks established for cost information?",evidence:"Data dictionary, validation checklist, quality logs.",best:"Critical cost data should have named owners, definitions, validations, and periodic quality checks."},
+      {domain:"Systems, Data & Digitalization",category:"Automation & Workflow",weight:.030,objective:"Assess automation maturity.",matters:"Manual processes consume time and increase reporting risk.",question:"Are repetitive cost control activities automated where practical?",evidence:"Workflow screenshots, automation logs, templates.",best:"High-volume repetitive tasks should be automated using controlled workflows and data integration."},
+      {domain:"Systems, Data & Digitalization",category:"BI & Dashboards",weight:.030,objective:"Assess dashboard maturity.",matters:"Modern project controls need fast, visual, and drillable performance insight.",question:"Are Power BI or similar dashboards used to provide timely cost and performance visibility?",evidence:"Dashboard screenshots, data model, refresh log.",best:"Dashboards should use governed data, clear KPIs, filters, RAG status, and drill-down capability."},
+      {domain:"Reporting & Performance Management",category:"Reporting Calendar",weight:.030,objective:"Assess reporting discipline.",matters:"A disciplined reporting cycle improves timeliness and accountability.",question:"Is there a fixed reporting calendar with clear cut-off dates, owners, and review steps?",evidence:"Reporting calendar, monthly close checklist.",best:"Reporting should follow a controlled monthly cycle with defined inputs, reviews, and approvals."},
+      {domain:"Reporting & Performance Management",category:"Management Reports",weight:.035,objective:"Assess report usefulness.",matters:"Reports should support decisions, not just present data.",question:"Do cost reports provide clear variance analysis, forecast explanation, risks, and required decisions?",evidence:"Monthly cost report, executive dashboard.",best:"Reports should explain variances, EAC movement, risks, corrective actions, and management decisions needed."},
+      {domain:"Reporting & Performance Management",category:"KPIs & Performance Review",weight:.030,objective:"Assess KPI management.",matters:"KPIs help management see whether cost control is effective and improving.",question:"Are cost control KPIs defined, measured, reviewed, and acted upon?",evidence:"KPI library, dashboard, review minutes.",best:"KPIs should measure timeliness, accuracy, forecast reliability, change control, productivity, and process compliance."},
+      {domain:"Risk, Compliance & Continuous Improvement",category:"Risk Integration",weight:.035,objective:"Assess risk-cost integration.",matters:"Forecasts are incomplete if risk exposure and opportunity are not reflected.",question:"Are cost risks and opportunities integrated into forecasts, contingency, and management reporting?",evidence:"Risk register, contingency drawdown, risk-adjusted EAC.",best:"Cost forecasts should include risk-adjusted scenarios and clear contingency governance."},
+      {domain:"Risk, Compliance & Continuous Improvement",category:"Compliance & Assurance",weight:.030,objective:"Assess assurance maturity.",matters:"Without assurance, process drift and weak controls remain hidden.",question:"Are cost control processes periodically reviewed for compliance and effectiveness?",evidence:"Audit reports, compliance checklist, review findings.",best:"Independent or management assurance should test process compliance, data quality, and corrective actions."},
+      {domain:"Risk, Compliance & Continuous Improvement",category:"Lessons Learned",weight:.025,objective:"Assess knowledge reuse.",matters:"Organizations lose value when recurring cost issues are not captured and prevented.",question:"Are cost control lessons learned captured and reused across projects?",evidence:"Lessons learned register, closeout reports.",best:"Lessons should be captured during and after projects, assigned owners, and embedded into procedures and templates."},
+      {domain:"Risk, Compliance & Continuous Improvement",category:"Continuous Improvement",weight:.030,objective:"Assess improvement discipline.",matters:"Transformation requires a managed improvement pipeline, not isolated fixes.",question:"Is there a structured improvement plan for cost control processes, systems, people, and reporting?",evidence:"Improvement roadmap, action tracker, benefits log.",best:"Improvement initiatives should be prioritized by value, risk, complexity, owner, timeline, and measurable benefit."}
+    ];
+
+    const choiceText = [
+      "No formal or consistent practice exists.",
+      "Basic practice exists but is informal or inconsistently applied.",
+      "Documented practice exists and is applied on most projects.",
+      "Managed practice exists with ownership, measurement, and regular review.",
+      "Optimized practice is standardized, measured, automated where practical, and continuously improved."
+    ];
+
+    const state = {
+      current: 0,
+      answers: questions.map(() => ({ level: "", notes: "", evidence: "" }))
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const pct = (n, d = 1) => `${(n * 100 / d).toFixed(1)}%`;
+    const maturityLabel = (score) => {
+      if (!score) return "Not started";
+      if (score < 1.5) return "Initial / Ad Hoc";
+      if (score < 2.5) return "Repeatable";
+      if (score < 3.5) return "Defined";
+      if (score < 4.5) return "Managed";
+      return "Optimized / Best Practice";
+    };
+    const priorityClass = (p) => p === "High" ? "priority-high" : p === "Medium" ? "priority-medium" : "priority-low";
+    const calcPriority = (gap) => gap >= 3 ? "High" : gap >= 2 ? "Medium" : "Low";
+
+    function calculations() {
+      const answered = state.answers.filter(a => Number(a.level) > 0).length;
+      let weightedScore = 0;
+      let answeredWeight = 0;
+      const domains = {};
+      const rows = questions.map((q, i) => {
+        const level = Number(state.answers[i].level);
+        const score = level ? q.weight * (level / 5) : 0;
+        const gap = level ? 5 - level : "";
+        const priority = level ? calcPriority(gap) : "";
+        weightedScore += score;
+        if (level) answeredWeight += q.weight;
+        if (!domains[q.domain]) domains[q.domain] = { weight: 0, answeredWeight: 0, score: 0, answered: 0, total: 0 };
+        domains[q.domain].weight += q.weight;
+        domains[q.domain].total += 1;
+        if (level) {
+          domains[q.domain].answeredWeight += q.weight;
+          domains[q.domain].score += score;
+          domains[q.domain].answered += 1;
+        }
+        return {
+          ...q,
+          index: i,
+          level,
+          score,
+          gap,
+          priority,
+          evidenceRequested: q.evidence,
+          evidenceAvailable: state.answers[i].evidence,
+          notes: state.answers[i].notes
+        };
+      });
+      const domainList = Object.keys(domains).map(name => {
+        const d = domains[name];
+        const scorePct = d.answeredWeight ? d.score / d.answeredWeight : 0;
+        const maturity = scorePct * 5;
+        return { name, ...d, scorePct, maturity, gap: d.answered ? 5 - maturity : "", priority: d.answered ? calcPriority(5 - maturity) : "" };
+      });
+      const weakest = domainList.filter(d => d.answered).sort((a,b) => a.maturity - b.maturity)[0];
+      return { answered, completion: answered / questions.length, weightedScore, overallMaturity: weightedScore * 5, rows, domainList, weakest };
+    }
+
+    function renderShell() {
+      const c = calculations();
+      $("overallMaturity").textContent = `${c.overallMaturity.toFixed(2)} / 5`;
+      $("overallScore").textContent = pct(c.weightedScore);
+      $("completion").textContent = pct(c.completion);
+      $("completionBar").style.width = pct(c.completion);
+      $("maturityLabel").textContent = maturityLabel(c.overallMaturity);
+      $("highPriorityCount").textContent = c.rows.filter(r => r.priority === "High").length;
+      $("weakestDomain").textContent = c.weakest ? c.weakest.name.split(" ")[0] : "-";
+      $("sideQuestions").textContent = questions.length;
+      $("sideAnswered").textContent = c.answered;
+      $("sideMaturity").textContent = c.overallMaturity.toFixed(2);
+      $("sideHigh").textContent = c.rows.filter(r => r.priority === "High").length;
+    }
+
+    function renderDashboard() {
+      const c = calculations();
+      const domainRows = c.domainList.map(d => `
+        <tr>
+          <td><strong>${d.name}</strong><br><span class="metric-note">${d.answered}/${d.total} answered</span></td>
+          <td class="bar-cell">${d.answered ? d.maturity.toFixed(2) : "-"} / 5<div class="score-bar"><span style="width:${d.maturity * 20}%"></span></div></td>
+          <td>${d.answered ? d.gap.toFixed(2) : "-"}</td>
+          <td class="${d.priority ? priorityClass(d.priority) : ""}">${d.priority || "-"}</td>
+        </tr>`).join("");
+      $("domainTable").innerHTML = `<table><thead><tr><th>Domain</th><th>Maturity</th><th>Gap</th><th>Priority</th></tr></thead><tbody>${domainRows}</tbody></table>`;
+
+      const priorities = c.rows.filter(r => r.level).sort((a,b) => b.gap - a.gap || b.weight - a.weight).slice(0, 10);
+      $("priorityList").innerHTML = priorities.length ? `<table><thead><tr><th>Area</th><th>Level</th><th>Priority</th></tr></thead><tbody>${priorities.map(r => `<tr><td><strong>${r.category}</strong><br><span class="metric-note">${r.domain}</span></td><td>${r.level}</td><td class="${priorityClass(r.priority)}">${r.priority}</td></tr>`).join("")}</tbody></table>` : `<div class="empty-state">Answer questions to see priority gaps.</div>`;
+
+      $("heatmap").innerHTML = c.domainList.map(d => {
+        const color = !d.answered ? "#f7f9fb" : d.maturity < 2 ? "#fff0f0" : d.maturity < 3 ? "#fff7e8" : d.maturity < 4 ? "#eef8f5" : "#eaf6ef";
+        return `<div class="heat-tile" style="background:${color}"><div class="heat-name">${d.name}</div><div class="heat-score">${d.answered ? d.maturity.toFixed(2) : "-"}</div><div class="metric-note">${d.priority || "Not assessed"}</div></div>`;
+      }).join("");
+    }
+
+    function renderAssessment() {
+      const q = questions[state.current];
+      const a = state.answers[state.current];
+      $("questionMeta").innerHTML = `
+        <span class="chip">Question ${state.current + 1} of ${questions.length}</span>
+        <span class="chip">${q.domain}</span>
+        <span class="chip">${q.category}</span>
+        <span class="chip">Weight ${pct(q.weight)}</span>`;
+      $("questionText").textContent = q.question;
+      $("objectiveText").textContent = q.objective;
+      $("mattersText").textContent = q.matters;
+      $("bestPracticeText").textContent = q.best;
+      $("evidenceText").textContent = q.evidence;
+      $("evidenceSelect").value = a.evidence;
+      $("notesText").value = a.notes;
+      $("choices").innerHTML = choiceText.map((txt, i) => {
+        const level = i + 1;
+        return `<label class="choice ${Number(a.level) === level ? "selected" : ""}">
+          <input type="radio" name="level" value="${level}" ${Number(a.level) === level ? "checked" : ""}>
+          <span><span class="choice-title">Level ${level} - ${level === 1 ? "Initial / Ad Hoc" : level === 2 ? "Repeatable" : level === 3 ? "Defined" : level === 4 ? "Managed" : "Optimized / Best Practice"}</span><span class="choice-desc">${txt}</span></span>
+        </label>`;
+      }).join("");
+      document.querySelectorAll("input[name='level']").forEach(input => {
+        input.addEventListener("change", (e) => {
+          state.answers[state.current].level = e.target.value;
+          saveSilent();
+          renderAll();
+        });
+      });
+      const level = Number(a.level);
+      const gap = level ? 5 - level : "";
+      $("liveLevel").textContent = level || "-";
+      $("liveWeighted").textContent = level ? pct(q.weight * level / 5) : "0.00%";
+      $("liveGap").textContent = level ? gap : "-";
+      $("livePriority").innerHTML = level ? `<span class="${priorityClass(calcPriority(gap))}">${calcPriority(gap)}</span>` : "-";
+      $("prevBtn").disabled = state.current === 0;
+      $("nextBtn").textContent = state.current === questions.length - 1 ? "Go to Results" : "Next";
+    }
+
+    function renderResults() {
+      const c = calculations();
+      const answered = c.rows.filter(r => r.level);
+      $("answeredTable").innerHTML = answered.length ? `<table><thead><tr><th>#</th><th>Domain / Category</th><th>Level</th><th>Score</th><th>Priority</th></tr></thead><tbody>${answered.map(r => `<tr><td>${r.index + 1}</td><td><strong>${r.category}</strong><br><span class="metric-note">${r.domain}</span></td><td>${r.level}</td><td>${pct(r.score)}</td><td class="${priorityClass(r.priority)}">${r.priority}</td></tr>`).join("")}</tbody></table>` : `<div class="empty-state">No answered questions yet.</div>`;
+      const top = c.rows.filter(r => r.level && r.priority !== "Low").sort((a,b) => b.gap - a.gap || b.weight - a.weight).slice(0, 8);
+      $("roadmapSummary").innerHTML = top.length ? `<table><thead><tr><th>Recommended Roadmap Input</th><th>Priority</th></tr></thead><tbody>${top.map((r, i) => `<tr><td><strong>INIT-${String(i + 1).padStart(3,"0")}: Improve ${r.category}</strong><br><span class="metric-note">${r.best}</span></td><td class="${priorityClass(r.priority)}">${r.priority}</td></tr>`).join("")}</tbody></table>` : `<div class="empty-state">Roadmap inputs will appear after answers are recorded.</div>`;
+    }
+
+    function renderAll() {
+      renderShell();
+      renderDashboard();
+      renderAssessment();
+      renderResults();
+    }
+
+    function saveSilent() {
+      localStorage.setItem("costControlAssessmentState", JSON.stringify(state.answers));
+    }
+
+    function saveProgress() {
+      saveSilent();
+      alert("Progress saved in this browser.");
+    }
+
+    function loadProgress() {
+      const saved = localStorage.getItem("costControlAssessmentState");
+      if (!saved) return;
+      try {
+        const answers = JSON.parse(saved);
+        if (Array.isArray(answers) && answers.length === questions.length) state.answers = answers;
+      } catch (e) {}
+    }
+
+    function download(name, content, type) {
+      const blob = new Blob([content], { type });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function csvEscape(value) {
+      return `"${String(value ?? "").replaceAll('"', '""')}"`;
+    }
+
+    function exportJson() {
+      const payload = {
+        tool: "Cost Control Department Assessment Tool",
+        exportedAt: new Date().toISOString(),
+        questions,
+        answers: state.answers,
+        calculations: calculations()
+      };
+      download("cost-control-assessment-backup.json", JSON.stringify(payload, null, 2), "application/json");
+    }
+
+    function exportCsv() {
+      const rows = [[
+        "Question No","Domain","Category","Weight","Selected Maturity","Weighted Score","Gap to Target","Priority","Evidence Available","Notes","Question","Best Practice","Evidence Requested"
+      ]];
+      calculations().rows.forEach(r => rows.push([
+        r.index + 1, r.domain, r.category, pct(r.weight), r.level || "", r.level ? pct(r.score) : "", r.gap, r.priority, r.evidenceAvailable, r.notes, r.question, r.best, r.evidenceRequested
+      ]));
+      download("cost-control-assessment-results.csv", rows.map(row => row.map(csvEscape).join(",")).join("\n"), "text/csv;charset=utf-8");
+    }
+
+    function exportSummary() {
+      const c = calculations();
+      const rows = [["Metric","Value"],["Overall Maturity",c.overallMaturity.toFixed(2)],["Overall Weighted Score",pct(c.weightedScore)],["Completion",pct(c.completion)],["Answered Questions",c.answered],["High Priority Gaps",c.rows.filter(r => r.priority === "High").length],["Weakest Domain",c.weakest ? c.weakest.name : ""]];
+      rows.push(["",""]);
+      rows.push(["Domain","Maturity","Gap","Priority"]);
+      c.domainList.forEach(d => rows.push([d.name, d.answered ? d.maturity.toFixed(2) : "", d.answered ? d.gap.toFixed(2) : "", d.priority]));
+      download("cost-control-assessment-executive-summary.csv", rows.map(row => row.map(csvEscape).join(",")).join("\n"), "text/csv;charset=utf-8");
+    }
+
+    function loadJsonFile(file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const data = JSON.parse(reader.result);
+          if (!Array.isArray(data.answers) || data.answers.length !== questions.length) throw new Error("Invalid backup");
+          state.answers = data.answers;
+          saveSilent();
+          renderAll();
+          alert("Backup loaded.");
+        } catch (err) {
+          alert("This JSON file does not match this assessment tool.");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    document.querySelectorAll("[data-view-button]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("[data-view-button]").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+        btn.classList.add("active");
+        $(`${btn.dataset.viewButton}View`).classList.add("active");
+      });
+    });
+
+    $("notesText").addEventListener("input", (e) => {
+      state.answers[state.current].notes = e.target.value;
+      saveSilent();
+    });
+    $("evidenceSelect").addEventListener("change", (e) => {
+      state.answers[state.current].evidence = e.target.value;
+      saveSilent();
+      renderAll();
+    });
+    $("prevBtn").addEventListener("click", () => {
+      if (state.current > 0) {
+        state.current -= 1;
+        renderAll();
+      }
+    });
+    $("nextBtn").addEventListener("click", () => {
+      if (state.current < questions.length - 1) {
+        state.current += 1;
+        renderAll();
+      } else {
+        document.querySelector("[data-view-button='results']").click();
+      }
+    });
+    ["saveBtn","saveBtn2"].forEach(id => $(id).addEventListener("click", saveProgress));
+    ["jsonBtn","jsonBtn2"].forEach(id => $(id).addEventListener("click", exportJson));
+    ["csvBtn","csvBtn2"].forEach(id => $(id).addEventListener("click", exportCsv));
+    $("summaryBtn").addEventListener("click", exportSummary);
+    $("loadBtn").addEventListener("click", () => $("jsonFile").click());
+    $("jsonFile").addEventListener("change", (e) => e.target.files[0] && loadJsonFile(e.target.files[0]));
+    $("resetBtn").addEventListener("click", () => {
+      if (!confirm("Reset all assessment answers and notes?")) return;
+      state.answers = questions.map(() => ({ level: "", notes: "", evidence: "" }));
+      state.current = 0;
+      saveSilent();
+      renderAll();
+    });
+
+    loadProgress();
+    renderAll();
+  </script>
+</body>
+</html>

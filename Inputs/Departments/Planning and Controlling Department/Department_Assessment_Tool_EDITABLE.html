@@ -1,0 +1,3048 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Planning Department Assessment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #eef1fa;
+      --panel: #ffffff;
+      --ink: #0d1b3e;
+      --muted: #5b6b86;
+      --line: #d9e0f2;
+      --nav: #0031eb;
+      --nav-2: #001559;
+      --nav-3: #336aea;
+      --brand-navy: #001559;
+      --brand-deep: #000f3d;
+      --brand-sky: #dde6ff;
+      --brand-ice: #f2f5ff;
+      --blue: #0031eb;
+      --cyan: #336aea;
+      --green: #0b7d73;
+      --amber: #d97706;
+      --red: #d23c22;
+      --soft-blue: #eaefff;
+      --soft-green: #e3f7f4;
+      --soft-amber: #fff3e0;
+      --soft-red: #fdece8;
+      --shadow: 0 12px 28px rgba(0, 21, 89, .12);
+      /* Madkour division accent system */
+      --accent-projects: #336aea;
+      --accent-utilities: #ff9203;
+      --accent-industries: #ea5a3f;
+      --accent-technology: #ae4dd1;
+      --accent-academy: #17d1c6;
+      --app-scale: .86;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Manrope", "Segoe UI", Arial, sans-serif;
+      line-height: 1.45;
+      zoom: var(--app-scale);
+    }
+    @media print { body { zoom: 1; } }
+    button, input, select, textarea { font: inherit; }
+    .app { min-height: calc(100vh / var(--app-scale)); display: grid; grid-template-columns: 280px 1fr; }
+    body.sidebar-collapsed .app { grid-template-columns: 1fr; }
+    body.sidebar-collapsed .sidebar { display: none; }
+    .sidebar {
+      background: linear-gradient(180deg, #001559 0%, #001e8f 52%, #0031eb 100%);
+      color: #fff;
+      padding: 22px 16px 18px;
+      position: sticky;
+      top: 0;
+      height: calc(100vh / var(--app-scale));
+      overflow: auto;
+    }
+    .brand { display: grid; gap: 8px; align-items: start; margin-bottom: 24px; padding-right: 42px; }
+    .brand-wrap { position: relative; }
+    .mark {
+      width: 204px;
+      height: auto;
+      display: block;
+      border-radius: 0;
+      background: transparent;
+      color: #fff;
+      overflow: visible;
+      margin: 6px 0 4px;
+    }
+    .mark img { width: 204px; height: auto; display: block; }
+    .brand p { margin: 4px 0 0; color: #d7ebff; font-size: 11px; text-transform: uppercase; letter-spacing: .07em; font-weight: 800; }
+    .sidebar-icon-btn, .sidebar-restore {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.24);
+      background: rgba(255,255,255,.12);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      padding: 0;
+    }
+    .sidebar-icon-btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+    .sidebar-icon-btn:hover, .sidebar-restore:hover { background: rgba(255,255,255,.22); }
+    .sidebar-icon-btn svg, .sidebar-restore svg { width: 18px; height: 18px; stroke-width: 2.2; }
+    .sidebar-restore {
+      display: none;
+      position: fixed;
+      left: 14px;
+      top: 14px;
+      z-index: 20;
+      background: var(--nav);
+      box-shadow: var(--shadow);
+    }
+    body.sidebar-collapsed .sidebar-restore { display: grid; }
+    .nav { display: grid; gap: 7px; }
+    .nav button {
+      width: 100%;
+      text-align: left;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #eaf5ff;
+      border-radius: 999px;
+      padding: 11px 14px;
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: .01em;
+    }
+    .nav button.active, .nav button:hover {
+      background: rgba(255,255,255,.14);
+      border-color: rgba(255,255,255,.34);
+      color: #fff;
+    }
+    .nav button.active:before {
+      content: "";
+      width: 4px;
+      align-self: stretch;
+      border-radius: 999px;
+      background: #fff;
+      margin-left: -5px;
+    }
+    .nav-icon {
+      width: 18px;
+      height: 18px;
+      display: inline-grid;
+      place-items: center;
+      color: #d7ebff;
+      flex: 0 0 18px;
+    }
+    .nav-icon svg { width: 18px; height: 18px; stroke-width: 2; }
+    .side-metrics {
+      margin-top: 22px;
+      display: grid;
+      gap: 10px;
+    }
+    .side-card {
+      background: rgba(255,255,255,.11);
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 8px;
+      padding: 12px;
+    }
+    .side-card span { display: block; color: #d7ebff; font-size: 12px; }
+    .side-card strong { display: block; margin-top: 4px; font-size: 22px; }
+    .main { min-width: 0; padding: 22px; }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+    .topbar h2 { margin: 0; font-size: 26px; letter-spacing: 0; }
+    .subtitle { margin: 7px 0 0; color: var(--muted); max-width: 960px; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+    .btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 9px 16px;
+      cursor: pointer;
+      min-height: 38px;
+    }
+    .btn.primary { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .btn.primary:hover { background: #0026c4; border-color: #0026c4; }
+    .btn.danger { color: var(--red); border-color: #f0b4b4; background: #fff7f7; }
+    .btn.small { padding: 6px 9px; min-height: 30px; font-size: 13px; }
+    .menu-wrap { position: relative; }
+    .menu {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 6px);
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      min-width: 224px;
+      padding: 6px;
+      z-index: 40;
+      display: grid;
+      gap: 2px;
+    }
+    .menu[hidden] { display: none; }
+    .menu button {
+      text-align: left;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      border-radius: 9px;
+      padding: 9px 12px;
+      cursor: pointer;
+    }
+    .menu button:hover { background: var(--soft-blue); }
+    .menu button.danger-item { color: var(--red); }
+    .menu button.danger-item:hover { background: var(--soft-red); }
+    .menu hr { border: 0; border-top: 1px solid var(--line); margin: 4px 6px; }
+    .view { display: none; }
+    .view.active { display: block; }
+    .grid { display: grid; gap: 14px; }
+    .two { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 15px;
+      min-width: 0;
+    }
+    .panel h3 {
+      color: var(--brand-deep);
+      font-size: 16px;
+      letter-spacing: .01em;
+    }
+    .panel h3:after {
+      content: "";
+      display: block;
+      width: 34px;
+      height: 3px;
+      border-radius: 999px;
+      background: var(--blue);
+      margin-top: 7px;
+    }
+    .panel h3, .panel h4 { margin: 0 0 12px; }
+    .metric { min-height: 118px; }
+    .metric-label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; font-weight: 800; }
+    .metric-value { font-size: 28px; font-weight: 800; margin-top: 6px; }
+    .metric-note { color: var(--muted); font-size: 13px; margin-top: 3px; }
+    .progress-track {
+      height: 8px;
+      background: #e7edf5;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+    .progress-bar { height: 100%; background: linear-gradient(90deg, var(--blue), var(--nav-3)); width: 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th {
+      text-align: left;
+      background: #f2f5f9;
+      color: #163252;
+      border-bottom: 1px solid var(--line);
+      padding: 9px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+    }
+    td { border-bottom: 1px solid var(--line); padding: 10px 9px; vertical-align: top; }
+    .scorebar { min-width: 120px; }
+    .bar {
+      height: 8px;
+      background: #e7edf5;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    .bar span { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--blue), var(--cyan)); }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .critical { background: var(--soft-red); color: var(--red); }
+    .major { background: var(--soft-amber); color: var(--amber); }
+    .moderate { background: var(--soft-blue); color: var(--blue); }
+    .minor { background: var(--soft-green); color: var(--green); }
+    .none { background: #eef2f7; color: var(--muted); }
+    .high { background: var(--soft-red); color: var(--red); }
+    .medium { background: var(--soft-amber); color: var(--amber); }
+    .low { background: var(--soft-green); color: var(--green); }
+    .chart-row { display: grid; grid-template-columns: 210px 1fr 64px; gap: 10px; align-items: center; margin: 10px 0; }
+    .chart-label { font-weight: 700; font-size: 13px; }
+    .chart-fill { height: 18px; background: #e7edf5; border-radius: 999px; overflow: hidden; }
+    .chart-fill span { display: block; height: 100%; background: linear-gradient(90deg, var(--blue), var(--cyan)); }
+    .donut-wrap { display: grid; grid-template-columns: 180px 1fr; gap: 18px; align-items: center; }
+    .donut {
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      background: conic-gradient(var(--red) 0deg, var(--red) 0deg, var(--amber) 0deg, var(--amber) 0deg, var(--blue) 0deg, var(--blue) 0deg, var(--green) 0deg);
+      position: relative;
+      margin: auto;
+    }
+    .donut:after {
+      content: "";
+      position: absolute;
+      inset: 34px;
+      background: #fff;
+      border-radius: 50%;
+    }
+    .legend { display: grid; gap: 8px; }
+    .legend div { display: flex; justify-content: space-between; gap: 10px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+    .assessment-layout { display: grid; grid-template-columns: 300px minmax(420px, 1fr) 410px; gap: 14px; align-items: start; }
+    .domain-list { display: grid; gap: 8px; max-height: calc(100vh - 210px); overflow: auto; padding-right: 4px; }
+    .domain-item {
+      text-align: left;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 8px;
+      padding: 11px;
+      cursor: pointer;
+    }
+    .domain-item.active { border-color: var(--blue); background: var(--soft-blue); }
+    .domain-item strong { display: block; }
+    .domain-item span { color: var(--muted); font-size: 12px; }
+    .question-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .chip {
+      background: #eef2f7;
+      border: 1px solid var(--line);
+      color: #263b55;
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .question-title { font-size: 23px; line-height: 1.25; margin: 0 0 14px; }
+    .answer-grid { display: grid; gap: 10px; }
+    .answer {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 12px;
+      align-items: start;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 8px;
+      padding: 12px;
+      cursor: pointer;
+    }
+    .answer input { width: 20px; height: 20px; margin-top: 2px; }
+    .answer.selected { border-color: var(--blue); background: var(--soft-blue); }
+    .answer:hover { border-color: #9fc7eb; background: #f8fbff; }
+    .answer-title { font-weight: 800; display: block; }
+    .answer-desc { display: block; color: var(--muted); margin-top: 3px; }
+    label.field { display: grid; gap: 6px; color: var(--muted); font-size: 13px; margin-bottom: 12px; }
+    input[type="number"], input[type="month"], input[type="text"], select, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--ink);
+      padding: 9px 10px;
+    }
+    textarea { min-height: 110px; resize: vertical; }
+    .info-box {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 11px;
+      background: #fbfcfe;
+      margin-bottom: 10px;
+    }
+    .info-box strong { display: block; margin-bottom: 5px; }
+    .question-score-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0;
+      background: #fff;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .score-briefing {
+      background: linear-gradient(135deg, var(--brand-deep), var(--blue));
+      color: #fff;
+      padding: 16px;
+    }
+    .score-briefing-top {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+    .score-eyebrow {
+      color: #d7ebff;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      font-weight: 900;
+    }
+    .score-main-value {
+      font-size: 52px;
+      line-height: 1;
+      font-weight: 900;
+      margin-top: 6px;
+    }
+    .score-status-pill {
+      border: 1px solid rgba(255,255,255,.38);
+      background: rgba(255,255,255,.14);
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .score-meter {
+      height: 11px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.22);
+      overflow: hidden;
+      margin-top: 14px;
+    }
+    .score-meter span {
+      display: block;
+      height: 100%;
+      width: 0;
+      border-radius: 999px;
+      background: #fff;
+    }
+    .score-meter-labels {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 7px;
+      color: #d7ebff;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .score-facts {
+      padding: 13px 16px;
+      display: grid;
+      gap: 0;
+      font-size: 13px;
+    }
+    .score-fact {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .score-fact:last-child { border-bottom: 0; }
+    .score-fact span { color: var(--muted); font-weight: 700; }
+    .score-fact strong { color: var(--ink); text-align: right; }
+    .assessment-support {
+      border-top: 1px solid var(--line);
+      padding: 14px 16px 4px;
+    }
+    .heatmap { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+    .heat-tile {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      min-height: 112px;
+    }
+    .heat-tile strong { display: block; }
+    .timeline-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; margin-bottom: 14px; }
+    .timeline-tools label { min-width: 160px; margin: 0; }
+    .roadmap-page-title h3 { margin-bottom: 6px; }
+    .roadmap-page-title p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+      max-width: 520px;
+    }
+    .roadmap-summary {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      width: 100%;
+    }
+    .roadmap-summary .mini-kpi { background: #fff; }
+    .roadmap-summary .mini-kpi {
+      min-height: 92px;
+      display: grid;
+      align-content: center;
+    }
+    .roadmap-summary .mini-kpi strong { font-size: 28px; }
+    .roadmap-control-bar {
+      background: var(--brand-ice);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 14px;
+    }
+    .roadmap-major-section {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+      overflow: hidden;
+      margin-top: 14px;
+    }
+    .panel.roadmap-major-section { padding: 0; }
+    .roadmap-major-section > summary {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 16px;
+      cursor: pointer;
+      background: linear-gradient(90deg, #fff 0%, var(--brand-ice) 100%);
+      border-bottom: 1px solid transparent;
+    }
+    .roadmap-major-section[open] > summary { border-bottom-color: var(--line); }
+    .roadmap-major-section > summary::-webkit-details-marker { display: none; }
+    .roadmap-section-heading {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+    .roadmap-section-index {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: var(--blue);
+      color: #fff;
+      font-weight: 900;
+      flex: 0 0 auto;
+    }
+    .roadmap-section-heading h3 {
+      margin: 0;
+      color: var(--brand-deep);
+      font-size: 17px;
+    }
+    .roadmap-section-heading h3:after { display: none; }
+    .roadmap-section-heading p {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .roadmap-section-meta {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+      align-items: center;
+    }
+    .roadmap-section-meta span {
+      border-radius: 999px;
+      padding: 5px 10px;
+      background: #eef3ff;
+      color: var(--brand-deep);
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .roadmap-section-toggle {
+      min-width: 78px;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 5px 10px;
+      background: #fff;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .roadmap-major-section[open] .closed-label,
+    .roadmap-major-section:not([open]) .open-label { display: none; }
+    .roadmap-section-body { padding: 14px; }
+    .roadmap-section-body .portfolio-wrap { margin: 0; }
+    .roadmap-workspace {
+      display: grid;
+      grid-template-columns: 300px minmax(0, 1fr) 260px;
+      gap: 14px;
+      align-items: start;
+      margin-top: 14px;
+    }
+    .roadmap-initiative-panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fff;
+    }
+    .roadmap-executive-panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fff;
+      position: sticky;
+      top: 18px;
+    }
+    .roadmap-executive-panel h3,
+    .roadmap-initiative-panel h3 {
+      margin-bottom: 12px;
+    }
+    .roadmap-gap-list {
+      display: grid;
+      gap: 9px;
+      max-height: 690px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+    .roadmap-gap-card {
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 8px;
+      padding: 12px 34px 12px 12px;
+      cursor: pointer;
+      display: grid;
+      gap: 7px;
+      position: relative;
+    }
+    .roadmap-gap-card.active {
+      border-color: var(--blue);
+      background: var(--brand-ice);
+      box-shadow: inset 4px 0 0 var(--blue);
+    }
+    .roadmap-gap-card strong { color: var(--brand-deep); }
+    .roadmap-gap-card .card-arrow {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--blue);
+      font-size: 24px;
+      line-height: 1;
+    }
+    .roadmap-card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .roadmap-card-meta span:not(.tag) {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .roadmap-all-btn {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--blue);
+      border-radius: 8px;
+      padding: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .roadmap-all-btn:hover { border-color: var(--blue); background: var(--brand-ice); }
+    .selected-roadmap {
+      display: grid;
+      gap: 10px;
+      min-width: 0;
+    }
+    .selected-roadmap-brief {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 10px 12px;
+    }
+    .selected-roadmap-brief h4 {
+      margin: 0;
+      color: var(--brand-deep);
+      font-size: 16px;
+    }
+    .selected-strip {
+      display: grid;
+      grid-template-columns: minmax(240px, 1.2fr) repeat(4, minmax(110px, .75fr));
+      gap: 10px;
+      align-items: center;
+    }
+    .selected-title-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      min-width: 0;
+    }
+    .selected-title-line h4 { min-width: 0; }
+    .selected-chip {
+      border-left: 1px solid var(--line);
+      padding-left: 10px;
+      min-height: 38px;
+    }
+    .selected-chip span {
+      display: block;
+      color: var(--muted);
+      text-transform: uppercase;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .06em;
+    }
+    .selected-chip strong {
+      display: block;
+      color: var(--brand-deep);
+      font-size: 12px;
+      margin-top: 3px;
+    }
+    .selected-support {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .selected-support div {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 10px;
+      background: var(--brand-ice);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .selected-support strong {
+      display: block;
+      color: var(--brand-deep);
+      margin-bottom: 3px;
+    }
+    .selected-roadmap-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .selected-roadmap-grid div {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 8px;
+      padding: 9px;
+    }
+    .selected-roadmap-grid span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      font-weight: 800;
+    }
+    .selected-roadmap-grid strong {
+      display: block;
+      margin-top: 4px;
+      color: var(--ink);
+      font-size: 13px;
+    }
+    .timeline-wrap {
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      min-height: 430px;
+    }
+    .timeline {
+      min-width: 1280px;
+      display: grid;
+      grid-template-columns: 360px 1fr;
+    }
+    .portfolio-wrap {
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      margin-top: 14px;
+      margin-bottom: 14px;
+    }
+    .portfolio-roadmap {
+      min-width: 100%;
+      display: grid;
+      grid-template-columns: 290px 120px 96px 1fr;
+      font-size: 12px;
+    }
+    .portfolio-head {
+      background: #f2f5f9;
+      border-bottom: 1px solid var(--line);
+      color: var(--brand-deep);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      padding: 10px;
+    }
+    .portfolio-months {
+      display: grid;
+      background: #f2f5f9;
+      border-bottom: 1px solid var(--line);
+    }
+    .portfolio-month {
+      border-left: 1px solid var(--line);
+      padding: 8px 4px;
+      text-align: center;
+      font-size: 10px;
+      font-weight: 900;
+      color: var(--brand-deep);
+    }
+    .portfolio-wave {
+      grid-column: 1 / -1;
+      padding: 9px 12px;
+      background: var(--brand-navy);
+      color: #fff;
+      font-weight: 900;
+      border-bottom: 1px solid rgba(255,255,255,.18);
+    }
+    .portfolio-cell {
+      border-bottom: 1px solid var(--line);
+      padding: 9px 10px;
+      background: #fff;
+      min-height: 48px;
+    }
+    .portfolio-cell strong { color: var(--brand-deep); }
+    .portfolio-track {
+      position: relative;
+      border-bottom: 1px solid var(--line);
+      min-height: 48px;
+      background-image: linear-gradient(to right, var(--line) 1px, transparent 1px);
+      background-repeat: repeat-x;
+    }
+    .portfolio-bar {
+      position: absolute;
+      top: 15px;
+      height: 18px;
+      border-radius: 999px;
+      background: var(--blue);
+      box-shadow: 0 6px 14px rgba(0,49,235,.18);
+      cursor: pointer;
+    }
+    .portfolio-bar.high { background: var(--red); }
+    .portfolio-bar.medium { background: var(--blue); }
+    .portfolio-bar.low { background: var(--green); }
+    .portfolio-dot {
+      position: absolute;
+      top: 18px;
+      width: 12px;
+      height: 12px;
+      transform: rotate(45deg);
+      border-radius: 3px;
+      background: var(--amber);
+    }
+    .portfolio-note {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .timeline-head, .timeline-name, .timeline-row { border-bottom: 1px solid var(--line); }
+    .timeline-head {
+      display: grid;
+      position: sticky;
+      top: 0;
+      background: #f2f5f9;
+      z-index: 2;
+    }
+    .period {
+      border-left: 1px solid var(--line);
+      padding: 8px 6px;
+      font-size: 12px;
+      font-weight: 800;
+      text-align: center;
+      min-height: 38px;
+    }
+    .timeline-name {
+      padding: 10px;
+      min-height: 66px;
+      background: #fff;
+      font-size: 12px;
+    }
+    .timeline-action-name {
+      display: grid;
+      gap: 5px;
+    }
+    .timeline-action-name strong { color: var(--brand-deep); }
+    .timeline-action-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .action-type {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 2px 7px;
+      font-size: 11px;
+      font-weight: 800;
+      background: var(--soft-blue);
+      color: var(--blue);
+    }
+    .action-type.monthly { background: var(--soft-green); color: var(--green); }
+    .action-type.milestone { background: var(--soft-amber); color: var(--amber); }
+    .action-type.review { background: #eef2f7; color: #475569; }
+    .timeline-row {
+      position: relative;
+      min-height: 66px;
+      background-image: linear-gradient(to right, var(--line) 1px, transparent 1px);
+    }
+    .initiative-bar {
+      position: absolute;
+      top: 13px;
+      height: 30px;
+      border-radius: 8px;
+      padding: 6px 9px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .bar-high { background: var(--red); }
+    .bar-medium { background: var(--amber); }
+    .bar-low { background: var(--green); }
+    .action-bar {
+      position: absolute;
+      top: 21px;
+      height: 22px;
+      border-radius: 999px;
+      background: var(--blue);
+      box-shadow: 0 6px 14px rgba(0,91,170,.18);
+    }
+    .action-bar.high { background: var(--red); }
+    .action-bar.medium { background: var(--amber); }
+    .action-bar.low { background: var(--blue); }
+    .action-milestone {
+      position: absolute;
+      top: 23px;
+      width: 18px;
+      height: 18px;
+      transform: rotate(45deg);
+      border-radius: 4px;
+      background: var(--amber);
+      box-shadow: 0 5px 12px rgba(183,121,31,.18);
+    }
+    .action-dot {
+      position: absolute;
+      top: 27px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 3px rgba(23,128,61,.12);
+    }
+    .action-review {
+      position: absolute;
+      top: 24px;
+      width: 16px;
+      height: 16px;
+      border-radius: 5px;
+      border: 2px solid var(--blue);
+      background: #fff;
+    }
+    .roadmap-detail-grid { margin-top: 14px; }
+    .report-preview { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 18px; }
+    .settings-grid { display: grid; grid-template-columns: 360px 1fr; gap: 14px; align-items: start; }
+    .dashboard-hero {
+      display: grid;
+      grid-template-columns: minmax(240px, 1fr) 240px minmax(300px, 1.1fr);
+      gap: 22px;
+      align-items: center;
+      border-top: 4px solid var(--blue);
+      background: linear-gradient(135deg, #ffffff 0%, var(--brand-ice) 58%, #e8f4ff 100%);
+    }
+    .hero-value {
+      font-size: 64px;
+      line-height: 1;
+      font-weight: 800;
+      margin-top: 8px;
+    }
+    .hero-progress { height: 12px; max-width: 520px; }
+    .hero-gauge {
+      --score: 0deg;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: conic-gradient(var(--blue) var(--score), #dfe7f1 0deg);
+      display: grid;
+      place-items: center;
+      position: relative;
+      margin: auto;
+    }
+    .hero-gauge:after {
+      content: "";
+      position: absolute;
+      inset: 28px;
+      background: #fff;
+      border: 1px solid #e7edf5;
+      border-radius: 50%;
+    }
+    .hero-gauge span {
+      position: relative;
+      z-index: 1;
+      font-size: 38px;
+      font-weight: 800;
+    }
+    .hero-kpis, .gap-kpis {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .mini-kpi {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,.82);
+      padding: 12px;
+      min-height: 92px;
+    }
+    .mini-kpi span, .mini-kpi small {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .mini-kpi strong {
+      display: block;
+      margin: 6px 0 3px;
+      font-size: 25px;
+      line-height: 1.05;
+    }
+    .gap-visual-grid {
+      display: grid;
+      grid-template-columns: minmax(260px, .85fr) minmax(260px, .85fr) minmax(320px, 1.3fr);
+      gap: 14px;
+      align-items: stretch;
+    }
+    .priority-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 10px;
+    }
+    .priority-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fff;
+      min-height: 142px;
+      display: grid;
+      gap: 7px;
+      align-content: start;
+    }
+    .priority-card strong { font-size: 15px; }
+    .priority-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .weighted-bar-row {
+      display: grid;
+      grid-template-columns: minmax(150px, 220px) 1fr 72px;
+      gap: 10px;
+      align-items: center;
+      margin: 10px 0;
+    }
+    .weighted-bar-label { font-weight: 700; font-size: 13px; }
+    .weighted-track {
+      height: 16px;
+      background: #e7edf5;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .weighted-track span {
+      display: block;
+      height: 100%;
+      width: 0;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--blue), var(--cyan));
+    }
+    .roadmap-priority-stack {
+      display: grid;
+      gap: 10px;
+    }
+    .roadmap-priority-row {
+      display: grid;
+      grid-template-columns: 78px 1fr 42px;
+      gap: 10px;
+      align-items: center;
+    }
+    .roadmap-priority-track {
+      height: 18px;
+      background: #e7edf5;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .roadmap-priority-track span {
+      display: block;
+      height: 100%;
+      border-radius: 999px;
+    }
+    .detail-register summary {
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 18px;
+    }
+    .register-tools {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(180px, 1fr)) auto;
+      gap: 10px;
+      align-items: end;
+      margin-top: 14px;
+    }
+    .register-tools label { margin-bottom: 0; }
+    .settings-hero {
+      display: grid;
+      grid-template-columns: minmax(260px, .75fr) minmax(360px, 1.25fr);
+      gap: 18px;
+      align-items: center;
+      margin-bottom: 14px;
+      border-top: 4px solid var(--blue);
+      background: linear-gradient(135deg, #ffffff 0%, var(--brand-ice) 100%);
+    }
+    .settings-layout {
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 14px;
+      align-items: start;
+    }
+    .weight-summary-bars { display: grid; gap: 8px; }
+    .weight-summary-row {
+      display: grid;
+      grid-template-columns: minmax(130px, 210px) 1fr 58px;
+      gap: 10px;
+      align-items: center;
+      font-size: 13px;
+    }
+    .weight-summary-track {
+      height: 18px;
+      background: #e7edf5;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .weight-summary-track span {
+      display: block;
+      height: 100%;
+      border-radius: 999px;
+    }
+    .weight-accordion {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+    .weight-accordion summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 13px;
+      background: linear-gradient(90deg, #fbfdff, var(--brand-ice));
+    }
+    .weight-accordion summary::-webkit-details-marker { display: none; }
+    .accordion-header {
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) repeat(4, auto);
+      gap: 10px;
+      align-items: center;
+    }
+    .accordion-header strong { display: block; }
+    .accordion-stat {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 7px 9px;
+      background: #fff;
+      min-width: 96px;
+    }
+    .accordion-stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+    }
+    .accordion-stat b {
+      display: block;
+      margin-top: 2px;
+      font-size: 14px;
+    }
+    .accordion-body {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 14px;
+      padding: 13px;
+      border-top: 1px solid var(--line);
+    }
+    .question-weight-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 10px;
+    }
+    .report-brand {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: center;
+      border-bottom: 3px solid var(--blue);
+      padding-bottom: 14px;
+      margin-bottom: 18px;
+    }
+    .report-brand h1 { margin: 0; color: var(--brand-deep); }
+    .report-brand p { margin: 4px 0 0; color: var(--muted); }
+    .report-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #fff;
+      font-weight: 900;
+      letter-spacing: .06em;
+      background: linear-gradient(135deg, #001559 0%, #0031eb 100%);
+      padding: 10px 16px;
+      border-radius: 12px;
+    }
+    .report-logo img { width: 160px; height: auto; display: block; }
+    .warning { background: #fff7e5; color: #7a4a00; border: 1px solid #f1d092; border-radius: 8px; padding: 10px; margin-bottom: 12px; }
+    .empty { color: var(--muted); background: #fbfcfe; border: 1px dashed var(--line); border-radius: 8px; padding: 16px; }
+    @media (max-width: 1180px) {
+      .app { grid-template-columns: 1fr; }
+      body.sidebar-collapsed .app { grid-template-columns: 1fr; }
+      .sidebar { position: static; height: auto; }
+      .nav { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .assessment-layout, .settings-grid, .settings-layout, .settings-hero, .dashboard-hero, .gap-visual-grid, .roadmap-summary, .roadmap-workspace, .selected-roadmap-grid, .selected-strip, .selected-support, .two, .three, .four { grid-template-columns: 1fr; }
+      .roadmap-executive-panel { position: static; }
+      .topbar { flex-direction: column; }
+      .toolbar { justify-content: flex-start; }
+      .question-score-top { grid-template-columns: 1fr; }
+      .hero-kpis, .gap-kpis, .register-tools, .accordion-header, .accordion-body { grid-template-columns: 1fr; }
+      .weighted-bar-row, .weight-summary-row { grid-template-columns: 1fr; }
+    }
+    @media print {
+      .sidebar, .toolbar, .nav, .no-print { display: none !important; }
+      .app, .main { display: block; padding: 0; }
+      .view { display: block; margin-bottom: 18px; }
+      .panel { box-shadow: none; break-inside: avoid; }
+      body { background: #fff; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand-wrap">
+        <div class="brand">
+          <div class="mark" aria-label="Madkour">
+            <img alt="Madkour" src="data:image/png;base64,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">
+          </div>
+          <p>Planning and Controlling Department</p>
+        </div>
+        <button class="sidebar-icon-btn" id="sidebarToggle" title="Hide sidebar" aria-label="Hide sidebar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M3 12h18"></path>
+            <path d="m9 6-6 6 6 6"></path>
+          </svg>
+        </button>
+      </div>
+      <nav class="nav" aria-label="Main views">
+        <button class="active" data-view="dashboard"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 13h6V4H4v9z"></path><path d="M14 20h6V4h-6v16z"></path><path d="M4 20h6v-3H4v3z"></path></svg></span><span>Dashboard</span></button>
+        <button data-view="assessment"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 6h13"></path><path d="M8 12h13"></path><path d="M8 18h13"></path><path d="M3 6h.01"></path><path d="M3 12h.01"></path><path d="M3 18h.01"></path></svg></span><span>Assessment</span></button>
+        <button data-view="gaps"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3v18h18"></path><path d="m7 15 4-4 3 3 5-7"></path></svg></span><span>Gap Analysis</span></button>
+        <button data-view="roadmap"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 7h16"></path><path d="M4 12h10"></path><path d="M4 17h16"></path><path d="M16 12h4"></path></svg></span><span>Roadmap</span></button>
+        <button data-view="report"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2h9l5 5v15H6z"></path><path d="M14 2v6h6"></path><path d="M9 13h6"></path><path d="M9 17h6"></path></svg></span><span>Report / Export</span></button>
+        <button data-view="settings"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.6 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.6 8.6a1.7 1.7 0 0 0-.34-1.88l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3a2 2 0 1 1 4 0v.09A1.7 1.7 0 0 0 15 4.6a1.7 1.7 0 0 0 1.88-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9c.25.36.6.61 1 .6h.6a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1.4z"></path></svg></span><span>Settings</span></button>
+      </nav>
+      <div class="side-metrics">
+        <div class="side-card"><span>Answered</span><strong id="sideAnswered">0 / 0</strong></div>
+        <div class="side-card"><span>Maturity</span><strong id="sideMaturity">0.00</strong></div>
+        <div class="side-card"><span>Achievement</span><strong id="sideAchievement">0%</strong></div>
+        <div class="side-card"><span>Critical Gaps</span><strong id="sideCritical">0</strong></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <button class="sidebar-restore" id="sidebarRestore" title="Show sidebar" aria-label="Show sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M3 12h18"></path>
+          <path d="m15 6 6 6-6 6"></path>
+        </svg>
+      </button>
+      <div class="topbar">
+        <div>
+          <h2>Planning and Controlling Department Assessment Tool</h2>
+          <p class="subtitle">Madkour assessment of planning governance, schedule development, integrated baselines, progress control, forecasting, recovery, delay analysis, closeout, and continuous improvement under MDP-PLN-BP01.</p>
+        </div>
+        <div class="toolbar">
+          <button class="btn" id="saveBtn">Save</button>
+          <button class="btn" id="copyGapBtn">Copy Gaps</button>
+          <div class="menu-wrap">
+            <button class="btn" id="backupMenuBtn" aria-haspopup="true" aria-expanded="false">Backup &#9662;</button>
+            <div class="menu" id="backupMenu" hidden>
+              <button id="jsonBtn">Export Backup JSON</button>
+              <button id="loadJsonBtn">Load Backup JSON</button>
+              <hr>
+              <button id="resetBtn" class="danger-item">Reset All Data</button>
+            </div>
+            <input id="jsonFile" type="file" accept="application/json,.json" style="display:none;">
+          </div>
+          <button class="btn primary" id="reportBtn">Executive Brief</button>
+        </div>
+      </div>
+
+      <section class="view active" id="dashboardView">
+        <div class="dashboard-hero panel">
+          <div>
+            <div class="metric-label">Target Achievement</div>
+            <div class="hero-value" id="achievement">0%</div>
+            <div class="metric-note">Weighted assessment achievement against the configured question targets.</div>
+            <div class="progress-track hero-progress"><div class="progress-bar" id="achievementBar"></div></div>
+          </div>
+          <div class="hero-gauge" id="achievementGauge"><span>0%</span></div>
+          <div class="hero-kpis">
+            <div class="mini-kpi">
+              <span>Maturity</span>
+              <strong id="overallMaturity">0.00 / 5</strong>
+              <small id="maturityText">Not started</small>
+            </div>
+            <div class="mini-kpi">
+              <span>Weighted Gap</span>
+              <strong id="weightedGap">0%</strong>
+              <small>Lost achievement</small>
+            </div>
+            <div class="mini-kpi">
+              <span>Critical / Major</span>
+              <strong id="criticalMajor">0</strong>
+              <small>Priority gaps</small>
+            </div>
+            <div class="mini-kpi">
+              <span>Confidence</span>
+              <strong id="assessmentConfidence">0%</strong>
+              <small id="assessmentCoverage">0 / 0 answered</small>
+            </div>
+          </div>
+        </div>
+        <div class="grid two" style="margin-top:14px;">
+          <div class="panel">
+            <h3>Domain Maturity</h3>
+            <div id="domainChart"></div>
+          </div>
+          <div class="panel">
+            <h3>Severity Mix</h3>
+            <div class="donut-wrap">
+              <div class="donut" id="severityDonut"></div>
+              <div class="legend" id="severityLegend"></div>
+            </div>
+          </div>
+        </div>
+        <div class="grid two" style="margin-top:14px;">
+          <div class="panel">
+            <h3>Weighted Gap By Domain</h3>
+            <div id="weightedGapChart"></div>
+          </div>
+          <div class="panel">
+            <h3>Roadmap Priorities</h3>
+            <div id="roadmapPriorityChart"></div>
+          </div>
+        </div>
+        <div class="grid two" style="margin-top:14px;">
+          <div class="panel">
+            <h3>Top Management Actions</h3>
+            <div id="managementActions"></div>
+          </div>
+          <div class="panel">
+            <h3>Domain Scorecard</h3>
+            <div id="domainTable"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="assessmentView">
+        <div class="assessment-layout">
+          <div class="panel">
+            <h3>Assessment Areas</h3>
+            <div class="domain-list" id="domainNavigator"></div>
+          </div>
+          <div class="panel">
+            <div class="question-meta" id="questionMeta"></div>
+            <h3 class="question-title" id="questionText"></h3>
+            <div class="answer-grid" id="answerOptions"></div>
+            <div style="display:flex;justify-content:space-between;gap:10px;margin-top:14px;">
+              <button class="btn" id="prevQuestion">Previous</button>
+              <button class="btn primary" id="nextQuestion">Next</button>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="question-score-card">
+              <div class="score-briefing">
+                <div class="score-briefing-top">
+                  <div>
+                    <div class="score-eyebrow">Question Achievement</div>
+                    <div class="score-main-value" id="questionScorePct">0%</div>
+                  </div>
+                  <div class="score-status-pill" id="questionStatusPill">Not Assessed</div>
+                </div>
+                <div class="score-meter"><span id="questionScoreBar"></span></div>
+                <div class="score-meter-labels">
+                  <span>0%</span>
+                  <span>100% = Target Achieved</span>
+                </div>
+              </div>
+              <div class="score-facts">
+                <div class="score-fact"><span>Current Maturity</span><strong id="questionCurrentScore">-</strong></div>
+                <div class="score-fact"><span>Target Maturity</span><strong id="questionTargetScore">-</strong></div>
+                <div class="score-fact"><span>Question Weight</span><strong id="questionWeightScore">-</strong></div>
+                <div class="score-fact"><span>Weighted Gap</span><strong id="questionWeightedGap">-</strong></div>
+                <div class="score-fact"><span>Severity</span><strong id="questionSeverity">-</strong></div>
+              </div>
+            </div>
+            <div class="assessment-support">
+              <label class="field">Question Target Maturity
+                <select id="targetSelect">
+                  <option value="3">3 - Defined and Applied</option>
+                  <option value="4">4 - Controlled and Measured</option>
+                  <option value="5">5 - Optimized</option>
+                </select>
+              </label>
+              <label class="field">Evidence Status
+                <select id="evidenceSelect">
+                  <option value="">Not selected</option>
+                  <option>Available</option>
+                  <option>Partially available</option>
+                  <option>Not available</option>
+                </select>
+              </label>
+              <label class="field">Notes / Evidence Comments
+                <textarea id="notesText" placeholder="Add current status, evidence location, exceptions, or management comments."></textarea>
+              </label>
+              <div class="info-box">
+                <strong>Process Reference</strong>
+                <span id="processRef"></span>
+              </div>
+              <div class="info-box">
+                <strong>Evidence Expected</strong>
+                <span id="evidenceExpected"></span>
+              </div>
+              <div class="info-box">
+                <strong>Business Impact</strong>
+                <span id="businessImpact"></span>
+              </div>
+              <div class="info-box">
+                <strong>Suggested Owner</strong>
+                <span id="suggestedOwner"></span>
+              </div>
+              <div class="info-box">
+                <strong>Recommended Improvement Action</strong>
+                <span id="recommendedAction"></span>
+              </div>
+              <div class="info-box">
+                <strong>Live Gap Preview</strong>
+                <div id="liveGap"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="gapsView">
+        <div class="gap-visual-grid">
+          <div class="panel gap-kpis" id="gapSummary"></div>
+          <div class="panel">
+            <h3>Severity Distribution</h3>
+            <div class="donut-wrap">
+              <div class="donut" id="gapSeverityDonut"></div>
+              <div class="legend" id="gapSeverityLegend"></div>
+            </div>
+          </div>
+          <div class="panel">
+            <h3>Weighted Gap By Domain</h3>
+            <div id="gapWeightedGapChart"></div>
+          </div>
+        </div>
+        <div class="panel" style="margin-top:14px;">
+          <h3>Domain Heatmap</h3>
+          <div class="heatmap" id="gapHeatmap"></div>
+        </div>
+        <div class="panel" style="margin-top:14px;">
+          <h3>Top Priority Gaps</h3>
+          <div id="topGapCards"></div>
+        </div>
+        <details class="panel detail-register" style="margin-top:14px;">
+          <summary>Detailed Gap Register</summary>
+          <div class="register-tools">
+            <label class="field">Severity
+              <select id="gapSeverityFilter">
+                <option value="">All severities</option>
+                <option>Critical</option>
+                <option>Major</option>
+                <option>Moderate</option>
+                <option>Minor</option>
+                <option>No Gap</option>
+              </select>
+            </label>
+            <label class="field">Domain
+              <select id="gapDomainFilter"></select>
+            </label>
+            <button class="btn" id="copyGapBtn2">Copy Gap Table</button>
+          </div>
+          <div id="gapTable" style="margin-top:12px;"></div>
+        </details>
+      </section>
+
+      <section class="view" id="roadmapView">
+        <div class="panel">
+          <div class="roadmap-page-title">
+            <h3>Detailed Implementation Roadmap</h3>
+            <p>Selected-gap implementation timeline with action ownership, recurring controls, and milestone governance.</p>
+          </div>
+          <div class="timeline-tools roadmap-control-bar">
+            <label class="field">Start
+              <input type="month" id="roadmapStart">
+            </label>
+            <label class="field">End
+              <input type="month" id="roadmapEnd">
+            </label>
+            <label class="field">Default Duration
+              <select id="durationSelect">
+                <option value="3">3 months</option>
+                <option value="6">6 months</option>
+                <option value="9">9 months</option>
+                <option value="12">12 months</option>
+              </select>
+            </label>
+            <label class="field">Timeline Scale
+              <select id="zoomSelect">
+                <option value="month">Month</option>
+                <option value="quarter" selected>Quarter</option>
+                <option value="half">Half-Year</option>
+                <option value="year">Year</option>
+              </select>
+            </label>
+            <label class="field">Domain
+              <select id="roadmapDomainFilter"></select>
+            </label>
+          </div>
+          <details class="roadmap-major-section" id="portfolioSection" open>
+            <summary>
+              <div class="roadmap-section-heading">
+                <span class="roadmap-section-index">1</span>
+                <div>
+                  <h3>Portfolio Roadmap Overview</h3>
+                  <p>All initiatives grouped by implementation wave</p>
+                </div>
+              </div>
+              <div class="roadmap-section-meta">
+                <span id="portfolioSectionMeta">0 initiatives</span>
+                <span class="roadmap-section-toggle"><span class="open-label">Collapse</span><span class="closed-label">Expand</span></span>
+              </div>
+            </summary>
+            <div class="roadmap-section-body">
+              <div class="portfolio-wrap">
+                <div class="portfolio-roadmap" id="portfolioRoadmap"></div>
+              </div>
+            </div>
+          </details>
+          <details class="roadmap-major-section" id="selectedRoadmapSection">
+            <summary>
+              <div class="roadmap-section-heading">
+                <span class="roadmap-section-index">2</span>
+                <div>
+                  <h3>Selected Gap Implementation Roadmap</h3>
+                  <p>Detailed action plan for the selected initiative</p>
+                </div>
+              </div>
+              <div class="roadmap-section-meta">
+                <span id="selectedSectionMeta">No selected initiative</span>
+                <span class="roadmap-section-toggle"><span class="open-label">Collapse</span><span class="closed-label">Expand</span></span>
+              </div>
+            </summary>
+            <div class="roadmap-section-body">
+              <div class="roadmap-workspace">
+                <div class="roadmap-initiative-panel">
+                  <h3>Gaps / Initiatives</h3>
+                  <div class="roadmap-gap-list" id="roadmapGapList"></div>
+                </div>
+                <div class="selected-roadmap">
+                  <div id="initiativeDetail" class="selected-roadmap-brief">
+                    <div class="empty">Select a gap to see its implementation actions.</div>
+                  </div>
+                  <div class="timeline-wrap"><div class="timeline" id="timeline"></div></div>
+                </div>
+                <div class="roadmap-executive-panel">
+                  <h3>Executive Roadmap</h3>
+                  <div class="roadmap-summary" id="roadmapSummary"></div>
+                </div>
+              </div>
+            </div>
+          </details>
+        </div>
+        <details class="panel roadmap-major-section roadmap-detail-grid" id="roadmapRegisterSection">
+          <summary>
+            <div class="roadmap-section-heading">
+              <span class="roadmap-section-index">3</span>
+              <div>
+                <h3>Detailed Action Register</h3>
+                <p>Operational action list supporting the selected roadmap initiative</p>
+              </div>
+            </div>
+            <div class="roadmap-section-meta">
+              <span id="registerSectionMeta">0 actions</span>
+              <span class="roadmap-section-toggle"><span class="open-label">Collapse</span><span class="closed-label">Expand</span></span>
+            </div>
+          </summary>
+          <div class="roadmap-section-body">
+            <div id="roadmapTable"></div>
+          </div>
+        </details>
+      </section>
+
+      <section class="view" id="reportView">
+        <div class="grid three">
+          <div class="panel">
+            <h3>Executive Brief</h3>
+            <p class="metric-note">One-page executive report: KPIs, domain maturity, top risks, strategic insights, and roadmap highlights. Open it and use Print &rarr; Save as PDF for a boardroom PDF.</p>
+            <button class="btn primary" id="execBriefBtn">Save Executive Brief</button>
+          </div>
+          <div class="panel">
+            <h3>Operational Appendix</h3>
+            <p class="metric-note">Full working-team detail: dashboard, gaps, roadmap, answers, notes, and evidence status.</p>
+            <button class="btn" id="reportBtn2">Save Detailed Report</button>
+          </div>
+          <div class="panel">
+            <h3>Data Export</h3>
+            <p class="metric-note">Flat data for Excel, Power BI, or any analytics tool. Copy buttons paste directly into Excel.</p>
+            <button class="btn" id="csvBtn">Download CSV</button>
+            <button class="btn" id="copyAssessmentBtn">Copy Assessment</button>
+            <button class="btn" id="copyRoadmapBtn">Copy Roadmap</button>
+          </div>
+        </div>
+        <div class="panel" style="margin-top:14px;">
+          <h3>Report Preview</h3>
+          <div class="report-preview" id="reportPreview"></div>
+        </div>
+      </section>
+
+      <section class="view" id="settingsView">
+        <div class="panel settings-hero">
+          <div>
+            <h3>Weights Summary</h3>
+            <div id="weightWarning"></div>
+          </div>
+          <div id="weightSummaryChart"></div>
+        </div>
+        <div class="settings-layout">
+          <div class="panel">
+            <h3>Target Settings</h3>
+            <label class="field">Default Target Maturity
+              <select id="defaultTarget">
+                <option value="3">3 - Defined and Applied</option>
+                <option value="4">4 - Controlled and Measured</option>
+                <option value="5">5 - Optimized</option>
+              </select>
+            </label>
+            <button class="btn" id="applyTargetBtn">Apply Target To All Questions</button>
+          </div>
+          <div class="panel">
+            <h3>Domain And Question Weights</h3>
+            <div id="domainWeights"></div>
+            <div id="questionWeights" style="display:none;"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const maturityScale = [
+      { value: 1, label: "Not Established", text: "The practice is not formally defined or consistently followed." },
+      { value: 2, label: "Partially Established", text: "The practice exists, but application varies by project, person, or situation." },
+      { value: 3, label: "Defined and Applied", text: "The practice is documented and generally applied across relevant projects." },
+      { value: 4, label: "Controlled and Measured", text: "The practice has ownership, control checks, review cycles, and performance monitoring." },
+      { value: 5, label: "Optimized", text: "The practice is standardized, integrated, improved, and supported by systems where practical." }
+    ];
+
+    const domains = [
+      { id: "governance", name: "Governance, Organization & Capability", weight: 10 },
+      { id: "initiation", name: "Pre-Award & Project Initiation", weight: 10 },
+      { id: "development", name: "Schedule Development Fundamentals", weight: 18 },
+      { id: "integration", name: "Integrated Planning & Baseline Control", weight: 16 },
+      { id: "updating", name: "Progress Measurement, Updating & Data Quality", weight: 15 },
+      { id: "analysis", name: "Analysis, Forecasting & Reporting", weight: 14 },
+      { id: "recovery", name: "Risk, Recovery, Change & Delay Claims", weight: 12 },
+      { id: "closeout", name: "Closeout, Records & Continuous Improvement", weight: 5 }
+    ];
+
+    const questions = [
+      q("governance","Department Mandate and Manual",17,"Is the Planning and Controlling Department mandate supported by an approved manual covering planning principles, schedule management, interfaces, baseline and change control, reporting, and schedule acceptance?","Approved planning manual, department mandate, process approval, revision history, and communication evidence.","MDP-PLN-BP01 Purpose, Scope, and Planning Manager responsibilities 55-58.","Governance","An incomplete mandate permits inconsistent methods and unclear authority across projects.","Planning Manager","Approve and control a department manual linking the business process to detailed standards, decision rights, required records, and acceptance criteria."),
+      q("governance","Roles and Cross-Functional Interfaces",17,"Are lifecycle responsibilities, handoffs, inputs, reviews, approvals, and escalation routes clearly assigned among Planning roles and interface departments?","Lifecycle RACI, job descriptions, SIPOC mapping, interface matrix, handover records, and sampled communications.","MDP-PLN-BP01 Responsibilities 44-111 and all SIPOC source/done-by/recipient fields.","People","Unclear handoffs cause missing inputs, duplicated work, delayed approval, and weak accountability.","Planning Manager with interface department managers","Approve a lifecycle RACI covering every required input, validation, activity, review, approval, distribution, escalation, and archive responsibility."),
+      q("governance","Department Capacity and Planner Assignment",17,"Is Planning capacity assessed against current and incoming project demand before planner assignment, hiring, or reallocation decisions?","Project allocation register, workload model, capacity forecast, assignment emails, hiring or transfer requests, and review minutes.","MDP-PLN-BP01 Project Initiation and Planning Manager responsibilities 59-72.","People","Insufficient or poorly allocated capacity delays baselines and reduces update and analysis quality.","Planning Manager","Implement a risk-based capacity model using project number, complexity, lifecycle, location, reporting frequency, and claims workload."),
+      q("governance","Competency and Knowledge Transfer",17,"Are technical, analytical, system, communication, and claims competencies defined for each Planning role and supported by assessed training, mentoring, and handover arrangements?","Competency matrix, training-needs analysis, development plan, mentoring records, work-review results, and handover evidence.","MDP-PLN-BP01 Responsibilities 59, 63-64, 77, and 93-101.","People","Capability gaps and knowledge concentration create schedule-quality and continuity risks.","Planning Manager and Planning Team Leader","Establish role-based competency requirements, evidence-based gap reviews, mentoring assignments, and post-development effectiveness checks."),
+      q("governance","Technical Review and Quality Assurance",16,"Are tender schedules, baselines, updates, recovery schedules, revised schedules, reports, and delay analyses independently reviewed against defined technical acceptance criteria before issue?","Approved review checklists, peer comments, correction logs, Time Schedule Evaluation results, sign-offs, and issued deliverables.","MDP-PLN-BP01 detailed-baseline review and responsibilities 64, 73, 78, 89, and 94.","Quality","Unreviewed outputs can contain scope, logic, loading, status, or interpretation errors that misdirect decisions.","Planning Team Leader","Define risk-based reviews, mandatory tests, acceptance thresholds, reviewer independence, exception approval, and evidence retention."),
+      q("governance","Audits, KPIs and Improvement Governance",16,"Are Planning audits and KPIs governed by clear definitions, validated data, management review, corrective actions, and verified improvement benefits?","Audit plan and findings, KPI dictionary, source data, performance reports, corrective-action register, management review, and benefits evidence.","MDP-PLN-BP01 Responsibilities 58, 65, 68, 90 and KPIs 113-119.","Governance","Weak KPI and audit governance can report compliance without improving process performance or data integrity.","Planning Manager","Create KPI calculation rules and audit cycles, analyze trends and root causes, assign actions, and verify benefits before closure."),
+
+      q("initiation","Tender Planning Activation and Assignment",17,"When Tendering or Business Development requests support, is the tender-planning request formally accepted, scoped, assigned, prioritized, and tracked to its required delivery date?","Planning request, tender requirements, assignment record, due date, workload review, and deliverable tracker.","MDP-PLN-BP01 Pre-Award SIPOC and footnote activating the process on request.","Process","Informal activation can cause late or inadequately resourced tender submissions.","Planning Manager","Introduce a tender-planning request form defining schedule level, required outputs, due date, assigned planner, review route, and acceptance."),
+      q("initiation","Tender Input and Assumption Control",17,"Before tender schedule development, are conditions, scope, BOQ, drawings, technical documents, basis of estimate, quantities, productivity, and missing information systematically reviewed and recorded?","Tender input checklist, document register, BOQ, drawings, technical documents, basis of estimate, clarifications, assumptions, and exclusions.","MDP-PLN-BP01 Pre-Award SIPOC inputs.","Process","Missing or unsupported tender assumptions create unrealistic commitments and omitted scope.","Planning Engineer","Use a mandatory input-readiness and assumptions register with owners, sources, status, impact, and escalation of unresolved items."),
+      q("initiation","Tender Schedule Development and Review",17,"Does tender schedule preparation cover scope definition, preliminary timeframe, WBS, activities, logic, internal review, adjustment, final issue, and narrative requirements?","Draft and final schedules, WBS, activity list, logic, review comments, revisions, approval, and narrative where requested.","MDP-PLN-BP01 Pre-Award SIPOC and Visio process A.","Schedule Development","An incomplete or poorly reviewed tender schedule can create non-achievable contractual commitments.","Planning Engineer with Planning Team Leader","Standardize tender development and review with traceability to scope, milestones, execution assumptions, interfaces, quality criteria, and approval."),
+      q("initiation","Tender Deliverable Level and Acceptance",17,"Is the required tender schedule level and client acceptance criteria confirmed and consistently applied before submission?","Client planning requirements, request record, schedule-level confirmation, acceptance checklist, approval, and submission evidence.","MDP-PLN-BP01 Pre-Award output and schedule-level definitions; SIPOC states Level 2 while Visio states Level 3.","Compliance","Ambiguous schedule levels can produce an unsuitable or rejected tender deliverable.","Planning Manager with Tendering or Business Development","Resolve the Level 2/Level 3 inconsistency and record the required level, content, reviewer, and acceptance criteria for every tender."),
+      q("initiation","Project Handover, Mobilization and Input Tracking",16,"After award, is the project handed over with contract documents and BOQ, assigned a planner, and supported by controlled follow-up of initial MDL, MTS, procurement, execution, and method inputs?","Kick-off presentation, contract and appendices, BOQ, assignment email, hiring or transfer request, interdisciplinary input register, and escalation records.","MDP-PLN-BP01 Project Planning Initiation SIPOC and General Notes.","Interfaces","Late mobilization or incomplete inputs delay the initial baseline and force unsupported assumptions.","Planning Manager and assigned Planning Engineer","Establish a planning-handover gate and input tracker with minimum content, owners, due dates, acceptance criteria, assumptions, and escalation."),
+      q("initiation","Initial WBS, Baseline and Planning Risk Register",16,"Does initiation produce a scope-complete WBS and activity list, an integrated initial baseline, and a Planning risk register reviewed with relevant project stakeholders?","WBS and dictionary, scope mapping, activity list, initial baseline, input integration record, risk register, review minutes, and issue log.","MDP-PLN-BP01 Project Planning Initiation SIPOC and Visio process B.","Planning Basis","Weak scope decomposition and risk identification create an unreliable foundation for detailed planning.","Planning Engineer with Project Manager","Define WBS and initial-baseline standards, require scope traceability and multidisciplinary review, and link risks to affected activities or milestones."),
+
+      q("development","Planning Basis, Scope and Deliverables",12.5,"Is a controlled planning basis maintained that translates contract scope, obligations, deliverables, exclusions, assumptions, and execution strategy into schedule-development requirements?","Planning-basis document, contract review, deliverable register, scope matrix, assumptions and exclusions, and approval.","MDP-PLN-BP01 Purpose, Scope, initiation inputs, and definitions.","Planning Basis","Hidden assumptions or incomplete obligations undermine schedule credibility and change analysis.","Project Planner","Approve a planning-basis template covering scope sources, assumptions, calendars, methods, coding, loading, measurement, and revision control."),
+      q("development","WBS Completeness and Control Levels",12.5,"Does the detailed WBS provide complete, non-overlapping, manageable coverage of project scope with clear hierarchy, ownership, and reporting levels?","WBS, WBS dictionary, scope-to-WBS mapping, control-account or responsibility mapping, review comments, and approval.","MDP-PLN-BP01 detailed baseline outputs and Planning responsibilities 46 and 96.","Schedule Fundamentals","A weak WBS hides scope, reduces accountability, and distorts consolidation and progress reporting.","Project Planner with Planning Team Leader","Define WBS design and coding rules and require completeness, ownership, reporting-level, and scope-traceability validation."),
+      q("development","Activity Definition and Scope Traceability",12.5,"Are activities defined at a measurable and controllable level with unique descriptions, accountable ownership, deliverable links, and traceability to the WBS and approved scope?","Activity register, schedule extract, naming rules, WBS links, responsibility codes, deliverable mapping, and validation results.","MDP-PLN-BP01 schedule development and responsibilities 46, 95-96.","Schedule Fundamentals","Vague or oversized activities conceal status, responsibility, and emerging delay.","Project Planner","Set activity-detail, naming, ownership, and traceability rules and review exceptions before baseline submission."),
+      q("development","Logic and Interface Validation",12.5,"Are predecessor and successor relationships complete, technically credible, and aligned with engineering, procurement, construction, testing, and handover interfaces?","Logic report, open-end check, relationship-type review, interface register, multidisciplinary comments, and corrected schedule.","MDP-PLN-BP01 detailed-baseline review and integrated schedule responsibilities.","Schedule Fundamentals","Missing or artificial logic creates false float and unreliable critical paths and forecasts.","Planning Team Leader","Apply logic-quality tests, multidisciplinary sequence reviews, interface milestones, and documented approval of necessary exceptions."),
+      q("development","Duration and Productivity Basis",12.5,"Are activity durations supported by quantities, productivity rates, resource assumptions, execution methods, and documented uncertainty rather than planner judgment alone?","Duration calculations, quantity take-off, productivity basis, resource assumptions, method statements, historical benchmarks, and review.","MDP-PLN-BP01 tender basis of estimate, detailed-baseline review, and responsibilities 89 and 96.","Schedule Fundamentals","Unsupported durations create unrealistic dates and weaken recovery feasibility.","Project Planner with execution owners","Require a duration-basis register, source traceability, benchmark checks, owner confirmation, and review of material assumptions."),
+      q("development","Calendars and Working-Time Rules",12.5,"Are project and activity calendars approved, correctly assigned, and consistent with contractual working time, shifts, holidays, access restrictions, and resource availability?","Calendar register, contractual working-time requirements, holiday and shift assumptions, activity assignments, exception report, and approval.","Planning fundamentals supporting MDP-PLN-BP01 schedule development and contractual requirements.","Schedule Fundamentals","Incorrect calendars distort durations, float, milestone forecasts, and claims analysis.","Project Planner","Establish calendar standards, naming, approval, assignment validation, change control, and periodic exception review."),
+      q("development","Constraints, Milestones and Contract Dates",12.5,"Are constraints and milestones justified, traceable to approved requirements, correctly modeled, and controlled to prevent artificial schedule behavior?","Constraint register, milestone register, source clauses, schedule extract, hard-constraint report, exception approvals, and review.","MDP-PLN-BP01 contract requirements, baseline outputs, and milestone KPI 116.","Schedule Fundamentals","Uncontrolled constraints can hide logic defects and create false critical paths or commitments.","Planning Team Leader","Define permitted constraint use, require source traceability, review hard constraints and lags, and remove expired or unnecessary restrictions."),
+      q("development","Float, Critical Path and Schedule Quality",12.5,"Is the critical and near-critical path validated using float, driving logic, longest-path review, schedule-quality metrics, and documented Time Schedule Evaluation or DCMA checks?","Critical-path report, near-critical analysis, float distribution, longest path, quality report, DCMA results, exceptions, and sign-off.","MDP-PLN-BP01 detailed-baseline review, Critical Path definition, and Planning Manager responsibility 73.","Schedule Quality","An invalid critical path prevents reliable prioritization, forecasting, recovery, and delay analysis.","Planning Team Leader","Define quality thresholds and critical-path validation steps, resolve material findings, approve exceptions, and retain the signed review."),
+
+      q("integration","Final Input Readiness and Interdisciplinary Integration",15,"Before detailed-baseline completion, are final contract, BOQ or cost mapping, MDL/DTS/MTS, procurement, execution, deployment, method, and testing inputs validated and integrated?","Final-input checklist, approved discipline plans, revisions, integration mapping, missing-input log, accepted exceptions, and sign-off.","MDP-PLN-BP01 Detailed Baseline SIPOC inputs.","Interfaces","Incomplete final inputs produce a baseline that does not represent executable scope or interfaces.","Project Planner and Planning Team Leader","Create a detailed-baseline readiness gate with minimum inputs, revision requirements, interface reconciliation, and approved exceptions."),
+      q("integration","Resource and Productivity Loading",15,"Where required, are labor, equipment, and other resources loaded consistently with activity scope, duration, productivity, calendars, deployment plans, and feasible availability?","Resource-loaded schedule, deployment plan, productivity calculations, histograms, availability review, peaks and conflicts, and approval.","MDP-PLN-BP01 detailed baseline, construction deployment input, outputs, and responsibilities 46 and 96.","Integration","A logically valid but resource-infeasible schedule cannot support reliable execution commitments.","Project Planner with Construction and resource owners","Define loading detail, validate availability and peaks, reconcile productivity, and document actions for resource conflicts."),
+      q("integration","Activity Weighting and Progress Measurement Design",14,"Are activity weights and weighting assumptions traceable to approved scope, BOQ values, earned-value requirements, or a justified alternative measurement basis?","Weighting system, calculation file, assumptions, BOQ mapping, earned-value method, reconciliation, review, and approval.","MDP-PLN-BP01 Detailed Baseline Schedule Development and Team Leader responsibility 88.","Performance Measurement","Unsupported weights distort S-curves, reported progress, and management interpretation.","Project Planner with Planning Team Leader and Cost Control","Define approved weighting methods, traceability and reconciliation rules, treatment of unavailable priced data, and controlled revisions."),
+      q("integration","Cost, Earned Value and Cash Loading",14,"Where required, are cost, earned-value, and cash data correctly mapped, time-phased, reconciled, and aligned with schedule activities and BOQ values?","Cost-loaded schedule, cost mapping, cash curve, earned-value setup, reconciliation report, exception log, and approval.","MDP-PLN-BP01 Detailed Baseline Schedule Development and Review.","Integration","Misaligned schedule and financial data produce unreliable performance and cash forecasts.","Project Planner with Cost Control and Project Management","Approve mapping and time-phasing rules, reconciliation tolerances, ownership, exception handling, and version control."),
+      q("integration","Engineering, Procurement and Testing Integration",14,"Are design, document, material, delivery, testing, commissioning, and readiness activities logic-linked to the work they enable and reconciled with MDL, DTS, MTS, and procurement plans?","Integrated schedule, MDL/DTS/MTS mappings, procurement and testing plans, required dates, interface milestones, exception log, and review.","MDP-PLN-BP01 Detailed Baseline SIPOC inputs and outputs.","Interfaces","Disconnected discipline plans conceal prerequisites and allow late deliverables to affect execution without warning.","Project Planner with Engineering, Procurement, Technical Office, and Testing owners","Establish logic-linked interface mapping, required-on-site dates, readiness checks, periodic reconciliation, and escalation of conflicts."),
+      q("integration","Baseline Multidisciplinary Review and Approval",14,"Is the detailed baseline reviewed by all relevant functions against scope, logic, durations, loading, obligations, rights, and acceptance criteria before approval or deemed approval?","Review circulation, comments, resolution log, Baseline R.0 approval, deemed-approval evidence, meeting minutes, and acceptance checklist.","MDP-PLN-BP01 Detailed Baseline Schedule Review and Schedule Release.","Governance","Weak approval permits disputed or technically deficient baselines to guide control and claims.","Planning Team Leader and Project Manager","Confirm reviewers and authority, formalize acceptance criteria, resolve comments, and validate the contractual basis of the five-day deemed-approval rule."),
+      q("integration","Baseline Release, Version and Change Protection",14,"Is the approved baseline uniquely identified, released with all required outputs, protected from unauthorized modification, and revised only for permitted approved events?","Released XER/PDF, narrative, WBS, critical path, S-curve, histogram, tracking form, transmittal, access control, revision log, and change approval.","MDP-PLN-BP01 Schedule Release and Baseline Schedule definition.","Governance","Unauthorized baseline changes erase performance history and weaken accountability and claims support.","Planning Team Leader","Implement baseline naming, access, issue, distribution, comparison, revision, archive, and exception controls tied to approved change events."),
+
+      q("updating","Update Frequency, Cut-Off and Monitoring Scope",17,"Is the update frequency, data date, cut-off, reporting calendar, and monitoring period formally agreed for each project and consistent with the weekly monitoring KPI below 90% completion?","Project reporting matrix, client requirement, cut-off calendar, approved frequency, submission tracker, and exceptions.","MDP-PLN-BP01 Progress Update SIPOC, responsibility 69, KPI 115, and closeout definition.","Governance","Ambiguous frequency and monitoring boundaries create inconsistent and late project status information.","Planning Manager and Project Manager","Reconcile weekly, biweekly, monthly, and 90% requirements and publish an approved project-specific update calendar."),
+      q("updating","Progress Measurement Rules and Tracking Forms",17,"Are objective progress-measurement rules and tracking forms approved for each work type before progress is reported?","Measurement procedure, weighted steps or quantity rules, tracking forms, basis of measurement, approvals, examples, and change history.","MDP-PLN-BP01 detailed-baseline weighting output, progress tracking form, and Progress Update inputs.","Performance Measurement","Subjective measurement overstates or understates progress and corrupts forecasts.","Planning Team Leader with Project Management","Define measurable completion rules, evidence requirements, validators, rounding, treatment of rework, and controlled revisions."),
+      q("updating","Source Data Collection and Validation",17,"Are tracking sheets, daily reports, MDL, MTS, NCR/IRS logs, invoices, and other status inputs received by cut-off and validated for completeness, accuracy, duplication, and supporting evidence?","Input tracker, source reports, validation checklist, corrected or rejected submissions, owner confirmation, and escalation log.","MDP-PLN-BP01 Progress Update SIPOC inputs and validation step.","Data","Unsupported or late progress data produces misleading status, float, and forecasts.","Project Planner with Senior Planning Engineer and source owners","Define source evidence and cut-off rules, automate feasible checks, record exceptions, and prevent unapproved data from entering the update."),
+      q("updating","P6 Data Date, Actuals and Statusing",17,"Are Oracle Primavera P6 updates performed using a controlled data date, verified actual starts and finishes, correct status, and retained source evidence?","P6 XER, data-date record, actual-date evidence, status checklist, update log, schedule comparison, and approval.","MDP-PLN-BP01 Progress Update process using Oracle Primavera P6.","Systems","Incorrect actuals or data dates permanently distort logic, float, trends, and claims analysis.","Project Planner with Senior Planning Engineer","Standardize P6 status entry, actual-date validation, data-date control, corrections, comparison reporting, and reviewer sign-off."),
+      q("updating","Remaining Duration, Logic and Forecast Update",16,"Are remaining durations, forecast dates, changed logic, calendars, constraints, and out-of-sequence conditions reviewed using current execution evidence and accountable owner input?","Remaining-duration basis, owner forecasts, changed-logic report, out-of-sequence report, constraint review, assumptions, and comments.","MDP-PLN-BP01 Progress Update and recovery-recommendation requirement; planning fundamentals.","Forecasting","Automatic or unsupported forecasts delay corrective action and provide false confidence.","Project Planner with Planning Team Leader and activity owners","Require evidence-based remaining-duration forecasts, controlled logic changes, out-of-sequence treatment, owner confirmation, and material movement explanations."),
+      q("updating","Update Quality Review, Approval and Archiving",16,"Before issue, is each update reviewed for schedule quality, progress reasonableness, critical-path changes, milestone movement, loading consistency, and version completeness?","Update review checklist, schedule-quality report, variance comparison, correction log, approval, XER/PDF archive, and transmittal.","MDP-PLN-BP01 Progress Update SIPOC and responsibilities 78 and 97.","Quality","An unreviewed update can distribute inaccurate project status and compromise future analysis.","Planning Team Leader or Senior Planning Engineer","Implement update-specific quality thresholds, trend comparison, formal approval, controlled issue, and retrievable archive."),
+
+      q("analysis","Variance, Float and Milestone Trend Analysis",17,"Does periodic analysis explain baseline variance, milestone movement, total and free float change, critical and near-critical paths, and the activities driving forecast outcomes?","Variance report, milestone trend, float analysis, driving-path report, baseline comparison, cause commentary, and review.","MDP-PLN-BP01 Progress Update outputs, Critical Path definition, KPI 116, and responsibilities 70 and 97.","Analysis","Reporting dates without drivers and trends prevents timely prioritization and intervention.","Planning Team Leader","Standardize variance and trend analysis with materiality thresholds, causes, responsible owners, impacts, and required decisions."),
+      q("analysis","S-Curve and Earned Progress Analysis",17,"Are planned, actual, and forecast S-curves calculated from controlled data and reconciled with approved weighting or earned-value rules?","Baseline and current S-curves, source data, calculation rules, reconciliation, variance commentary, and approval.","MDP-PLN-BP01 baseline and progress-report outputs; S-Curve definition.","Performance","Unreconciled curves misstate progress and reduce confidence in performance reporting.","Project Planner with Planning Team Leader and Cost Control","Define curve data sources and calculation rules, reconcile totals and cut-offs, explain variance, and control revisions."),
+      q("analysis","Forecast Completion and Recovery Warning",17,"Are completion and milestone forecasts supported by current critical-path logic, remaining duration, productivity, risks, and a consistently calculated 5% recovery warning threshold?","Forecast analysis, critical path, productivity trend, risk links, threshold calculation, flag or escalation, and decision record.","MDP-PLN-BP01 Progress Update note and Recovery Schedule definition.","Forecasting","Weak forecasting or an unclear threshold delays recovery and creates false confidence.","Planning Team Leader","Define the 5% reference, formula, rounding, exceptions, forecast method, and escalation route, then test it in each cycle."),
+      q("analysis","Look-Ahead Planning and Execution Follow-Up",17,"Are two-to-four-week look-ahead schedules derived from the current integrated schedule, checked for prerequisites and resources, agreed with execution owners, and monitored for adherence?","Look-ahead schedule, schedule traceability, constraint or readiness log, owner commitments, meeting minutes, and adherence results.","MDP-PLN-BP01 Progress Update outputs and Site Planning Engineer responsibilities 109-110.","Execution Planning","Disconnected or unchecked look-aheads fail to convert the master schedule into executable commitments.","Site Planning Engineer with Project Planner and Construction","Standardize look-ahead extraction, readiness checks, accountable commitments, daily or weekly follow-up, and variance feedback to the master schedule."),
+      q("analysis","Progress Report Completeness and Data Integrity",16,"Do internal and external reports accurately present required project, progress, milestone, lifecycle, engineering, procurement, financial, concern, photo, and look-ahead information from controlled sources?","Issued report, report template, data lineage, validation checklist, source extracts, approval, distribution, and corrections.","MDP-PLN-BP01 Progress Update output list and responsibility 51.","Reporting","Incomplete, stale, or inconsistent reporting can mislead management and clients.","Project Planner with Planning Team Leader","Create a report data dictionary, source ownership, refresh and validation controls, approval route, and correction protocol."),
+      q("analysis","Management Insight, Escalation and Action Closure",16,"Do Planning reports and meetings convert analysis into clear risks, warnings, recovery recommendations, decisions, accountable actions, and tracked closure?","Area-of-concern register, formal warnings, recommendations, meeting minutes, decision log, action tracker, escalation, and closure evidence.","MDP-PLN-BP01 Purpose and responsibilities 47, 49-51, 70, 83-85, and 97-99.","Decision Support","Analysis without decisions and action follow-up does not protect project milestones.","Planning Manager and Planning Team Leader","Define escalation materiality, decision-paper content, action ownership, due dates, aging, and management closure verification."),
+
+      q("recovery","Schedule Risk Identification and Monitoring",17,"Are time-related risks and opportunities identified, linked to affected schedule activities or milestones, assigned, quantified where practical, and reviewed with forecasts?","Risk register, activity links, time-impact assessment, owners, mitigation dates, forecast assumptions, and review minutes.","MDP-PLN-BP01 initiation risk register and responsibilities 49 and 85.","Risk","Disconnected or static risks understate completion uncertainty and delay mitigation.","Project Planner with Project Manager","Define risk-to-schedule linkage, time-impact assessment, ownership, review frequency, and forecast disclosure."),
+      q("recovery","Recovery Trigger and Delay Cause Assessment",17,"When the approved recovery criterion is met, is current status and delay cause formally assessed with relevant project functions before recovery development?","Threshold calculation, trigger record, current schedule, cause analysis, meeting minutes, interdisciplinary inputs, and decision.","MDP-PLN-BP01 Recovery Schedule SIPOC and definition.","Recovery","Recovery based on an incomplete cause assessment may consume resources without addressing the actual delay.","Planning Team Leader with Project Manager","Confirm the trigger formula and require a recovery initiation record covering causes, affected paths, participants, required inputs, and approval."),
+      q("recovery","Recovery Feasibility, Approval and Monitoring",17,"Does each recovery schedule demonstrate feasible logic, resources, productivity, interfaces, risks, and quantified benefit, receive the required approvals, and have actions monitored to outcome?","Recovery schedule, options, labor and equipment plan, feasibility review, Planning Manager/PM/client approvals, action plan, and benefit tracking.","MDP-PLN-BP01 Recovery Schedule SIPOC, Visio C.2, and definition.","Recovery","Unsupported recovery commitments can mask continuing delay and create additional delivery or cost exposure.","Planning Manager, Planning Team Leader, and Project Manager","Define recovery options and feasibility requirements, confirm approval sequence, assign actions, and compare planned with achieved recovery."),
+      q("recovery","Revised Schedule Eligibility and Traceability",17,"Is a revised schedule initiated only for an approved EOT, variation order, or documented client request and issued with a transparent comparison to the prior baseline?","EOT or variation approval, client request, authorization, prior and revised XER/PDF, comparison, narrative, WBS, critical path, S-curve, and approval.","MDP-PLN-BP01 Revised Schedule SIPOC, Visio C.3, and definition.","Change","Uncontrolled rebaselining erases performance history and weakens contractual accountability.","Planning Team Leader with Project Manager and Contracts","Apply an eligibility gate, validate inputs, require baseline comparison and narrative, control approval, and preserve all prior versions."),
+      q("recovery","Delay Event Records and Claim Readiness",16,"Are delay events recorded contemporaneously with causes, affected work, notices, responsibility information, and supporting records, and are required claim inputs checked before analysis begins?","Delay-event register, chronology, correspondence, notices, MOM, VO and inspection logs, baselines and updates, MDL/MTS records, and readiness checklist.","MDP-PLN-BP01 Delay Analysis SIPOC and responsibilities 98 and 108.","Claims","Incomplete event records and evidence weaken entitlement assessment and delay analysis.","Contracts with Planning Team Leader and Project Management","Create a controlled event chronology and claim-readiness gate with mandatory fields, evidence ownership, missing-document escalation, and review."),
+      q("recovery","Delay Analysis Method, Review and Outputs",16,"Is the delay-analysis method appropriate to the contract and records, supported by assumptions, validated cross-functionally, independently reviewed, and issued as an impacted program and narrative with post-approval baseline control?","Method paper, contract requirements, analysis protocol, impacted schedule, narrative, workshop records, review comments, submission, approval, and revised baseline.","MDP-PLN-BP01 Delay Analysis SIPOC, Visio C.4, definition, and KPI 118.","Claims","An unsuitable or weakly reviewed analysis reduces claim credibility and defensibility.","Planning Team Leader with Contracts and Project Management","Establish method-selection criteria, data-quality requirements, multidisciplinary validation, independent technical review, output acceptance, and post-approval baseline rules."),
+
+      q("closeout","Closeout Trigger and As-Built Schedule",34,"Is the transition from routine monitoring to closeout clearly authorized, reconciled with the 90% statement, and completed through a validated as-built schedule representing final execution?","Closeout trigger and email, project status, remaining-work plan, as-built XER/PDF, actual-date evidence, baseline comparison, review, and approval.","MDP-PLN-BP01 Project Closeout SIPOC and definition.","Closure","An unclear monitoring boundary or unreliable as-built record leaves final delivery risk unmanaged and loses actual performance history.","Planning Manager, Project Manager, and Planning Team Leader","Reconcile the 90% rule with final monitoring, define closeout responsibilities, and require source-validated as-built review and approval."),
+      q("closeout","Lessons Learned and Historical Data Reuse",33,"Are Planning lessons supported by evidence and root-cause analysis, released through the approved report and log, and converted into reusable standards, benchmarks, training, or actions?","Lesson Learned Report and log, schedule analysis, root-cause evidence, historical database, assigned actions, evidence of reuse, and benefits review.","MDP-PLN-BP01 Project Closeout SIPOC and responsibilities 53 and 81.","Improvement","Superficial or unused lessons allow planning and forecasting failures to recur.","Planning Team Leader with Planning Document Controller/Admin","Define lesson quality criteria, capture planned-versus-actual benchmarks, assign improvement owners, integrate approved learning, and verify reuse."),
+      q("closeout","Planning Records, Archiving and Retrieval",33,"Are final schedules, updates, reports, approvals, claims records, logs, and lessons completely archived in the company database with controlled naming, access, retention, and verified retrieval?","Archive checklist and index, naming standard, database record, access controls, retention requirements, archived sample, backup evidence, and retrieval test.","MDP-PLN-BP01 Project Closeout SIPOC and responsibility 53.","Compliance","Missing or irretrievable records weaken audits, claims, benchmarking, and future planning.","Planning Document Controller/Admin","Establish mandatory archive contents, metadata, version and access rules, completeness sign-off, backup, retention, and periodic retrieval testing.")
+    ];
+
+    function q(domain, category, weight, text, evidence, process, theme, impact, owner, action) {
+      return { domain, category, weight, text, evidence, process, theme, impact, owner, action };
+    }
+
+    const state = {
+      current: 0,
+      answers: questions.map(() => ({ level: "", target: 4, evidence: "", notes: "" })),
+      domainWeights: Object.fromEntries(domains.map(d => [d.id, d.weight])),
+      questionWeights: Object.fromEntries(questions.map((q, i) => [i, q.weight])),
+      settings: { defaultTarget: 4, roadmapStart: "2026-07", roadmapEnd: "2027-12", duration: 6, zoom: "quarter", sidebarCollapsed: false },
+      selectedInitiative: "",
+      history: [],
+      schemaVersion: "2.1"
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const domainById = (id) => domains.find(d => d.id === id);
+    const fmt = (n, d = 1) => Number(n || 0).toFixed(d);
+    const pct = (n, d = 1) => `${fmt(n, d)}%`;
+    const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+    const esc = (value) => String(value ?? "").replace(/[&<>"']/g, ch => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[ch]));
+    const csv = (value) => `"${String(value ?? "").replaceAll('"', '""')}"`;
+
+    function maturityLabel(score) {
+      if (!score) return "Not started";
+      if (score < 1.5) return "Not Established";
+      if (score < 2.5) return "Partially Established";
+      if (score < 3.5) return "Defined and Applied";
+      if (score < 4.5) return "Controlled and Measured";
+      return "Optimized";
+    }
+
+    function severity(gap) {
+      if (gap >= 3) return "Critical";
+      if (gap >= 2) return "Major";
+      if (gap >= 1) return "Moderate";
+      if (gap > 0) return "Minor";
+      return "No Gap";
+    }
+
+    function severityClass(s) {
+      return s === "Critical" ? "critical" : s === "Major" ? "major" : s === "Moderate" ? "moderate" : s === "Minor" ? "minor" : "none";
+    }
+
+    function priorityFromScore(score) {
+      if (score >= 5) return "High";
+      if (score >= 2) return "Medium";
+      return "Low";
+    }
+
+    function priorityClass(p) {
+      return p === "High" ? "high" : p === "Medium" ? "medium" : "low";
+    }
+
+    function calculations() {
+      let totalPotential = 0;
+      let achieved = 0;
+      let maturityWeighted = 0;
+      const domainMap = {};
+      domains.forEach(d => {
+        domainMap[d.id] = { ...d, weight: Number(state.domainWeights[d.id] || 0), potential: 0, achieved: 0, maturityWeighted: 0, answered: 0, total: 0, gaps: [] };
+      });
+      const rows = questions.map((question, index) => {
+        const a = state.answers[index];
+        const level = Number(a.level || 0);
+        const target = Number(a.target || state.settings.defaultTarget || 4);
+        const domainWeight = Number(state.domainWeights[question.domain] || 0);
+        const questionWeight = Number(state.questionWeights[index] || 0);
+        const potential = domainWeight * questionWeight / 100;
+        const achievementRatio = level ? clamp(level / target, 0, 1) : 0;
+        const achievedPoints = potential * achievementRatio;
+        const maturityGap = level ? Math.max(target - level, 0) : target;
+        const weightedGap = potential - achievedPoints;
+        const sev = level ? severity(maturityGap) : "Not Assessed";
+        const priorityScore = maturityGap * potential;
+        const priority = level ? priorityFromScore(priorityScore) : "";
+        totalPotential += potential;
+        achieved += achievedPoints;
+        maturityWeighted += potential * level;
+        const d = domainMap[question.domain];
+        d.potential += potential;
+        d.achieved += achievedPoints;
+        d.maturityWeighted += potential * level;
+        d.total += 1;
+        if (level) d.answered += 1;
+        d.gaps.push(maturityGap);
+        return { ...question, index, level, target, domainName: domainById(question.domain).name, domainWeight, questionWeight, potential, achievementRatio, achievedPoints, maturityGap, weightedGap, severity: sev, priorityScore, priority, evidenceStatus: a.evidence, notes: a.notes };
+      });
+      const domainList = Object.values(domainMap).map(d => {
+        const maturity = d.potential ? d.maturityWeighted / d.potential : 0;
+        const achievementPct = d.potential ? d.achieved / d.potential * 100 : 0;
+        const targetAvg = rows.filter(r => r.domain === d.id).reduce((sum, r) => sum + r.target, 0) / Math.max(d.total, 1);
+        const gap = d.answered ? Math.max(targetAvg - maturity, 0) : targetAvg;
+        return { ...d, maturity, achievementPct, gap, severity: d.answered ? severity(gap) : "Not Assessed" };
+      });
+      const answered = rows.filter(r => r.level).length;
+      const overallMaturity = totalPotential ? maturityWeighted / totalPotential : 0;
+      const achievementPct = totalPotential ? achieved / totalPotential * 100 : 0;
+      return { rows, domainList, answered, total: questions.length, totalPotential, achieved, overallMaturity, achievementPct, weightedGapPct: 100 - achievementPct };
+    }
+
+    function generateRoadmap() {
+      const c = calculations();
+      const grouped = {};
+      c.rows.filter(r => r.level && r.maturityGap > 0).forEach(r => {
+        const key = `${r.domain}|${r.category}`;
+        if (!grouped[key]) grouped[key] = { domain: r.domain, domainName: r.domainName, category: r.category, rows: [], potential: 0, priorityScore: 0, maxGap: 0 };
+        grouped[key].rows.push(r);
+        grouped[key].potential += r.potential;
+        grouped[key].priorityScore += r.priorityScore;
+        grouped[key].maxGap = Math.max(grouped[key].maxGap, r.maturityGap);
+      });
+      const initiatives = Object.values(grouped)
+        .sort((a, b) => b.priorityScore - a.priorityScore || b.maxGap - a.maxGap)
+        .map((item, i) => {
+          const lead = item.rows.sort((a, b) => b.priorityScore - a.priorityScore)[0];
+          const priority = priorityFromScore(item.priorityScore);
+          const complexity = item.rows.length > 1 || item.maxGap >= 3 ? "High" : item.maxGap >= 2 ? "Medium" : "Low";
+          const owner = lead.owner || suggestedOwner(item.domain, item.category);
+          const id = `INIT-${String(i + 1).padStart(3, "0")}`;
+          return {
+            id,
+            name: initiativeName(item.category),
+            domain: item.domain,
+            domainName: item.domainName,
+            category: item.category,
+            priority,
+            severity: severity(item.maxGap),
+            businessValue: lead.impact,
+            complexity,
+            owner,
+            status: "Not Started",
+            deliverables: lead.evidence,
+            kpi: kpiFor(item.category, item.domain),
+            recommendedAction: lead.action,
+            sourceQuestions: item.rows.map(r => r.index + 1).join(", "),
+            priorityScore: item.priorityScore,
+            maxGap: item.maxGap
+          };
+        });
+      return scheduleInitiatives(initiatives);
+    }
+
+    function initiativeName(category) {
+      return `Strengthen ${category}`;
+    }
+
+    function suggestedOwner(domain, category) {
+      if (domain === "governance" || domain === "closeout") return "Planning Manager";
+      if (domain === "development" || domain === "integration" || domain === "analysis" || domain === "recovery") return "Planning Team Leader";
+      if (domain === "initiation" || domain === "updating") return "Project Planner";
+      return "Planning process owner";
+    }
+
+    function deliverablesFor(category, theme) {
+      return `${category} standard, control checklist, retained evidence, owner assignment, and performance review`;
+    }
+
+    function kpiFor(category, domain) {
+      if (category.includes("Tender")) return "On-time accepted tender schedules";
+      if (category.includes("Baseline")) return "Approved baseline coverage and timeliness";
+      if (category.includes("Forecast") || category.includes("Milestone")) return "Milestone forecast reliability";
+      if (category.includes("Quality") || category.includes("Validation")) return "Schedule quality compliance";
+      if (category.includes("Update") || category.includes("Progress")) return "On-time validated schedule updates";
+      if (category.includes("Claim") || category.includes("Delay")) return "Claims supported by approved delay analysis";
+      if (domain === "closeout") return "Complete closeout records and lessons";
+      return "Planning improvement action closure rate";
+    }
+
+    function monthIndex(value) {
+      const [year, month] = value.split("-").map(Number);
+      return year * 12 + month - 1;
+    }
+
+    function monthValue(index) {
+      const year = Math.floor(index / 12);
+      const month = index % 12 + 1;
+      return `${year}-${String(month).padStart(2, "0")}`;
+    }
+
+    function scheduleInitiatives(initiatives) {
+      const start = monthIndex(state.settings.roadmapStart);
+      const end = monthIndex(state.settings.roadmapEnd);
+      const duration = Number(state.settings.duration || 6);
+      const lanes = { High: 0, Medium: 2, Low: 4 };
+      return initiatives.map((item, i) => {
+        const offset = lanes[item.priority] + Math.floor(i / 3) * Math.max(1, Math.floor(duration / 2));
+        const s = clamp(start + offset, start, end);
+        const e = clamp(s + duration - 1, s, end);
+        return { ...item, start: monthValue(s), finish: monthValue(e), startIndex: s, endIndex: e };
+      });
+    }
+
+    function generateRoadmapActions(initiatives = generateRoadmap()) {
+      const rangeStart = monthIndex(state.settings.roadmapStart);
+      const rangeEnd = monthIndex(state.settings.roadmapEnd);
+      const defaultDuration = Number(state.settings.duration || 6);
+      return initiatives.flatMap((initiative, initiativeIndex) => {
+        const baseStart = monthIndex(initiative.start);
+        const baseEnd = monthIndex(initiative.finish);
+        return actionTemplatesFor(initiative).map((template, actionIndex) => {
+          const offset = template.offset ?? actionIndex;
+          const duration = template.duration ?? (template.type === "milestone" ? 1 : Math.max(1, Math.min(defaultDuration, 3)));
+          const startIndex = clamp(baseStart + offset, rangeStart, rangeEnd);
+          const endIndex = template.type === "monthly" || template.type === "review"
+            ? clamp(baseEnd, startIndex, rangeEnd)
+            : clamp(startIndex + duration - 1, startIndex, rangeEnd);
+          return {
+            id: `${initiative.id}-A${String(actionIndex + 1).padStart(2, "0")}`,
+            initiativeId: initiative.id,
+            initiativeName: initiative.name,
+            domain: initiative.domain,
+            domainName: initiative.domainName,
+            category: initiative.category,
+            priority: initiative.priority,
+            severity: initiative.severity,
+            businessValue: initiative.businessValue,
+            complexity: initiative.complexity,
+            sourceQuestions: initiative.sourceQuestions,
+            action: template.action,
+            owner: template.owner || initiative.owner,
+            stakeholders: template.stakeholders || stakeholdersFor(initiative.domain, initiative.category),
+            deliverable: template.deliverable,
+            type: template.type || "implementation",
+            recurrence: template.recurrence || "",
+            startIndex,
+            endIndex,
+            start: monthValue(startIndex),
+            finish: monthValue(endIndex),
+            sortIndex: initiativeIndex * 100 + actionIndex
+          };
+        });
+      });
+    }
+
+    function actionTemplatesFor(initiative) {
+      return [
+        { type: "milestone", offset: 0, action: "Confirm the assessed gap, accountable owner, required evidence, and intended management outcome.", owner: initiative.owner, stakeholders: stakeholdersFor(initiative.domain, initiative.category), deliverable: "Approved Planning gap action brief" },
+        { type: "implementation", offset: 1, duration: 2, action: initiative.recommendedAction || `Strengthen ${initiative.category}.`, owner: initiative.owner, stakeholders: stakeholdersFor(initiative.domain, initiative.category), deliverable: "Approved process, control, template, or system improvement" },
+        { type: "implementation", offset: 2, duration: 2, action: "Define acceptance criteria, required inputs, retained evidence, review responsibility, and escalation rules.", owner: initiative.owner, stakeholders: stakeholdersFor(initiative.domain, initiative.category), deliverable: "Control criteria and responsibility matrix" },
+        { type: "monthly", offset: 3, action: "Operate the improved control, retain evidence, review exceptions, and track corrective actions.", owner: initiative.owner, stakeholders: stakeholdersFor(initiative.domain, initiative.category), deliverable: "Periodic control evidence and exception log", recurrence: "Per approved Planning cycle" },
+        { type: "review", offset: 4, action: "Report effectiveness, unresolved exceptions, KPI movement, and required decisions to Planning management.", owner: "Planning Manager", stakeholders: stakeholdersFor(initiative.domain, initiative.category), deliverable: "Management effectiveness review", recurrence: "Periodic management review" }
+      ];
+    }
+
+    function stakeholdersFor(domain, category) {
+      if (domain === "initiation") return "Tendering / Business Development, Project Management, Engineering, Procurement, Technical Office, Construction";
+      if (domain === "development") return "Project Management, Engineering, Procurement, Construction, Testing & Commissioning";
+      if (domain === "integration") return "Cost Control, Project Management, Engineering, Procurement, Construction, Testing & Commissioning";
+      if (domain === "updating" || domain === "analysis") return "Project team, Engineering, Procurement, Construction, Document Control, Quality, Cost Control";
+      if (domain === "recovery") return "Project Management, Contracts, Engineering, Procurement, Construction, Document Control, Cost Control, Client where applicable";
+      if (domain === "closeout") return "Project Management, Planning Document Controller / Admin, Testing & Commissioning, Document Control";
+      return "Planning team and relevant process stakeholders";
+    }
+    function renderAll() {
+      renderShell();
+      renderDashboard();
+      renderAssessment();
+      renderGapAnalysis();
+      renderRoadmap();
+      renderReportPreview();
+      renderSettings();
+      saveSilent();
+    }
+
+    function renderShell() {
+      const c = calculations();
+      document.body.classList.toggle("sidebar-collapsed", !!state.settings.sidebarCollapsed);
+      $("sidebarToggle").title = "Hide sidebar";
+      $("sidebarToggle").setAttribute("aria-label", "Hide sidebar");
+      $("sidebarRestore").title = "Show sidebar";
+      $("sidebarRestore").setAttribute("aria-label", "Show sidebar");
+      $("sideAnswered").textContent = `${c.answered} / ${c.total}`;
+      $("sideMaturity").textContent = fmt(c.overallMaturity, 2);
+      $("sideAchievement").textContent = pct(c.achievementPct, 0);
+      $("sideCritical").textContent = c.rows.filter(r => r.severity === "Critical").length;
+    }
+
+    function renderDashboard() {
+      const c = calculations();
+      const confidence = c.total ? c.answered / c.total * 100 : 0;
+      $("overallMaturity").textContent = `${fmt(c.overallMaturity, 2)} / 5`;
+      $("maturityText").textContent = maturityLabel(c.overallMaturity);
+      $("achievement").textContent = pct(c.achievementPct, 1);
+      $("achievementBar").style.width = `${clamp(c.achievementPct, 0, 100)}%`;
+      $("achievementGauge").style.setProperty("--score", `${clamp(c.achievementPct, 0, 100) * 3.6}deg`);
+      $("achievementGauge").querySelector("span").textContent = pct(c.achievementPct, 0);
+      $("weightedGap").textContent = pct(c.weightedGapPct, 1);
+      $("criticalMajor").textContent = c.rows.filter(r => r.level && (r.severity === "Critical" || r.severity === "Major")).length;
+      $("assessmentConfidence").textContent = pct(confidence, 0);
+      $("assessmentCoverage").textContent = `${c.answered} / ${c.total} answered`;
+      $("domainChart").innerHTML = c.domainList.map(d => `
+        <div class="chart-row">
+          <div class="chart-label">${esc(d.name)}</div>
+          <div class="chart-fill"><span style="width:${clamp(d.maturity / 5 * 100, 0, 100)}%"></span></div>
+          <div>${d.answered ? fmt(d.maturity, 2) : "-"}</div>
+        </div>`).join("");
+      const counts = countSeverities(c.rows.filter(r => r.level));
+      renderDonut(counts);
+      renderWeightedGapChart("weightedGapChart", c.domainList);
+      renderRoadmapPriorityChart();
+      $("domainTable").innerHTML = table(["Domain","Weight","Answered","Maturity","Achievement","Gap","Severity"], c.domainList.map(d => [
+        `<strong>${esc(d.name)}</strong>`,
+        pct(d.weight, 1),
+        `${d.answered}/${d.total}`,
+        d.answered ? `${fmt(d.maturity, 2)} / 5` : "-",
+        pct(d.achievementPct, 1),
+        d.answered ? fmt(d.gap, 2) : "-",
+        d.answered ? tag(d.severity) : tag("Not Assessed")
+      ]));
+      renderPriorityCards("managementActions", c.rows.filter(r => r.level && r.maturityGap > 0).sort((a,b) => b.priorityScore - a.priorityScore).slice(0, 4), true);
+    }
+
+    function countSeverities(rows) {
+      const counts = { Critical: 0, Major: 0, Moderate: 0, Minor: 0, "No Gap": 0 };
+      rows.forEach(r => { if (counts[r.severity] !== undefined) counts[r.severity] += 1; });
+      return counts;
+    }
+
+    function renderDonut(counts) {
+      renderDonutTo("severityDonut", "severityLegend", counts);
+    }
+
+    function renderDonutTo(donutId, legendId, counts) {
+      const total = Object.values(counts).reduce((a,b) => a + b, 0) || 1;
+      const colors = { Critical: "var(--red)", Major: "var(--amber)", Moderate: "var(--blue)", Minor: "var(--green)", "No Gap": "#94a3b8" };
+      let start = 0;
+      const segments = Object.entries(counts).map(([name, count]) => {
+        const deg = count / total * 360;
+        const seg = `${colors[name]} ${start}deg ${start + deg}deg`;
+        start += deg;
+        return seg;
+      });
+      $(donutId).style.background = `conic-gradient(${segments.join(",")})`;
+      $(legendId).innerHTML = Object.entries(counts).map(([name, count]) => `<div><span>${tag(name)}</span><strong>${count}</strong></div>`).join("");
+    }
+
+    function renderWeightedGapChart(id, domainList) {
+      const maxGap = Math.max(...domainList.map(d => d.potential ? d.potential - d.achieved : 0), 1);
+      $(id).innerHTML = domainList.map(d => {
+        const weightedGap = d.potential ? d.potential - d.achieved : 0;
+        const width = clamp(weightedGap / maxGap * 100, 0, 100);
+        return `<div class="weighted-bar-row">
+          <div class="weighted-bar-label">${esc(d.name)}</div>
+          <div class="weighted-track"><span style="width:${width}%"></span></div>
+          <div>${pct(weightedGap, 1)}</div>
+        </div>`;
+      }).join("");
+    }
+
+    function renderRoadmapPriorityChart() {
+      const initiatives = generateRoadmap();
+      const counts = { High: 0, Medium: 0, Low: 0 };
+      initiatives.forEach(i => { counts[i.priority] += 1; });
+      const max = Math.max(...Object.values(counts), 1);
+      const colors = { High: "var(--red)", Medium: "var(--amber)", Low: "var(--green)" };
+      $("roadmapPriorityChart").innerHTML = `<div class="roadmap-priority-stack">${Object.entries(counts).map(([name, count]) => `
+        <div class="roadmap-priority-row">
+          <div>${tag(name)}</div>
+          <div class="roadmap-priority-track"><span style="width:${count / max * 100}%;background:${colors[name]};"></span></div>
+          <strong>${count}</strong>
+        </div>`).join("")}</div>`;
+    }
+
+    function renderPriorityCards(id, rows, managementMode = false) {
+      $(id).innerHTML = rows.length ? `<div class="priority-card-grid">${rows.map(r => `
+        <div class="priority-card">
+          <div class="priority-meta">${tag(r.severity)}${r.priority ? tag(r.priority) : ""}<span class="chip">${pct(r.weightedGap, 2)}</span></div>
+          <strong>${esc(managementMode ? actionFor(r) : r.category)}</strong>
+          <div class="metric-note">${esc(r.domainName)} - ${esc(r.theme)}</div>
+          <div class="metric-note">Current ${r.level} / Target ${r.target} / Gap ${fmt(r.maturityGap, 1)}</div>
+          ${managementMode ? `<div class="metric-note">${esc(r.impact)}</div>` : `<div>${esc(actionFor(r))}</div>`}
+        </div>`).join("")}</div>` : `<div class="empty">Answer questions to see priority gaps.</div>`;
+    }
+
+    function renderDomainHeatmap(id, domainList) {
+      $(id).innerHTML = domainList.map(d => {
+        const cls = d.answered ? severityClass(d.severity) : "none";
+        return `<div class="heat-tile ${cls}"><strong>${esc(d.name)}</strong><div class="metric-value" style="font-size:22px;">${d.answered ? fmt(d.gap, 2) : "-"}</div><div>${d.answered ? esc(d.severity) : "Not assessed"}</div><div class="metric-note">${d.answered}/${d.total} answered</div></div>`;
+      }).join("");
+    }
+
+    function renderAssessment() {
+      const c = calculations();
+      const qn = questions[state.current];
+      const ans = state.answers[state.current];
+      const row = c.rows[state.current];
+      $("domainNavigator").innerHTML = domains.map(d => {
+        const dd = c.domainList.find(x => x.id === d.id);
+        const firstIndex = questions.findIndex(qx => qx.domain === d.id);
+        return `<button class="domain-item ${qn.domain === d.id ? "active" : ""}" data-domain-jump="${firstIndex}">
+          <strong>${esc(d.name)}</strong>
+          <span>${dd.answered}/${dd.total} answered - ${dd.answered ? fmt(dd.maturity, 2) + " maturity" : "not assessed"}</span>
+        </button>`;
+      }).join("");
+      document.querySelectorAll("[data-domain-jump]").forEach(btn => btn.addEventListener("click", () => {
+        state.current = Number(btn.dataset.domainJump);
+        renderAll();
+      }));
+      $("questionMeta").innerHTML = `
+        <span class="chip">Question ${state.current + 1} of ${questions.length}</span>
+        <span class="chip">${esc(row.domainName)}</span>
+        <span class="chip">${esc(qn.category)}</span>
+        <span class="chip">Domain ${pct(row.domainWeight, 1)}</span>
+        <span class="chip">Question ${pct(row.questionWeight, 1)}</span>`;
+      $("questionText").textContent = qn.text;
+      $("answerOptions").innerHTML = maturityScale.map(item => `
+        <label class="answer ${Number(ans.level) === item.value ? "selected" : ""}">
+          <input type="radio" name="maturity" value="${item.value}" ${Number(ans.level) === item.value ? "checked" : ""}>
+          <span><span class="answer-title">${item.value} - ${esc(item.label)}</span><span class="answer-desc">${esc(item.text)}</span></span>
+        </label>`).join("");
+      document.querySelectorAll("input[name='maturity']").forEach(input => input.addEventListener("change", e => {
+        state.answers[state.current].level = e.target.value;
+        renderAll();
+      }));
+      $("targetSelect").value = ans.target || state.settings.defaultTarget;
+      $("evidenceSelect").value = ans.evidence;
+      $("notesText").value = ans.notes;
+      $("processRef").textContent = qn.process;
+      $("evidenceExpected").textContent = qn.evidence;
+      $("businessImpact").textContent = qn.impact;
+      $("suggestedOwner").textContent = qn.owner;
+      $("recommendedAction").textContent = qn.action;
+      const questionAchievement = row.level ? clamp(row.achievementRatio * 100, 0, 100) : 0;
+      $("questionScoreBar").style.width = `${questionAchievement}%`;
+      $("questionScorePct").textContent = pct(questionAchievement, 0);
+      const statusText = !row.level ? "Not Assessed" : row.achievementRatio >= 1 ? "Meets Target" : row.achievementRatio >= .75 ? "Near Target" : "Below Target";
+      $("questionStatusPill").textContent = statusText;
+      $("questionCurrentScore").textContent = row.level ? `${row.level} / 5` : "-";
+      $("questionTargetScore").textContent = `${row.target} / 5`;
+      $("questionWeightScore").textContent = pct(row.questionWeight, 1);
+      $("questionWeightedGap").textContent = row.level ? pct(row.weightedGap, 2) : "-";
+      $("questionSeverity").innerHTML = row.level ? tag(row.severity) : "-";
+      $("liveGap").innerHTML = row.level ? `
+        <table><tbody>
+          <tr><td>Current</td><td>${row.level} / 5</td></tr>
+          <tr><td>Target</td><td>${row.target} / 5</td></tr>
+          <tr><td>Maturity Gap</td><td>${fmt(row.maturityGap, 1)}</td></tr>
+          <tr><td>Severity</td><td>${tag(row.severity)}</td></tr>
+          <tr><td>Weighted Gap</td><td>${pct(row.weightedGap, 2)}</td></tr>
+        </tbody></table>` : `<div class="empty">Select a maturity level to calculate the gap.</div>`;
+      $("prevQuestion").disabled = state.current === 0;
+      $("nextQuestion").textContent = state.current === questions.length - 1 ? "Go to Gaps" : "Next";
+    }
+
+    function renderGapAnalysis() {
+      const c = calculations();
+      populateFilter("gapDomainFilter", true);
+      const sev = $("gapSeverityFilter").value;
+      const dom = $("gapDomainFilter").value;
+      let rows = c.rows.filter(r => r.level);
+      if (sev) rows = rows.filter(r => r.severity === sev);
+      if (dom) rows = rows.filter(r => r.domain === dom);
+      const counts = countSeverities(c.rows.filter(r => r.level));
+      const assessedRows = c.rows.filter(r => r.level);
+      const criticalMajor = assessedRows.filter(r => r.severity === "Critical" || r.severity === "Major").length;
+      const topDomain = c.domainList
+        .filter(d => d.answered)
+        .sort((a, b) => ((b.potential - b.achieved) - (a.potential - a.achieved)))[0];
+      $("gapSummary").innerHTML = `
+        <div class="mini-kpi"><span>Total Gaps</span><strong>${assessedRows.filter(r => r.maturityGap > 0).length}</strong><small>${c.answered} assessed questions</small></div>
+        <div class="mini-kpi"><span>Weighted Gap</span><strong>${pct(c.weightedGapPct, 1)}</strong><small>Lost target achievement</small></div>
+        <div class="mini-kpi"><span>Critical / Major</span><strong>${criticalMajor}</strong><small>Immediate attention</small></div>
+        <div class="mini-kpi"><span>Top Risk Domain</span><strong style="font-size:18px;">${topDomain ? esc(topDomain.name) : "-"}</strong><small>${topDomain ? pct(topDomain.potential - topDomain.achieved, 1) + " weighted gap" : "Not assessed"}</small></div>`;
+      renderDonutTo("gapSeverityDonut", "gapSeverityLegend", counts);
+      renderWeightedGapChart("gapWeightedGapChart", c.domainList);
+      renderDomainHeatmap("gapHeatmap", c.domainList);
+      renderPriorityCards("topGapCards", c.rows.filter(r => r.level && r.maturityGap > 0).sort((a,b) => b.priorityScore - a.priorityScore).slice(0, 6));
+      $("gapTable").innerHTML = rows.length ? table(["#","Area","Current","Target","Gap","Weighted Gap","Severity","Business Impact","Recommended Action"], rows.sort((a,b) => b.priorityScore - a.priorityScore).map(r => [
+        r.index + 1,
+        `<strong>${esc(r.category)}</strong><br><span class="metric-note">${esc(r.domainName)} - ${esc(r.theme)}</span>`,
+        r.level,
+        r.target,
+        fmt(r.maturityGap, 1),
+        pct(r.weightedGap, 2),
+        tag(r.severity),
+        esc(r.impact),
+        esc(actionFor(r))
+      ])) : `<div class="empty">No answered gaps match the selected filters.</div>`;
+    }
+
+    function actionFor(r) {
+      if (r.severity === "No Gap") return "Maintain control and monitor through normal review cycle.";
+      return r.action || `${initiativeName(r.category)} through updated process ownership, evidence checks, KPI tracking, and management review.`;
+    }
+
+    function roadmapWaveFor(item) {
+      const text = `${item.domainName || ""} ${item.category || ""} ${item.name || ""}`.toLowerCase();
+      if (text.includes("system") || text.includes("erp") || text.includes("data") || text.includes("automation") || text.includes("dashboard") || text.includes("closure") || text.includes("lessons") || text.includes("improvement")) {
+        return { id: "wave3", name: "Wave 3: Systems, Data Discipline & Continuous Improvement" };
+      }
+      if (text.includes("forecast") || text.includes("cash") || text.includes("planning") || text.includes("finance") || text.includes("procurement") || text.includes("resource") || text.includes("technical office") || text.includes("quantity") || text.includes("interface")) {
+        return { id: "wave2", name: "Wave 2: Forecasting, Cash Flow & Integration" };
+      }
+      return { id: "wave1", name: "Wave 1: Immediate Governance & Reporting Controls" };
+    }
+
+    function roadmapWaves(initiatives) {
+      const order = [
+        { id: "wave1", name: "Wave 1: Immediate Governance & Reporting Controls" },
+        { id: "wave2", name: "Wave 2: Forecasting, Cash Flow & Integration" },
+        { id: "wave3", name: "Wave 3: Systems, Data Discipline & Continuous Improvement" }
+      ];
+      const groups = Object.fromEntries(order.map(w => [w.id, { ...w, items: [] }]));
+      initiatives.forEach(item => {
+        const wave = roadmapWaveFor(item);
+        groups[wave.id].items.push(item);
+      });
+      return order.map(w => groups[w.id]).filter(w => w.items.length);
+    }
+
+    function timelinePeriods() {
+      const start = monthIndex(state.settings.roadmapStart);
+      const end = monthIndex(state.settings.roadmapEnd);
+      const zoom = state.settings.zoom;
+      const periods = [];
+      let i = start;
+      while (i <= end) {
+        const d = new Date(Math.floor(i / 12), i % 12, 1);
+        let label, span;
+        if (zoom === "year") {
+          label = String(d.getFullYear());
+          span = 12 - (i % 12);
+        } else if (zoom === "half") {
+          label = `${d.getFullYear()} H${i % 12 < 6 ? 1 : 2}`;
+          span = (i % 12 < 6 ? 6 : 12) - (i % 12);
+        } else if (zoom === "quarter") {
+          label = `${d.getFullYear()} Q${Math.floor((i % 12) / 3) + 1}`;
+          span = 3 - ((i % 12) % 3);
+        } else {
+          label = d.toLocaleString("en", { month: "short", year: "numeric" });
+          span = 1;
+        }
+        span = Math.min(span, end - i + 1);
+        periods.push({ start: i, end: i + span - 1, label });
+        i += span;
+      }
+      return periods;
+    }
+
+    function portfolioPeriods() {
+      return timelinePeriods();
+    }
+
+    function periodIndexForMonth(periods, value) {
+      const idx = monthIndex(value);
+      const found = periods.findIndex(p => idx >= p.start && idx <= p.end);
+      return found < 0 ? clamp(idx - periods[0].start, 0, periods.length - 1) : found;
+    }
+
+    function roadmapSectionChips(items) {
+      const counts = { High: 0, Medium: 0, Low: 0 };
+      items.forEach(item => { if (counts[item.priority] !== undefined) counts[item.priority] += 1; });
+      const scaleLabels = { month: "Month", quarter: "Quarter", half: "Half-Year", year: "Year" };
+      return `<span>${items.length} initiatives</span><span>${counts.High} high</span><span>${counts.Medium} medium</span><span>${counts.Low} low</span><span>${esc(scaleLabels[state.settings.zoom] || "Timeline")} scale</span>`;
+    }
+
+    function renderPortfolioRoadmap(initiatives) {
+      const el = $("portfolioRoadmap");
+      if (!el) return;
+      const periods = portfolioPeriods();
+      const periodWidthPct = 100 / Math.max(periods.length, 1);
+      el.style.gridTemplateColumns = `290px 120px 96px minmax(420px, 1fr)`;
+      const monthHeader = `<div class="portfolio-months" style="grid-template-columns:repeat(${periods.length}, minmax(0, 1fr));">${periods.map(p => `<div class="portfolio-month">${esc(p.label)}</div>`).join("")}</div>`;
+      if (!initiatives.length) {
+        el.innerHTML = `<div class="empty" style="grid-column:1/-1;">No roadmap initiatives match the selected filters.</div>`;
+        return;
+      }
+      const rows = roadmapWaves(initiatives).map(wave => `
+        <div class="portfolio-wave">${esc(wave.name)}</div>
+        ${wave.items.map(item => {
+          const start = periodIndexForMonth(periods, item.start);
+          const end = periodIndexForMonth(periods, item.finish);
+          const left = start * periodWidthPct + 1.4;
+          const width = Math.max((end - start + 1) * periodWidthPct - 2.8, 3.5);
+          return `<div class="portfolio-cell"><strong>${esc(item.name)}</strong><br><span class="metric-note">${esc(item.domainName)}</span></div>
+            <div class="portfolio-cell">${esc(item.owner)}</div>
+            <div class="portfolio-cell">${tag(item.priority)}</div>
+            <div class="portfolio-track" style="background-size:${periodWidthPct}% 100%;">
+              <button class="portfolio-bar ${esc(item.priority.toLowerCase())}" data-roadmap-gap="${esc(item.id)}" title="${esc(item.name)}" style="left:${left}%;width:${width}%;border:0;"></button>
+              <span class="portfolio-dot" style="left:calc(${Math.min(left + width, 98)}% - 6px);"></span>
+            </div>`;
+        }).join("")}
+      `).join("");
+      el.innerHTML = `<div class="portfolio-head">Initiative</div><div class="portfolio-head">Owner</div><div class="portfolio-head">Priority</div>${monthHeader}${rows}`;
+      el.querySelectorAll("[data-roadmap-gap]").forEach(btn => btn.addEventListener("click", () => {
+        state.selectedInitiative = btn.dataset.roadmapGap;
+        renderRoadmap();
+      }));
+    }
+
+    function renderRoadmap() {
+      $("roadmapStart").value = state.settings.roadmapStart;
+      $("roadmapEnd").value = state.settings.roadmapEnd;
+      $("durationSelect").value = state.settings.duration;
+      $("zoomSelect").value = state.settings.zoom;
+      populateFilter("roadmapDomainFilter", true);
+      const domainFilter = $("roadmapDomainFilter").value;
+      let initiatives = generateRoadmap();
+      if (domainFilter) initiatives = initiatives.filter(i => i.domain === domainFilter);
+      if (!initiatives.length) {
+        state.selectedInitiative = "";
+        const scaleLabels = { month: "Month", quarter: "Quarter", half: "Half-Year", year: "Year" };
+        $("portfolioSectionMeta").innerHTML = `<span>0 initiatives</span><span>${esc(scaleLabels[state.settings.zoom] || "Timeline")} scale</span>`;
+        $("selectedSectionMeta").innerHTML = `<span>No selected initiative</span>`;
+        $("registerSectionMeta").innerHTML = `<span>0 actions</span>`;
+        $("roadmapSummary").innerHTML = `
+          <div class="mini-kpi"><span>Initiatives</span><strong>0</strong><small>No roadmap gaps in this view</small></div>
+          <div class="mini-kpi"><span>Requirements</span><strong>0</strong><small>Answer gaps to generate actions</small></div>
+          <div class="mini-kpi"><span>Monthly Controls</span><strong>0</strong><small>Recurring updates and reviews</small></div>
+          <div class="mini-kpi"><span>Milestones</span><strong>0</strong><small>Setup and approval points</small></div>`;
+        $("roadmapGapList").innerHTML = `<div class="empty">No roadmap gaps match the selected domain.</div>`;
+        renderPortfolioRoadmap([]);
+        $("initiativeDetail").innerHTML = `<div class="empty">Select another domain or complete more assessment questions to generate roadmap actions.</div>`;
+        $("timeline").innerHTML = `<div class="empty">No timeline available for the selected filters.</div>`;
+        $("timeline").style.gridTemplateColumns = "";
+        $("roadmapTable").innerHTML = `<div class="empty">No detailed actions available for the selected filters.</div>`;
+        return;
+      }
+      if (!state.selectedInitiative || !initiatives.some(i => i.id === state.selectedInitiative)) {
+        state.selectedInitiative = initiatives[0].id;
+      }
+      const selected = initiatives.find(i => i.id === state.selectedInitiative) || initiatives[0];
+      const allActions = generateRoadmapActions(initiatives);
+      const selectedActions = generateRoadmapActions([selected]);
+      renderPortfolioRoadmap(initiatives);
+      renderTimeline(selectedActions);
+      const monthlyCount = selectedActions.filter(a => a.type === "monthly").length;
+      const milestoneCount = selectedActions.filter(a => a.type === "milestone").length;
+      $("portfolioSectionMeta").innerHTML = roadmapSectionChips(initiatives);
+      $("selectedSectionMeta").innerHTML = `<span>${esc(selected.name)}</span><span>${selectedActions.length} actions</span><span>${monthlyCount} monthly</span><span>${milestoneCount} milestones</span>`;
+      $("registerSectionMeta").innerHTML = `<span>${selectedActions.length} selected actions</span><span>${allActions.length} total actions</span>`;
+      $("roadmapSummary").innerHTML = `
+        <div class="mini-kpi"><span>Initiatives</span><strong>${initiatives.length}</strong><small>Generated from assessed gaps</small></div>
+        <div class="mini-kpi"><span>Selected Actions</span><strong>${selectedActions.length}</strong><small>${esc(selected.name)}</small></div>
+        <div class="mini-kpi"><span>Monthly Controls</span><strong>${monthlyCount}</strong><small>Recurring updates and reviews</small></div>
+        <div class="mini-kpi"><span>Total Actions</span><strong>${allActions.length}</strong><small>Across visible gaps</small></div>`;
+      $("roadmapGapList").innerHTML = initiatives.map(i => {
+        const actionCount = generateRoadmapActions([i]).length;
+        const active = i.id === selected.id ? " active" : "";
+        return `<button class="roadmap-gap-card${active}" data-roadmap-gap="${esc(i.id)}" type="button">
+          <strong>${esc(i.name)}</strong>
+          <span class="metric-note">${esc(i.domainName)}</span>
+          <div class="roadmap-card-meta">
+            ${tag(i.priority)}
+            <span>${esc(i.owner)}</span>
+            <span>${actionCount} actions</span>
+            <span>${esc(i.start)} to ${esc(i.finish)}</span>
+          </div>
+          <span class="card-arrow" aria-hidden="true">&rsaquo;</span>
+        </button>`;
+      }).join("") + `<button class="roadmap-all-btn" id="viewAllInitiativesBtn" type="button">View all initiatives (${initiatives.length})</button>`;
+      $("roadmapGapList").querySelectorAll("[data-roadmap-gap]").forEach(el => el.addEventListener("click", () => {
+        state.selectedInitiative = el.dataset.roadmapGap;
+        renderRoadmap();
+      }));
+      $("viewAllInitiativesBtn")?.addEventListener("click", () => {
+        $("roadmapDomainFilter").value = "";
+        renderRoadmap();
+      });
+      $("initiativeDetail").innerHTML = initiativeHtml(selected);
+      $("roadmapTable").innerHTML = selectedActions.length ? table(["Selected Gap","Requirement / Action","Owner","Stakeholders","Deliverable","Type","Timing","Priority"], selectedActions.map(a => [
+        `<strong>${esc(a.initiativeName)}</strong><br><span class="metric-note">${esc(a.domainName)} - ${esc(a.initiativeId)}</span>`,
+        esc(a.action),
+        esc(a.owner),
+        esc(a.stakeholders),
+        esc(a.deliverable),
+        `<span class="action-type ${esc(a.type)}">${esc(activityTypeLabel(a.type))}</span>`,
+        esc(a.type === "monthly" || a.type === "review" ? `${a.start} to ${a.finish} (${a.recurrence})` : a.start === a.finish ? a.start : `${a.start} to ${a.finish}`),
+        tag(a.priority)
+      ])) : `<div class="empty">Answer questions with gaps to generate detailed roadmap actions.</div>`;
+    }
+
+    function periodsForTimeline() {
+      return timelinePeriods();
+    }
+
+    function renderTimeline(actions) {
+      const periods = periodsForTimeline();
+      const colCss = periods.map(p => `${Math.max(88, (p.end - p.start + 1) * 50)}px`).join(" ");
+      const periodWidths = periods.map(p => Math.max(88, (p.end - p.start + 1) * 50));
+      const head = `<div class="timeline-name" style="background:#f2f5f9;font-weight:800;">Selected Requirement / Action</div><div class="timeline-head" style="grid-template-columns:${colCss};">${periods.map(p => `<div class="period">${esc(p.label)}</div>`).join("")}</div>`;
+      const rows = actions.map(item => {
+        const markers = renderActionMarkers(item, periods, periodWidths);
+        return `<div class="timeline-name">
+            <div class="timeline-action-name">
+              <strong>${esc(item.action)}</strong>
+              <span class="metric-note">${esc(item.initiativeName)}</span>
+              <span class="metric-note">${esc(item.owner)} - ${esc(item.deliverable)}</span>
+              <div class="timeline-action-meta"><span class="action-type ${esc(item.type)}">${esc(activityTypeLabel(item.type))}</span>${tag(item.priority)}</div>
+            </div>
+          </div>
+          <div class="timeline-row" style="background-size:${periods.map(p => Math.max(88, (p.end - p.start + 1) * 50)).join("px ")}px 100%;">
+            <button class="timeline-click-target" data-init="${item.initiativeId}" style="position:absolute;inset:0;border:0;background:transparent;cursor:pointer;" aria-label="${esc(item.initiativeName)}"></button>
+            ${markers}
+          </div>`;
+      }).join("");
+      $("timeline").innerHTML = head + rows;
+      $("timeline").style.gridTemplateColumns = `360px ${periodWidths.reduce((sum, width) => sum + width, 0)}px`;
+      document.querySelectorAll("[data-init]").forEach(el => el.addEventListener("click", () => {
+        state.selectedInitiative = el.dataset.init;
+        renderRoadmap();
+      }));
+    }
+
+    function renderActionMarkers(item, periods, periodWidths) {
+      const startPeriod = periods.findIndex(p => item.startIndex <= p.end && item.startIndex >= p.start);
+      const endPeriod = periods.findIndex(p => item.endIndex <= p.end && item.endIndex >= p.start);
+      const left = startPeriod < 0 ? 0 : periodWidths.slice(0, startPeriod).reduce((sum, width) => sum + width, 0);
+      const width = startPeriod < 0 || endPeriod < 0 ? 0 : periodWidths.slice(startPeriod, endPeriod + 1).reduce((sum, width) => sum + width, 0);
+      if (item.type === "milestone") {
+        return `<div class="action-milestone" title="${esc(item.action)}" style="left:${left + Math.max(width / 2 - 9, 6)}px;"></div>`;
+      }
+      if (item.type === "monthly") {
+        const dots = [];
+        for (let i = startPeriod; i <= endPeriod; i += 1) {
+          const dotLeft = periodWidths.slice(0, i).reduce((sum, w) => sum + w, 0) + periodWidths[i] / 2 - 5;
+          dots.push(`<div class="action-dot" title="${esc(item.action)}" style="left:${dotLeft}px;"></div>`);
+        }
+        return dots.join("");
+      }
+      if (item.type === "review") {
+        const points = [];
+        for (let i = startPeriod; i <= endPeriod; i += 1) {
+          const pointLeft = periodWidths.slice(0, i).reduce((sum, w) => sum + w, 0) + periodWidths[i] / 2 - 8;
+          points.push(`<div class="action-review" title="${esc(item.action)}" style="left:${pointLeft}px;"></div>`);
+        }
+        return points.join("");
+      }
+      return `<div class="action-bar ${item.priority.toLowerCase()}" title="${esc(item.action)}" style="left:${left + 6}px;width:${Math.max(width - 12, 44)}px;"></div>`;
+    }
+
+    function activityTypeLabel(type) {
+      return type === "monthly" ? "Monthly Recurring" : type === "milestone" ? "Milestone" : type === "review" ? "Review" : "Implementation";
+    }
+
+    function initiativeHtml(i) {
+      const actions = generateRoadmapActions([i]);
+      const owners = Array.from(new Set(actions.map(a => a.owner))).join(", ");
+      return `<div>
+        <div class="selected-strip">
+          <div>
+            <div class="selected-title-line">
+              ${tag(i.priority)}
+              <h4>${esc(i.name)}</h4>
+            </div>
+            <div class="metric-note">${esc(i.domainName)} - ${esc(i.id)}</div>
+          </div>
+          <div class="selected-chip"><span>Owner</span><strong>${esc(i.owner)}</strong></div>
+          <div class="selected-chip"><span>Timeline</span><strong>${esc(i.start)} to ${esc(i.finish)}</strong></div>
+          <div class="selected-chip"><span>Actions</span><strong>${actions.length} requirements</strong></div>
+          <div class="selected-chip"><span>KPI Link</span><strong>${esc(i.kpi)}</strong></div>
+        </div>
+        <div class="selected-support">
+          <div><strong>Business Value</strong>${esc(i.businessValue)}</div>
+          <div><strong>Key Deliverables</strong>${esc(i.deliverables)}</div>
+        </div>
+      </div>`;
+    }
+
+    function renderReportPreview() {
+      const c = calculations();
+      $("reportPreview").innerHTML = `
+        <h2>Executive Summary</h2>
+        <p><strong>Overall maturity:</strong> ${fmt(c.overallMaturity, 2)} / 5 (${esc(maturityLabel(c.overallMaturity))})</p>
+        <p><strong>Achievement vs target:</strong> ${pct(c.achievementPct, 1)}. <strong>Weighted gap:</strong> ${pct(c.weightedGapPct, 1)}.</p>
+        <p><strong>Answered questions:</strong> ${c.answered} of ${c.total}.</p>
+        <h3>Highest Priority Gaps</h3>
+        ${table(["Area","Gap","Severity","Impact"], c.rows.filter(r => r.level && r.maturityGap > 0).sort((a,b) => b.priorityScore - a.priorityScore).slice(0, 5).map(r => [esc(r.category), fmt(r.maturityGap, 1), tag(r.severity), esc(r.impact)]))}
+      `;
+    }
+
+    function renderSettings() {
+      $("defaultTarget").value = state.settings.defaultTarget;
+      const c = calculations();
+      const domainTotal = Object.values(state.domainWeights).reduce((a,b) => a + Number(b || 0), 0);
+      const badDomains = domains.filter(d => questionWeightTotal(d.id) !== 100);
+      $("weightWarning").innerHTML = (Math.round(domainTotal * 100) / 100 !== 100 || badDomains.length) ? `
+        <div class="warning">
+          Domain total is ${pct(domainTotal, 1)}. ${badDomains.length ? `Question totals need review in: ${badDomains.map(d => esc(d.name)).join(", ")}.` : ""}
+        </div>` : `<div class="info-box"><strong>Weights Valid</strong><span>Domain weights total 100% and each domain question set totals 100%.</span></div>`;
+      $("weightSummaryChart").innerHTML = `<div class="weight-summary-bars">${domains.map((d, i) => {
+        const colors = ["var(--blue)", "var(--accent-projects)", "var(--accent-technology)", "var(--accent-utilities)", "var(--accent-industries)", "var(--accent-academy)", "var(--nav-2)", "var(--nav-3)", "var(--cyan)"];
+        const weight = Number(state.domainWeights[d.id] || 0);
+        return `<div class="weight-summary-row">
+          <strong>${esc(d.name)}</strong>
+          <div class="weight-summary-track"><span style="width:${clamp(weight, 0, 100)}%;background:${colors[i % colors.length]};"></span></div>
+          <span>${pct(weight, 1)}</span>
+        </div>`;
+      }).join("")}</div>`;
+      $("domainWeights").innerHTML = domains.map((d, domainIndex) => {
+        const qs = questions.map((question, i) => ({ ...question, i })).filter(question => question.domain === d.id);
+        const dCalc = c.domainList.find(item => item.id === d.id);
+        const qTotal = questionWeightTotal(d.id);
+        const valid = Math.round(qTotal * 100) / 100 === 100;
+        return `<details class="weight-accordion" ${domainIndex === 0 ? "open" : ""}>
+          <summary>
+            <div class="accordion-header">
+              <div>
+                <strong>${esc(d.name)}</strong>
+                <span class="metric-note">${dCalc.answered}/${dCalc.total} answered - ${dCalc.answered ? fmt(dCalc.maturity, 2) + " maturity" : "not assessed"}</span>
+              </div>
+              <div class="accordion-stat"><span>Domain Weight</span><b>${pct(Number(state.domainWeights[d.id] || 0), 1)}</b></div>
+              <div class="accordion-stat"><span>Gap</span><b>${dCalc.answered ? fmt(dCalc.gap, 2) : "-"}</b></div>
+              <div class="accordion-stat"><span>Status</span><b>${valid ? "Valid" : "Review"}</b></div>
+              <div>${dCalc.answered ? tag(dCalc.severity) : tag("Not Assessed")}</div>
+            </div>
+          </summary>
+          <div class="accordion-body">
+            <label class="field">Domain Weight
+              <input type="number" min="0" max="100" step="0.5" data-domain-weight="${d.id}" value="${state.domainWeights[d.id]}">
+            </label>
+            <div>
+              <div class="metric-note" style="margin-bottom:10px;">Question weights total ${pct(qTotal, 1)} inside this domain.</div>
+              <div class="question-weight-grid">
+                ${qs.map(question => `<label class="field">${question.i + 1}. ${esc(question.category)}
+                  <input type="number" min="0" max="100" step="0.5" data-question-weight="${question.i}" value="${state.questionWeights[question.i]}">
+                </label>`).join("")}
+              </div>
+            </div>
+          </div>
+        </details>`;
+      }).join("");
+      $("questionWeights").innerHTML = "";
+      document.querySelectorAll("[data-domain-weight]").forEach(input => input.addEventListener("change", e => {
+        state.domainWeights[e.target.dataset.domainWeight] = Number(e.target.value || 0);
+        renderAll();
+      }));
+      document.querySelectorAll("[data-question-weight]").forEach(input => input.addEventListener("change", e => {
+        state.questionWeights[e.target.dataset.questionWeight] = Number(e.target.value || 0);
+        renderAll();
+      }));
+    }
+
+    function questionWeightTotal(domainId) {
+      return questions.reduce((sum, question, i) => sum + (question.domain === domainId ? Number(state.questionWeights[i] || 0) : 0), 0);
+    }
+
+    function table(headers, rows) {
+      if (!rows.length) return `<div class="empty">No data yet.</div>`;
+      return `<table><thead><tr>${headers.map(h => `<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${rows.map(row => `<tr>${row.map(cell => `<td>${cell}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+    }
+
+    function tag(value) {
+      const cls = ["Critical","Major","Moderate","Minor","No Gap","Not Assessed"].includes(value) ? severityClass(value) : priorityClass(value);
+      return `<span class="tag ${cls}">${esc(value)}</span>`;
+    }
+
+    function populateFilter(id, includeAll) {
+      const el = $(id);
+      const old = el.value;
+      el.innerHTML = `${includeAll ? `<option value="">All domains</option>` : ""}${domains.map(d => `<option value="${d.id}">${esc(d.name)}</option>`).join("")}`;
+      el.value = old;
+    }
+
+    function saveSilent() {
+      localStorage.setItem("planningControllingAssessmentStateV1", JSON.stringify(state));
+    }
+
+    function loadState() {
+      const saved = localStorage.getItem("planningControllingAssessmentStateV1");
+      if (!saved) return;
+      try {
+        const data = JSON.parse(saved);
+        if (!Array.isArray(data.answers) || data.answers.length !== questions.length) return;
+        state.current = Number(data.current || 0);
+        state.answers = data.answers;
+        state.domainWeights = { ...state.domainWeights, ...(data.domainWeights || {}) };
+        state.questionWeights = { ...state.questionWeights, ...(data.questionWeights || {}) };
+        state.settings = { ...state.settings, ...(data.settings || {}) };
+        state.history = Array.isArray(data.history) ? data.history : [];
+      } catch (err) {}
+    }
+
+    function download(name, content, type) {
+      const blob = new Blob([content], { type });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function exportJson() {
+      const roadmap = generateRoadmap();
+      download("planning-controlling-assessment-backup.json", JSON.stringify({ tool: "Planning and Controlling Department Assessment", processReference: "MDP-PLN-BP01", exportedAt: new Date().toISOString(), state, calculations: calculations(), roadmap, roadmapActions: generateRoadmapActions(roadmap) }, null, 2), "application/json");
+    }
+
+    function loadJson(file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const data = JSON.parse(reader.result);
+          const next = data.state || data;
+          if (!Array.isArray(next.answers) || next.answers.length !== questions.length) throw new Error("Invalid answers");
+          state.current = Number(next.current || 0);
+          state.answers = next.answers;
+          state.domainWeights = { ...state.domainWeights, ...(next.domainWeights || {}) };
+          state.questionWeights = { ...state.questionWeights, ...(next.questionWeights || {}) };
+          state.settings = { ...state.settings, ...(next.settings || {}) };
+          state.history = Array.isArray(next.history) ? next.history : (state.history || []);
+          renderAll();
+          alert("Backup loaded.");
+        } catch (err) {
+          alert("This file is valid JSON only if it contains a v2 assessment backup with the same question set.");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function assessmentRowsForCopy() {
+      const c = calculations();
+      return [["Question No","Domain","Category","Domain Weight %","Question Weight %","Current Maturity","Target Maturity","Maturity Gap","Severity","Weighted Gap %","Evidence Status","Notes","Assessment Question","Evidence Requested","Process Reference","Business Impact","Suggested Owner","Recommended Improvement Action"]]
+        .concat(c.rows.map(r => [r.index + 1, r.domainName, r.category, r.domainWeight, r.questionWeight, r.level || "", r.target, r.level ? fmt(r.maturityGap, 1) : "", r.level ? r.severity : "Not Assessed", fmt(r.weightedGap, 2), r.evidenceStatus, r.notes, r.text, r.evidence, r.process, r.impact, r.owner, r.action]));
+    }
+
+    function gapRowsForCopy() {
+      const c = calculations();
+      return [["Question No","Domain","Category","Current","Target","Gap","Severity","Weighted Gap %","Business Impact","Recommended Action"]]
+        .concat(c.rows.filter(r => r.level).map(r => [r.index + 1, r.domainName, r.category, r.level, r.target, fmt(r.maturityGap, 1), r.severity, fmt(r.weightedGap, 2), r.impact, actionFor(r)]));
+    }
+
+    function roadmapRowsForCopy() {
+      return [["Initiative ID","Initiative Name","Domain","Category","Requirement / Action","Activity Type","Owner","Stakeholders","Deliverable","Start","Finish","Recurrence","Priority","Business Value","Source Questions"]]
+        .concat(generateRoadmapActions().map(a => [a.initiativeId, a.initiativeName, a.domainName, a.category, a.action, activityTypeLabel(a.type), a.owner, a.stakeholders, a.deliverable, a.start, a.finish, a.recurrence, a.priority, a.businessValue, a.sourceQuestions]));
+    }
+
+    function rowsToText(rows) {
+      return rows.map(row => row.map(value => String(value ?? "").replace(/\t/g, " ")).join("\t")).join("\n");
+    }
+
+    async function copyRows(rows) {
+      const text = rowsToText(rows);
+      try {
+        await navigator.clipboard.writeText(text);
+        alert("Copied. You can paste into Excel.");
+      } catch (err) {
+        download("copied-table.tsv", text, "text/tab-separated-values;charset=utf-8");
+      }
+    }
+
+    function recordSnapshot() {
+      const c = calculations();
+      if (!c.answered) return;
+      const counts = countSeverities(c.rows.filter(r => r.level));
+      const snap = {
+        ts: new Date().toISOString(),
+        maturity: Math.round(c.overallMaturity * 100) / 100,
+        achievementPct: Math.round(c.achievementPct * 10) / 10,
+        weightedGapPct: Math.round(c.weightedGapPct * 10) / 10,
+        answered: c.answered,
+        critical: counts.Critical,
+        major: counts.Major
+      };
+      state.history = state.history || [];
+      const day = snap.ts.slice(0, 10);
+      state.history = state.history.filter(s => (s.ts || "").slice(0, 10) !== day);
+      state.history.push(snap);
+      if (state.history.length > 60) state.history = state.history.slice(-60);
+    }
+
+    function exportCsv() {
+      const c = calculations();
+      const header = ["Domain", "Domain Weight %", "Category", "Assessment Question", "Question Weight %", "Current Level", "Target Level", "Maturity Gap", "Severity", "Priority Score", "Priority", "Evidence Requested", "Process Reference", "Business Impact", "Suggested Owner", "Recommended Improvement Action", "Evidence Status", "Notes"];
+      const body = c.rows.map(r => [r.domainName, r.domainWeight, r.category, r.text, r.questionWeight, r.level || "", r.target, r.level ? r.maturityGap : "", r.severity, Math.round(r.priorityScore * 100) / 100, r.priority, r.evidence || "", r.process || "", r.impact || "", r.owner || "", r.action || "", r.evidenceStatus || "", r.notes || ""]);
+      const csvField = v => { v = String(v ?? ""); return /[",\n\r]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v; };
+      const csvText = [header, ...body].map(row => row.map(csvField).join(",")).join("\r\n");
+      download("planning-controlling-assessment-data.csv", "﻿" + csvText, "text/csv;charset=utf-8");
+    }
+
+    function buildExecutiveBrief() {
+      const c = calculations();
+      const answeredRows = c.rows.filter(r => r.level);
+      const counts = countSeverities(answeredRows);
+      const roadmap = generateRoadmap();
+      const logoSrc = document.querySelector(".mark img")?.src || "";
+      const generated = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+      const answeredDomains = c.domainList.filter(d => d.answered);
+      const priorityGaps = c.rows.filter(r => r.level && r.maturityGap > 0).sort((a, b) => b.priorityScore - a.priorityScore).slice(0, 5);
+      const strengths = [...answeredDomains].sort((a, b) => b.maturity - a.maturity).slice(0, 3);
+      const coveragePct = c.total ? c.answered / c.total * 100 : 0;
+      const sevColors = { Critical: "#d23c22", Major: "#d97706", Moderate: "#0031eb", Minor: "#0b7d73", "No Gap": "#94a3b8" };
+      const sevTotal = Object.values(counts).reduce((a, b) => a + b, 0);
+      let acc = 0;
+      const segs = Object.entries(counts).filter(([, n]) => n > 0).map(([k, n]) => {
+        const from = acc / Math.max(sevTotal, 1) * 360;
+        acc += n;
+        const to = acc / Math.max(sevTotal, 1) * 360;
+        return `${sevColors[k]} ${from.toFixed(1)}deg ${to.toFixed(1)}deg`;
+      }).join(", ");
+      const donutStyle = sevTotal ? `background:conic-gradient(${segs});` : "background:#e2e8f0;";
+      const chip = s => `<span class="chip" style="color:${sevColors[s] || "#5b6b86"};background:${(sevColors[s] || "#5b6b86")}18;">${esc(s)}</span>`;
+
+      const insights = [];
+      if (!c.answered) {
+        insights.push("The assessment has not been started yet - complete the questionnaire to generate strategic insights.");
+      } else {
+        const weakest = [...answeredDomains].sort((a, b) => a.maturity - b.maturity)[0];
+        const strongest = strengths[0];
+        if (strongest) insights.push(`<strong>${esc(strongest.name)}</strong> is the strongest capability at ${fmt(strongest.maturity, 2)}/5 - protect this discipline and use it as the internal benchmark.`);
+        if (weakest && weakest !== strongest) insights.push(`<strong>${esc(weakest.name)}</strong> is the weakest domain at ${fmt(weakest.maturity, 2)}/5 and should anchor the first improvement wave.`);
+        const gapDriver = c.domainList.map(d => ({ name: d.name, share: d.potential - d.achieved })).sort((a, b) => b.share - a.share)[0];
+        const totalGap = Math.max(c.totalPotential - c.achieved, 0.0001);
+        if (gapDriver && gapDriver.share > 0) insights.push(`<strong>${esc(gapDriver.name)}</strong> drives ${pct(gapDriver.share / totalGap * 100, 0)} of the total weighted gap - the single largest lever for improving achievement.`);
+        const quickWins = c.rows.filter(r => r.level && r.maturityGap === 1).length;
+        if (quickWins) insights.push(`${quickWins} question${quickWins > 1 ? "s are" : " is"} one maturity level from target - quick wins that can lift achievement with limited investment.`);
+        if (counts.Critical + counts.Major > 0) insights.push(`${counts.Critical + counts.Major} critical or major gaps require management ownership; the roadmap sequences them into ${roadmap.length} initiatives.`);
+        if (c.answered < c.total) insights.push(`Coverage is ${pct(coveragePct, 0)} (${c.answered}/${c.total} questions answered) - findings will firm up as the remaining areas are assessed.`);
+      }
+
+      const history = (state.history || []).slice(-12);
+      let trendHtml = "";
+      if (history.length >= 2) {
+        const w = 560, h = 110, padX = 16, padY = 16;
+        const pts = history.map((s, i) => {
+          const x = padX + i * (w - padX * 2) / (history.length - 1);
+          const y = h - padY - clamp(s.maturity, 0, 5) / 5 * (h - padY * 2);
+          return [x, y];
+        });
+        const line = pts.map(p => p.map(n => n.toFixed(1)).join(",")).join(" ");
+        trendHtml = `<section class="panel"><h2>Maturity Trend</h2>
+          <svg viewBox="0 0 ${w} ${h}" style="width:100%;height:auto;display:block">
+            <polyline points="${line}" fill="none" stroke="#0031eb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            ${pts.map(p => `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="4" fill="#001559"/>`).join("")}
+          </svg>
+          <div class="trend-labels">${history.map(s => `<span>${esc((s.ts || "").slice(0, 10))}<br><strong>${fmt(s.maturity, 2)}</strong></span>`).join("")}</div>
+        </section>`;
+      }
+
+      const domainRows = c.domainList.map(d => {
+        const fill = clamp(d.maturity / 5 * 100, 0, 100);
+        const targetVal = d.answered ? d.maturity + d.gap : d.gap;
+        const marker = clamp(targetVal / 5 * 100, 0, 100);
+        return `<div class="dom-row">
+          <span class="dom-name">${esc(d.name)}</span>
+          <div class="dom-track"><span class="dom-fill" style="width:${fill.toFixed(1)}%"></span><span class="dom-target" style="left:${marker.toFixed(1)}%"></span></div>
+          <span class="dom-val">${d.answered ? fmt(d.maturity, 2) : "-"}</span>
+        </div>`;
+      }).join("");
+
+      const legend = Object.entries(counts).map(([k, n]) => `<div class="leg-row"><span class="leg-dot" style="background:${sevColors[k]}"></span>${esc(k)}<strong>${n}</strong></div>`).join("");
+
+      const prCounts = { High: 0, Medium: 0, Low: 0 };
+      roadmap.forEach(r => { if (prCounts[r.priority] !== undefined) prCounts[r.priority] += 1; });
+      const briefPeriods = timelinePeriods();
+      const briefMonthWidthPct = 100 / Math.max(briefPeriods.length, 1);
+      const briefRoadmap = roadmap.length ? `<div class="brief-roadmap" style="grid-template-columns:220px 92px 78px minmax(360px, 1fr)">
+        <div class="br-head">Initiative</div><div class="br-head">Owner</div><div class="br-head">Priority</div>
+        <div class="br-months" style="grid-template-columns:repeat(${briefPeriods.length}, minmax(0, 1fr));">${briefPeriods.map(p => `<div>${esc(p.label)}</div>`).join("")}</div>
+        ${roadmapWaves(roadmap).map(wave => `
+          <div class="br-wave">${esc(wave.name)}</div>
+          ${wave.items.map(item => {
+            const start = periodIndexForMonth(briefPeriods, item.start);
+            const end = periodIndexForMonth(briefPeriods, item.finish);
+            const left = start * briefMonthWidthPct + 1.5;
+            const width = Math.max((end - start + 1) * briefMonthWidthPct - 3, 4);
+            return `<div class="br-cell"><strong>${esc(item.name)}</strong><br><span>${esc(item.domainName)}</span></div>
+              <div class="br-cell">${esc(item.owner)}</div>
+              <div class="br-cell">${chip(item.priority)}</div>
+              <div class="br-track" style="background-size:${briefMonthWidthPct}% 100%;">
+                <span class="br-bar ${esc(item.priority.toLowerCase())}" style="left:${left}%;width:${width}%;"></span>
+                <span class="br-milestone" style="left:calc(${Math.min(left + width, 98)}% - 5px);"></span>
+              </div>`;
+          }).join("")}
+        `).join("")}
+      </div><p class="muted" style="margin:10px 0 0">Detailed requirements and monthly actions are covered in the Operational Appendix.</p>` : '<p class="muted">The roadmap is generated once gaps are identified.</p>';
+
+      return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Planning and Controlling Executive Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #eef1fa; color: #0d1b3e; font-family: "Manrope", "Segoe UI", Arial, sans-serif; line-height: 1.45; padding: 26px; }
+  .wrap { max-width: 1040px; margin: 0 auto; display: grid; gap: 14px; }
+  .brief-head { display: flex; justify-content: space-between; align-items: center; gap: 18px; background: linear-gradient(120deg, #001559 0%, #0031eb 100%); color: #fff; border-radius: 16px; padding: 22px 26px; }
+  .brief-head img { width: 190px; height: auto; display: block; }
+  .brief-head h1 { margin: 8px 0 2px; font-size: 24px; }
+  .brief-head p { margin: 0; color: #cfe0ff; font-size: 13px; }
+  .brief-head .date { text-align: right; color: #cfe0ff; font-size: 13px; white-space: nowrap; }
+  .kpis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .kpi { background: #fff; border: 1px solid #d9e0f2; border-radius: 14px; padding: 14px; }
+  .kpi span { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #5b6b86; }
+  .kpi strong { display: block; font-size: 24px; margin-top: 4px; color: #001559; }
+  .kpi em { font-style: normal; font-size: 12px; color: #5b6b86; }
+  .cols { display: grid; grid-template-columns: 3fr 2fr; gap: 14px; }
+  .cols.even { grid-template-columns: 1fr 1fr; }
+  .panel { background: #fff; border: 1px solid #d9e0f2; border-radius: 14px; padding: 18px; }
+  h2 { margin: 0 0 12px; font-size: 15px; color: #000f3d; }
+  h2:after { content: ""; display: block; width: 34px; height: 3px; border-radius: 999px; background: #0031eb; margin-top: 6px; }
+  .dom-row { display: grid; grid-template-columns: 1fr 160px 44px; gap: 10px; align-items: center; padding: 5px 0; font-size: 13px; }
+  .dom-track { position: relative; height: 10px; border-radius: 999px; background: #e8edf9; }
+  .dom-fill { position: absolute; inset: 0 auto 0 0; border-radius: 999px; background: linear-gradient(90deg, #0031eb, #336aea); }
+  .dom-target { position: absolute; top: -3px; bottom: -3px; width: 3px; border-radius: 2px; background: #001559; }
+  .dom-val { text-align: right; font-weight: 700; }
+  .donut-wrap { display: flex; gap: 18px; align-items: center; }
+  .donut { width: 130px; height: 130px; border-radius: 50%; position: relative; flex: 0 0 130px; }
+  .donut:after { content: ""; position: absolute; inset: 26px; border-radius: 50%; background: #fff; }
+  .leg-row { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 3px 0; }
+  .leg-row strong { margin-left: auto; }
+  .legend { flex: 1; }
+  .leg-dot { width: 10px; height: 10px; border-radius: 50%; flex: 0 0 10px; }
+  ul.insights { margin: 0; padding-left: 18px; display: grid; gap: 8px; font-size: 13.5px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; color: #5b6b86; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; padding: 6px 8px; border-bottom: 1px solid #d9e0f2; }
+  td { padding: 7px 8px; border-bottom: 1px solid #eef1f8; vertical-align: top; }
+  .chip { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 11.5px; font-weight: 700; }
+  .muted { color: #5b6b86; font-size: 12px; }
+  .strength { display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px solid #eef1f8; font-size: 13.5px; }
+  .strength strong { color: #0b7d73; white-space: nowrap; }
+  .pr-band { display: flex; gap: 10px; margin-bottom: 12px; font-size: 12.5px; }
+  .pr-band span { background: #eef3ff; border-radius: 999px; padding: 4px 12px; font-weight: 700; color: #001559; }
+  .brief-roadmap { display: grid; overflow: auto; border: 1px solid #d9e0f2; border-radius: 12px; font-size: 11px; min-width: 100%; }
+  .br-head { padding: 8px; background: #f5f7fc; color: #001559; border-bottom: 1px solid #d9e0f2; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+  .br-months { display: grid; background: #f5f7fc; border-bottom: 1px solid #d9e0f2; }
+  .br-months div { border-left: 1px solid #d9e0f2; padding: 6px 2px; text-align: center; color: #001559; font-weight: 800; }
+  .br-wave { grid-column: 1 / -1; padding: 8px 10px; background: #001559; color: #fff; font-weight: 800; }
+  .br-cell { padding: 7px 8px; border-bottom: 1px solid #eef1f8; min-height: 42px; background: #fff; }
+  .br-cell strong { color: #001559; }
+  .br-cell span { color: #5b6b86; font-size: 10px; }
+  .br-track { position: relative; min-height: 42px; border-bottom: 1px solid #eef1f8; background-image: linear-gradient(to right, #d9e0f2 1px, transparent 1px); background-repeat: repeat-x; }
+  .br-bar { position: absolute; top: 16px; height: 10px; border-radius: 999px; background: #0031eb; }
+  .br-bar.high { background: #d23c22; }
+  .br-bar.medium { background: #0031eb; }
+  .br-bar.low { background: #0b7d73; }
+  .br-milestone { position: absolute; top: 16px; width: 10px; height: 10px; transform: rotate(45deg); border-radius: 2px; background: #d97706; }
+  .trend-labels { display: flex; justify-content: space-between; font-size: 11px; color: #5b6b86; text-align: center; margin-top: 6px; }
+  footer { color: #5b6b86; font-size: 11.5px; text-align: center; padding: 4px 0 10px; }
+  @page { size: A4; margin: 11mm; }
+  @media print {
+    body { background: #fff; padding: 0; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .wrap { max-width: none; gap: 10px; }
+    .panel, .kpi, .brief-head { break-inside: avoid; }
+  }
+  @media (max-width: 760px) { .kpis { grid-template-columns: repeat(2, 1fr); } .cols, .cols.even { grid-template-columns: 1fr; } }
+</style></head><body><div class="wrap">
+  <header class="brief-head">
+    <div>
+      ${logoSrc ? `<img alt="Madkour" src="${esc(logoSrc)}">` : ""}
+      <h1>Planning and Controlling Executive Brief</h1>
+      <p>Planning and Controlling Department - maturity, schedule risk, and roadmap summary under MDP-PLN-BP01</p>
+    </div>
+    <div class="date">Generated<br><strong>${esc(generated)}</strong></div>
+  </header>
+  <section class="kpis">
+    <div class="kpi"><span>Overall Maturity</span><strong>${fmt(c.overallMaturity, 2)} / 5</strong><em>${esc(maturityLabel(c.overallMaturity))}</em></div>
+    <div class="kpi"><span>Achievement</span><strong>${pct(c.achievementPct, 1)}</strong><em>vs configured targets</em></div>
+    <div class="kpi"><span>Weighted Gap</span><strong>${pct(c.weightedGapPct, 1)}</strong><em>lost achievement</em></div>
+    <div class="kpi"><span>Critical / Major</span><strong>${counts.Critical + counts.Major}</strong><em>priority gaps</em></div>
+    <div class="kpi"><span>Coverage</span><strong>${pct(coveragePct, 0)}</strong><em>${c.answered} / ${c.total} answered</em></div>
+  </section>
+  <div class="cols">
+    <section class="panel">
+      <h2>Domain Maturity vs Target</h2>
+      ${domainRows}
+      <p class="muted" style="margin:10px 0 0">Bars show current maturity; the navy marker is the target level.</p>
+    </section>
+    <section class="panel">
+      <h2>Severity Mix</h2>
+      <div class="donut-wrap">
+        <div class="donut" style="${donutStyle}"></div>
+        <div class="legend">${legend || '<p class="muted">No questions answered yet.</p>'}</div>
+      </div>
+    </section>
+  </div>
+  <div class="cols even">
+    <section class="panel">
+      <h2>Key Strengths</h2>
+      ${strengths.length ? strengths.map(d => `<div class="strength"><span>${esc(d.name)}</span><strong>${fmt(d.maturity, 2)} / 5</strong></div>`).join("") : '<p class="muted">Not enough data yet.</p>'}
+    </section>
+    <section class="panel">
+      <h2>Top Risks &amp; Priority Gaps</h2>
+      ${priorityGaps.length ? `<table><thead><tr><th>Area</th><th>Gap</th><th>Severity</th></tr></thead><tbody>
+        ${priorityGaps.map(r => `<tr><td><strong>${esc(r.category)}</strong><br><span class="muted">${esc(r.domainName)} - ${esc(r.impact)}</span></td><td>${fmt(r.maturityGap, 1)}</td><td>${chip(r.severity)}</td></tr>`).join("")}
+      </tbody></table>` : '<p class="muted">No priority gaps identified yet.</p>'}
+    </section>
+  </div>
+  <section class="panel">
+    <h2>Strategic Insights</h2>
+    <ul class="insights">${insights.map(i => `<li>${i}</li>`).join("")}</ul>
+  </section>
+  ${trendHtml}
+  <section class="panel">
+    <h2>Roadmap at a Glance</h2>
+    <div class="pr-band"><span>${roadmap.length} initiatives</span><span>${prCounts.High} high</span><span>${prCounts.Medium} medium</span><span>${prCounts.Low} low priority</span></div>
+    ${briefRoadmap}
+  </section>
+  <footer>Madkour - Planning and Controlling Department Assessment - maturity scored 1-5 per question and weighted by domain and question importance. Process reference: MDP-PLN-BP01. For full detail see the Operational Appendix report.</footer>
+</div></body></html>`;
+    }
+
+    function saveExecutiveBrief() {
+      download("planning-controlling-executive-brief.html", buildExecutiveBrief(), "text/html;charset=utf-8");
+    }
+
+    function buildReportHtml() {
+      const c = calculations();
+      const roadmap = generateRoadmap();
+      const roadmapActions = generateRoadmapActions(roadmap);
+      const css = document.querySelector("style").innerHTML;
+      const logoSrc = document.querySelector(".mark img")?.src || "";
+      return `<!doctype html><html><head><meta charset="utf-8"><title>Planning and Controlling Assessment Report</title><style>${css}.sidebar,.toolbar,.nav,.no-print{display:none!important}.app{display:block}.main{padding:24px}.view{display:block;margin-bottom:18px}.panel{box-shadow:none}</style></head><body><main class="main">
+        <div class="report-brand">
+          <div>
+            <h1>Planning and Controlling Department Assessment Report</h1>
+            <p>Madkour executive maturity, gap analysis, and roadmap report under MDP-PLN-BP01</p>
+            <p>Generated on ${esc(new Date().toLocaleString())}</p>
+          </div>
+          <div class="report-logo">
+            ${logoSrc ? `<img alt="Madkour" src="${esc(logoSrc)}">` : ""}
+          </div>
+        </div>
+        <section class="panel"><h2>Executive Summary</h2>
+          <table><tbody>
+            <tr><td>Overall Maturity</td><td>${fmt(c.overallMaturity, 2)} / 5</td></tr>
+            <tr><td>Maturity Label</td><td>${esc(maturityLabel(c.overallMaturity))}</td></tr>
+            <tr><td>Achievement vs Target</td><td>${pct(c.achievementPct, 1)}</td></tr>
+            <tr><td>Weighted Gap</td><td>${pct(c.weightedGapPct, 1)}</td></tr>
+            <tr><td>Answered Questions</td><td>${c.answered} / ${c.total}</td></tr>
+          </tbody></table>
+        </section>
+        <section class="panel"><h2>Domain Scorecard</h2>${table(["Domain","Weight","Answered","Maturity","Achievement","Gap","Severity"], c.domainList.map(d => [esc(d.name), pct(d.weight, 1), `${d.answered}/${d.total}`, d.answered ? fmt(d.maturity, 2) : "-", pct(d.achievementPct, 1), d.answered ? fmt(d.gap, 2) : "-", d.answered ? esc(d.severity) : "Not Assessed"]))}</section>
+        <section class="panel"><h2>Gap Analysis</h2>${table(["Question","Domain","Category","Current","Target","Gap","Severity","Impact","Action"], c.rows.filter(r => r.level).sort((a,b) => b.priorityScore - a.priorityScore).map(r => [r.index + 1, esc(r.domainName), esc(r.category), r.level, r.target, fmt(r.maturityGap, 1), esc(r.severity), esc(r.impact), esc(actionFor(r))]))}</section>
+        <section class="panel"><h2>Roadmap Initiatives</h2>${table(["ID","Initiative","Domain","Priority","Complexity","Owner","Start","Finish","Deliverables","KPI"], roadmap.map(i => [esc(i.id), esc(i.name), esc(i.domainName), esc(i.priority), esc(i.complexity), esc(i.owner), esc(i.start), esc(i.finish), esc(i.deliverables), esc(i.kpi)]))}</section>
+        <section class="panel"><h2>Detailed Roadmap Requirements</h2>${table(["Initiative","Requirement / Action","Type","Owner","Stakeholders","Deliverable","Timing","Priority"], roadmapActions.map(a => [esc(a.initiativeName), esc(a.action), esc(activityTypeLabel(a.type)), esc(a.owner), esc(a.stakeholders), esc(a.deliverable), esc(a.type === "monthly" || a.type === "review" ? `${a.start} to ${a.finish} (${a.recurrence})` : a.start === a.finish ? a.start : `${a.start} to ${a.finish}`), esc(a.priority)]))}</section>
+        <section class="panel"><h2>Assessment Detail</h2>${table(assessmentRowsForCopy()[0], assessmentRowsForCopy().slice(1).map(row => row.map(esc)))}</section>
+      </main></body></html>`;
+    }
+
+    function saveReport() {
+      download("planning-controlling-assessment-report.html", buildReportHtml(), "text/html;charset=utf-8");
+    }
+
+    document.querySelectorAll("[data-view]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("[data-view]").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+        btn.classList.add("active");
+        $(`${btn.dataset.view}View`).classList.add("active");
+      });
+    });
+
+    $("targetSelect").addEventListener("change", e => { state.answers[state.current].target = Number(e.target.value); renderAll(); });
+    $("evidenceSelect").addEventListener("change", e => { state.answers[state.current].evidence = e.target.value; renderAll(); });
+    $("notesText").addEventListener("input", e => { state.answers[state.current].notes = e.target.value; saveSilent(); });
+    $("prevQuestion").addEventListener("click", () => { if (state.current > 0) { state.current -= 1; renderAll(); } });
+    $("nextQuestion").addEventListener("click", () => {
+      if (state.current < questions.length - 1) { state.current += 1; renderAll(); }
+      else { document.querySelector("[data-view='gaps']").click(); }
+    });
+    $("sidebarToggle").addEventListener("click", () => {
+      state.settings.sidebarCollapsed = !state.settings.sidebarCollapsed;
+      renderAll();
+    });
+    $("sidebarRestore").addEventListener("click", () => {
+      state.settings.sidebarCollapsed = false;
+      renderAll();
+    });
+    $("saveBtn").addEventListener("click", () => { recordSnapshot(); saveSilent(); alert("Progress saved in this browser."); });
+    $("reportBtn").addEventListener("click", saveExecutiveBrief);
+    $("execBriefBtn").addEventListener("click", saveExecutiveBrief);
+    $("reportBtn2").addEventListener("click", saveReport);
+    $("csvBtn").addEventListener("click", exportCsv);
+    $("jsonBtn").addEventListener("click", exportJson);
+    $("loadJsonBtn").addEventListener("click", () => $("jsonFile").click());
+    $("backupMenuBtn").addEventListener("click", (e) => {
+      e.stopPropagation();
+      const menu = $("backupMenu");
+      menu.hidden = !menu.hidden;
+      $("backupMenuBtn").setAttribute("aria-expanded", String(!menu.hidden));
+    });
+    $("backupMenu").addEventListener("click", () => { $("backupMenu").hidden = true; });
+    document.addEventListener("click", (e) => {
+      if (!$("backupMenu").hidden && !e.target.closest(".menu-wrap")) {
+        $("backupMenu").hidden = true;
+        $("backupMenuBtn").setAttribute("aria-expanded", "false");
+      }
+    });
+    $("jsonFile").addEventListener("change", e => e.target.files[0] && loadJson(e.target.files[0]));
+    $("copyAssessmentBtn").addEventListener("click", () => copyRows(assessmentRowsForCopy()));
+    $("copyGapBtn").addEventListener("click", () => copyRows(gapRowsForCopy()));
+    $("copyGapBtn2").addEventListener("click", () => copyRows(gapRowsForCopy()));
+    $("copyRoadmapBtn").addEventListener("click", () => copyRows(roadmapRowsForCopy()));
+    $("gapSeverityFilter").addEventListener("change", renderGapAnalysis);
+    $("gapDomainFilter").addEventListener("change", renderGapAnalysis);
+    $("roadmapDomainFilter").addEventListener("change", renderRoadmap);
+    ["roadmapStart","roadmapEnd"].forEach(id => $(id).addEventListener("change", e => { state.settings[id === "roadmapStart" ? "roadmapStart" : "roadmapEnd"] = e.target.value; renderAll(); }));
+    $("durationSelect").addEventListener("change", e => { state.settings.duration = Number(e.target.value); renderAll(); });
+    $("zoomSelect").addEventListener("change", e => { state.settings.zoom = e.target.value; renderAll(); });
+    $("defaultTarget").addEventListener("change", e => { state.settings.defaultTarget = Number(e.target.value); renderAll(); });
+    $("applyTargetBtn").addEventListener("click", () => {
+      state.answers.forEach(a => { a.target = Number(state.settings.defaultTarget); });
+      renderAll();
+    });
+    $("resetBtn").addEventListener("click", () => {
+      if (!confirm("Reset all Planning assessment answers, settings, and local history?")) return;
+      localStorage.removeItem("planningControllingAssessmentStateV1");
+      location.reload();
+    });
+
+    loadState();
+    renderAll();
+  </script>
+</body>
+</html>
