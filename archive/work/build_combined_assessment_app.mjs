@@ -227,6 +227,15 @@ const questionRewrites = {
         "Quantity-validation results demonstrate that the control consistently prevents unsupported quantities from being approved."
       ]
     },
+    "Executive Review Cycle": {
+      answers: [
+        "Monthly cost reports are submitted and signed, but no executive review of performance takes place.",
+        "Reviews occur occasionally or only for problem projects, and rarely result in agreed actions.",
+        "Monthly reviews examine cost performance for most projects and identify required corrective action.",
+        "Every monthly review assigns corrective actions with named owners and due dates, and previous actions are revisited.",
+        "Monthly reviews consistently drive corrective action to closure, with demonstrable impact on project cost performance."
+      ]
+    },
     "Monthly Input Calendar": {
       category: "Monthly Cost Report Coverage",
       text: "Are all projects covered by a monthly cost report?",
@@ -248,10 +257,95 @@ const questionRewrites = {
   //   "Some Category": { answers: ["level 1", "level 2", "level 3", "level 4", "level 5"] },
   // `answers` must be exactly 5 non-empty strings (build enforces this). Categories left out
   // fall back to the generic answerAnchors() template. See archive/HANDOFF.md.
-  "document-control": {},
-  "planning-controlling": {},
-  "project-procurement": {},
-  "technical-office": {}
+  "document-control": {
+    "Policy Framework": {
+      answers: [
+        "No approved document-control procedures or standard forms exist; teams create their own formats as needed.",
+        "Some procedures and forms are approved, but several are outdated and staff often work from uncontrolled local copies.",
+        "A controlled set of current procedures, forms, logs, and templates is published and used on most projects.",
+        "All required procedures and templates are current, approved, and accessible, and their use is verified with exceptions documented.",
+        "The controlled framework is applied on every project, with revisions issued on time and no uncontrolled forms in use."
+      ]
+    },
+    "Stakeholder Compliance": {
+      answers: [
+        "Documents reach Document Control through informal channels, and no one is held accountable for bypassing the process.",
+        "Requirements are communicated to stakeholders, but non-compliance is tolerated and rarely followed up.",
+        "Most submissions follow the approved channels, and repeated deviations are raised with the responsible party.",
+        "Deviations from the required submission route are logged, escalated to the accountable manager, and corrected.",
+        "Stakeholders consistently submit through approved channels, and the few deviations that occur are resolved without recurrence."
+      ]
+    },
+    "Status Classification": {
+      answers: [
+        "Document purpose and issue status are not recorded, so recipients cannot tell whether a document is for review, information, or construction.",
+        "Status codes exist but are applied inconsistently, and misclassified documents are found regularly.",
+        "Defined status codes such as IFA and IFC are applied correctly to most documents and recorded in the register.",
+        "Every issued document carries a verified purpose and status code, with misclassifications corrected before distribution.",
+        "Status classification is consistently accurate across all transmittals, and no document is worked to under an incorrect issue status."
+      ]
+    }
+  },
+  "planning-controlling": {
+    "Department Capacity and Planner Assignment": {
+      answers: [
+        "Planners are assigned as requests arrive, with no assessment of existing workload or incoming project demand.",
+        "Workload is considered informally when a shortage becomes urgent, but assignments remain reactive.",
+        "Planning capacity is assessed against current and forecast project demand before most assignment decisions.",
+        "A maintained workload model supports all planner assignment, hiring, and reallocation decisions, with shortfalls formally raised.",
+        "Planning capacity consistently matches portfolio demand, and no project is left without adequate planning support."
+      ]
+    },
+    "Tender Input and Assumption Control": {
+      answers: [
+        "Tender schedules are developed without a structured review of scope, BOQ, drawings, or the basis of estimate.",
+        "Key tender documents are reviewed informally, but assumptions and missing information are not recorded.",
+        "A tender input review covers scope, BOQ, drawings, and productivity data, and the main assumptions are recorded.",
+        "All tender inputs are reviewed against a checklist before schedule development, with assumptions, exclusions, and missing information formally logged.",
+        "Every tender schedule is traceable to a complete, recorded set of reviewed inputs and assumptions, with no unrecorded gaps at submission."
+      ]
+    }
+  },
+  "project-procurement": {
+    "Resource Allocation": {
+      answers: [
+        "Procurement staff are allocated without reference to project workload or the risk profile of the packages involved.",
+        "Allocation responds to immediate pressure, so high-risk packages are sometimes handled with insufficient support.",
+        "Workload and procurement risk inform resource allocation across most projects.",
+        "A maintained resource plan matches department capacity to project workload and package risk, with gaps formally addressed.",
+        "Resourcing consistently matches workload and risk across the portfolio, with no critical package left under-supported."
+      ]
+    },
+    "Procurement Requirements Register": {
+      answers: [
+        "Procurement requirements are held in scattered emails and personal lists with no central register.",
+        "A register exists but is incomplete, and entries cannot always be traced to an approved source document.",
+        "Most procurement requirements are captured in the register and traceable to their source documents.",
+        "The register captures every project requirement with full revision history and traceability to approved sources.",
+        "The register is consistently complete and current, and no procurement proceeds against an unregistered requirement."
+      ]
+    }
+  },
+  "technical-office": {
+    "Roles and Authority": {
+      answers: [
+        "Responsibilities and decision authorities between Technical Office and the interfacing functions are undefined.",
+        "Roles are understood for some activities but vary by project, leaving overlaps and unowned decisions.",
+        "An approved RACI assigns responsibilities and authorities across most interfacing functions.",
+        "Responsibilities and decision authorities are documented and applied across all listed functions, with overlaps and gaps formally resolved.",
+        "Every interface operates with clear, agreed accountability, and role disputes do not delay technical decisions."
+      ]
+    },
+    "Tender Handover": {
+      answers: [
+        "Technical Office begins work without a formal handover of tender and contract information.",
+        "Handover happens for some projects, but the information received is incomplete and is not verified.",
+        "Technical Office receives the required tender and contract documents at handover on most projects.",
+        "Every handover delivers the required scope, contract, BOQ, specification, and schedule information, and Technical Office verifies it against the contract.",
+        "No project starts with an unresolved handover deficiency, and verified tender information is available from day one."
+      ]
+    }
+  }
 };
 
 function slug(value) {
@@ -567,6 +661,54 @@ const portalCss = `
       .department-grid{grid-template-columns:1fr}
       .department-card,.department-card:nth-last-child(2),.department-card:nth-last-child(1),.department-card:last-child{grid-column:auto}
     }
+    /* Back to Home: solid navy, full sidebar width, high contrast */
+    .back-home-btn { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; margin:0 0 14px; padding:11px 14px; border:none; border-radius:10px; background:var(--brand-navy); color:#fff; font-size:13px; font-weight:800; letter-spacing:.01em; cursor:pointer; transition:.18s ease; }
+    .back-home-btn svg { width:16px; height:16px; stroke-width:2.4; flex:0 0 auto; }
+    .back-home-btn:hover { background:var(--blue); color:#fff; transform:translateX(-2px); }
+    .back-home-btn:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
+    /* Answer options: number circle is the selection indicator, native radio hidden */
+    .answer-grid { gap:12px; }
+    .answer { grid-template-columns:38px 1fr; gap:14px; align-items:center; padding:15px 17px; border:1.5px solid #d5dfee; border-radius:12px; transition:.16s ease; }
+    .answer input { position:absolute; opacity:0; width:0; height:0; pointer-events:none; }
+    .answer > span { display:flex; align-items:center; gap:0; }
+    .answer-title { display:inline-grid !important; place-items:center; width:38px; height:38px; margin:0; border:1.5px solid #c6d3e8; border-radius:50%; background:#fff; color:#5c6f8c; font-size:14px; font-weight:900; transition:.16s ease; }
+    .answer-desc { padding-top:0; color:#22334d !important; font-size:14.5px !important; font-weight:500 !important; line-height:1.55 !important; }
+    .answer:hover { border-color:#9db6e2 !important; background:#f7faff !important; }
+    .answer:hover .answer-title { border-color:#9db6e2; color:var(--blue); }
+    .answer.selected { border-color:var(--blue) !important; background:#eef3ff !important; box-shadow:0 0 0 3px rgba(0,49,235,.09); }
+    .answer.selected .answer-title { border-color:var(--blue); background:var(--blue); color:#fff; }
+    .answer.selected .answer-desc { color:#0d1f3c !important; font-weight:600 !important; }
+    /* Combined portfolio dashboard on home */
+    .portfolio-dashboard { margin-bottom:34px; }
+    .pf-empty { margin:0; padding:26px; border:1px dashed #c9d6ea; border-radius:14px; background:#fff; color:var(--muted); font-size:13px; text-align:center; }
+    .pf-kpis { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin-bottom:16px; }
+    .pf-kpi { padding:15px 17px; border:1px solid #dbe3f2; border-radius:14px; background:#fff; box-shadow:0 8px 20px rgba(0,21,89,.05); }
+    .pf-kpi span { display:block; color:var(--muted); font-size:10px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; }
+    .pf-kpi strong { display:block; margin-top:6px; color:var(--brand-navy); font-size:23px; letter-spacing:-.02em; }
+    .pf-kpi em { display:block; margin-top:3px; color:var(--muted); font-size:11px; font-style:normal; }
+    .pf-panels { display:grid; grid-template-columns:1.35fr 1fr; gap:16px; margin-bottom:16px; }
+    .pf-panel { padding:18px 20px; border:1px solid #dbe3f2; border-radius:16px; background:#fff; box-shadow:0 8px 20px rgba(0,21,89,.05); }
+    .pf-panel h3 { margin:0 0 14px; color:var(--brand-navy); font-size:14px; font-weight:800; }
+    .pf-panel .chart-row { grid-template-columns:150px 1fr 44px; margin:9px 0; font-size:12px; }
+    .pf-panel .chart-label { font-size:12px; }
+    .pf-panel .chart-fill { height:15px; }
+    .pf-donut-wrap { display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+    .pf-gaps { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+    .pf-gap { padding:13px 15px; border:1px solid #e6ecf6; border-left:3px solid var(--blue); border-radius:0 11px 11px 0; background:#f9fbfe; }
+    .pf-gap-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:6px; }
+    .pf-gap-head strong { color:var(--brand-navy); font-size:13px; }
+    .pf-gap p { margin:0 0 8px; color:#41536e; font-size:12px; line-height:1.5; }
+    .pf-gap-meta { display:flex; justify-content:space-between; gap:10px; color:var(--muted); font-size:10.5px; font-weight:700; }
+    .pf-note { margin:0; color:var(--muted); font-size:12.5px; }
+    @media(max-width:1100px){
+      .pf-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .pf-panels{grid-template-columns:1fr}
+      .pf-gaps{grid-template-columns:1fr}
+    }
+    @media(max-width:650px){
+      .pf-kpis{grid-template-columns:1fr}
+      .pf-panel .chart-row{grid-template-columns:110px 1fr 40px}
+    }
 `;
 html = html.replace("  </style>", `${portalCss}  </style>`);
 html = html.replace(/<title>.*?<\/title>/, "<title>Madkour Department Assessment Portal</title>");
@@ -601,6 +743,37 @@ const portalHtml = `
         </div>
       </div>
       <div class="portal-main">
+        <section class="portfolio-dashboard" id="portfolioDashboard">
+          <div class="portal-section-head">
+            <div><h2>Portfolio Overview</h2><p>Combined assessment performance across all departments.</p></div>
+          </div>
+          <p class="pf-empty" id="portfolioEmpty" hidden>No assessment data yet. Open a department and answer its questions to build the portfolio overview.</p>
+          <div id="portfolioBody" hidden>
+            <div class="pf-kpis">
+              <div class="pf-kpi"><span>Portfolio maturity</span><strong id="pfMaturity">0.00 / 5</strong></div>
+              <div class="pf-kpi"><span>Assessment score</span><strong id="pfScore">0%</strong></div>
+              <div class="pf-kpi"><span>Completion</span><strong id="pfCompletion">0%</strong><em id="pfCoverage">0 / 300 answered</em></div>
+              <div class="pf-kpi"><span>Critical + major gaps</span><strong id="pfCritical">0</strong></div>
+            </div>
+            <div class="pf-panels">
+              <div class="pf-panel">
+                <h3>Maturity by department</h3>
+                <div id="pfDeptChart"></div>
+              </div>
+              <div class="pf-panel">
+                <h3>Severity mix</h3>
+                <div class="pf-donut-wrap">
+                  <div class="donut" id="pfSeverityDonut"></div>
+                  <div class="legend" id="pfSeverityLegend"></div>
+                </div>
+              </div>
+            </div>
+            <div class="pf-panel">
+              <h3>Top gaps across all departments</h3>
+              <div class="pf-gaps" id="pfTopGaps"></div>
+            </div>
+          </div>
+        </section>
         <div class="portal-section-head">
           <div><h2>Choose a Department</h2><p>Open an assessment or continue saved progress.</p></div>
           <div class="portal-legend"><span>Not started</span><span class="active">In progress</span><span class="complete">Complete</span></div>
@@ -612,7 +785,9 @@ const portalHtml = `
 `;
 html = html.replace("<body>\n  <div class=\"app\">", `<body>\n${portalHtml}  <div class="app" id="assessmentApp" hidden>`);
 html = html.replace("<p>Cost Control Department</p>", '<p id="sidebarDepartmentName">Department</p>');
-html = html.replace("<h2>Cost Control Department Assessment Tool</h2>", '<button class="back-home-btn" id="homeBtn" aria-label="Back to department home">← Back to Home</button><h2 id="toolTitle">Department Assessment Tool</h2>');
+html = html.replace("<h2>Cost Control Department Assessment Tool</h2>", '<h2 id="toolTitle">Department Assessment Tool</h2>');
+html = html.replace('<nav class="nav" aria-label="Main views">', `<button class="back-home-btn" id="homeBtn" aria-label="Back to department home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M19 12H5"></path><path d="m12 19-7-7 7-7"></path></svg><span>Back to Home</span></button>
+      <nav class="nav" aria-label="Main views">`);
 html = html.replace(/<p class="subtitle">.*?<\/p>/, '<p class="subtitle" id="toolSubtitle">Department maturity, gap analysis, and roadmap governance.</p>');
 html = html.replace('<button id="resetBtn" class="danger-item">Reset All Data</button>', '<button id="resetBtn" class="danger-item">Reset Current Department</button>');
 
@@ -702,15 +877,28 @@ function portalRuntime() {
     function departmentSummary(config, savedState) {
       const local = savedState || { answers: [], domainWeights: Object.fromEntries(config.domains.map(d => [d.id, d.weight])), questionWeights: Object.fromEntries(config.questions.map((q, i) => [i, q.weight])) };
       let potential = 0, achieved = 0, maturityWeighted = 0, answered = 0;
+      const severityCounts = { Critical: 0, Major: 0, Moderate: 0, Minor: 0, "No Gap": 0 };
+      const gapRows = [];
       config.questions.forEach((question, index) => {
         const answer = local.answers?.[index] || {};
         const level = Number(answer.level || 0);
         const target = Number(answer.target || 4);
         const points = Number(local.domainWeights?.[question.domain] ?? config.domains.find(d => d.id === question.domain)?.weight ?? 0) * Number(local.questionWeights?.[index] ?? question.weight) / 100;
         potential += points;
-        if (level) { answered += 1; achieved += points * Math.min(level / 5, 1); maturityWeighted += points * level; }
+        if (level) {
+          answered += 1; achieved += points * Math.min(level / 5, 1); maturityWeighted += points * level;
+          const maturityGap = Math.max(target - level, 0);
+          const sev = severity(maturityGap);
+          if (severityCounts[sev] !== undefined) severityCounts[sev] += 1;
+          if (maturityGap > 0) {
+            gapRows.push({
+              department: config.name, category: question.category, text: question.text,
+              level, target, severity: sev, priorityScore: maturityGap * points
+            });
+          }
+        }
       });
-      return { answered, total: config.questions.length, completion: answered / config.questions.length * 100, achievement: potential ? achieved / potential * 100 : 0, maturity: potential ? maturityWeighted / potential : 0, updatedAt: local.updatedAt || "" };
+      return { answered, total: config.questions.length, completion: answered / config.questions.length * 100, achievement: potential ? achieved / potential * 100 : 0, maturity: potential ? maturityWeighted / potential : 0, updatedAt: local.updatedAt || "", severityCounts, gapRows };
     }
 
     function readDepartmentState(departmentId) {
@@ -739,6 +927,43 @@ function portalRuntime() {
         </button>`;
       }).join("");
       document.querySelectorAll("[data-department]").forEach(button => button.addEventListener("click", () => openDepartment(button.dataset.department)));
+      renderPortfolioDashboard(configs, summaries, accents, totalAnswered, totalQuestions);
+    }
+
+    function renderPortfolioDashboard(configs, summaries, accents, totalAnswered, totalQuestions) {
+      const hasData = totalAnswered > 0;
+      $("portfolioDashboard").hidden = false;
+      $("portfolioEmpty").hidden = hasData;
+      $("portfolioBody").hidden = !hasData;
+      if (!hasData) return;
+      const answeredSummaries = summaries.filter(s => s.answered > 0);
+      const maturity = answeredSummaries.reduce((sum, s) => sum + s.maturity * s.answered, 0) / totalAnswered;
+      const score = answeredSummaries.reduce((sum, s) => sum + s.achievement * s.answered, 0) / totalAnswered;
+      const counts = { Critical: 0, Major: 0, Moderate: 0, Minor: 0, "No Gap": 0 };
+      summaries.forEach(s => Object.entries(s.severityCounts).forEach(([key, value]) => { counts[key] += value; }));
+      $("pfMaturity").textContent = maturity.toFixed(2) + " / 5";
+      $("pfScore").textContent = score.toFixed(1) + "%";
+      $("pfCompletion").textContent = (totalAnswered / totalQuestions * 100).toFixed(0) + "%";
+      $("pfCoverage").textContent = totalAnswered + " / " + totalQuestions + " answered";
+      $("pfCritical").textContent = counts.Critical + counts.Major;
+      $("pfDeptChart").innerHTML = configs.map((config, index) => {
+        const s = summaries[index];
+        const label = s.answered ? s.maturity.toFixed(2) : "-";
+        return `<div class="chart-row">
+          <div class="chart-label">${esc(config.name)}</div>
+          <div class="chart-fill"><span style="width:${Math.max(0, Math.min(s.maturity / 5 * 100, 100))}%;background:${accents[index]}"></span></div>
+          <div>${label}</div>
+        </div>`;
+      }).join("");
+      renderDonutTo("pfSeverityDonut", "pfSeverityLegend", counts);
+      const topGaps = summaries.flatMap(s => s.gapRows).sort((a, b) => b.priorityScore - a.priorityScore).slice(0, 6);
+      $("pfTopGaps").innerHTML = topGaps.length
+        ? topGaps.map(row => `<div class="pf-gap">
+            <div class="pf-gap-head"><strong>${esc(row.category)}</strong>${tag(row.severity)}</div>
+            <p>${esc(row.text)}</p>
+            <div class="pf-gap-meta"><span>${esc(row.department)}</span><span>Level ${row.level} of ${row.target}</span></div>
+          </div>`).join("")
+        : `<p class="pf-note">No gaps recorded — every answered question meets its target.</p>`;
     }
 
     function openDepartment(departmentId) {

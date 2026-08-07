@@ -1407,6 +1407,54 @@
       .department-grid{grid-template-columns:1fr}
       .department-card,.department-card:nth-last-child(2),.department-card:nth-last-child(1),.department-card:last-child{grid-column:auto}
     }
+    /* Back to Home: solid navy, full sidebar width, high contrast */
+    .back-home-btn { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; margin:0 0 14px; padding:11px 14px; border:none; border-radius:10px; background:var(--brand-navy); color:#fff; font-size:13px; font-weight:800; letter-spacing:.01em; cursor:pointer; transition:.18s ease; }
+    .back-home-btn svg { width:16px; height:16px; stroke-width:2.4; flex:0 0 auto; }
+    .back-home-btn:hover { background:var(--blue); color:#fff; transform:translateX(-2px); }
+    .back-home-btn:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
+    /* Answer options: number circle is the selection indicator, native radio hidden */
+    .answer-grid { gap:12px; }
+    .answer { grid-template-columns:38px 1fr; gap:14px; align-items:center; padding:15px 17px; border:1.5px solid #d5dfee; border-radius:12px; transition:.16s ease; }
+    .answer input { position:absolute; opacity:0; width:0; height:0; pointer-events:none; }
+    .answer > span { display:flex; align-items:center; gap:0; }
+    .answer-title { display:inline-grid !important; place-items:center; width:38px; height:38px; margin:0; border:1.5px solid #c6d3e8; border-radius:50%; background:#fff; color:#5c6f8c; font-size:14px; font-weight:900; transition:.16s ease; }
+    .answer-desc { padding-top:0; color:#22334d !important; font-size:14.5px !important; font-weight:500 !important; line-height:1.55 !important; }
+    .answer:hover { border-color:#9db6e2 !important; background:#f7faff !important; }
+    .answer:hover .answer-title { border-color:#9db6e2; color:var(--blue); }
+    .answer.selected { border-color:var(--blue) !important; background:#eef3ff !important; box-shadow:0 0 0 3px rgba(0,49,235,.09); }
+    .answer.selected .answer-title { border-color:var(--blue); background:var(--blue); color:#fff; }
+    .answer.selected .answer-desc { color:#0d1f3c !important; font-weight:600 !important; }
+    /* Combined portfolio dashboard on home */
+    .portfolio-dashboard { margin-bottom:34px; }
+    .pf-empty { margin:0; padding:26px; border:1px dashed #c9d6ea; border-radius:14px; background:#fff; color:var(--muted); font-size:13px; text-align:center; }
+    .pf-kpis { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin-bottom:16px; }
+    .pf-kpi { padding:15px 17px; border:1px solid #dbe3f2; border-radius:14px; background:#fff; box-shadow:0 8px 20px rgba(0,21,89,.05); }
+    .pf-kpi span { display:block; color:var(--muted); font-size:10px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; }
+    .pf-kpi strong { display:block; margin-top:6px; color:var(--brand-navy); font-size:23px; letter-spacing:-.02em; }
+    .pf-kpi em { display:block; margin-top:3px; color:var(--muted); font-size:11px; font-style:normal; }
+    .pf-panels { display:grid; grid-template-columns:1.35fr 1fr; gap:16px; margin-bottom:16px; }
+    .pf-panel { padding:18px 20px; border:1px solid #dbe3f2; border-radius:16px; background:#fff; box-shadow:0 8px 20px rgba(0,21,89,.05); }
+    .pf-panel h3 { margin:0 0 14px; color:var(--brand-navy); font-size:14px; font-weight:800; }
+    .pf-panel .chart-row { grid-template-columns:150px 1fr 44px; margin:9px 0; font-size:12px; }
+    .pf-panel .chart-label { font-size:12px; }
+    .pf-panel .chart-fill { height:15px; }
+    .pf-donut-wrap { display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+    .pf-gaps { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+    .pf-gap { padding:13px 15px; border:1px solid #e6ecf6; border-left:3px solid var(--blue); border-radius:0 11px 11px 0; background:#f9fbfe; }
+    .pf-gap-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:6px; }
+    .pf-gap-head strong { color:var(--brand-navy); font-size:13px; }
+    .pf-gap p { margin:0 0 8px; color:#41536e; font-size:12px; line-height:1.5; }
+    .pf-gap-meta { display:flex; justify-content:space-between; gap:10px; color:var(--muted); font-size:10.5px; font-weight:700; }
+    .pf-note { margin:0; color:var(--muted); font-size:12.5px; }
+    @media(max-width:1100px){
+      .pf-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .pf-panels{grid-template-columns:1fr}
+      .pf-gaps{grid-template-columns:1fr}
+    }
+    @media(max-width:650px){
+      .pf-kpis{grid-template-columns:1fr}
+      .pf-panel .chart-row{grid-template-columns:110px 1fr 40px}
+    }
   </style>
 </head>
 <body>
@@ -1440,6 +1488,37 @@
         </div>
       </div>
       <div class="portal-main">
+        <section class="portfolio-dashboard" id="portfolioDashboard">
+          <div class="portal-section-head">
+            <div><h2>Portfolio Overview</h2><p>Combined assessment performance across all departments.</p></div>
+          </div>
+          <p class="pf-empty" id="portfolioEmpty" hidden>No assessment data yet. Open a department and answer its questions to build the portfolio overview.</p>
+          <div id="portfolioBody" hidden>
+            <div class="pf-kpis">
+              <div class="pf-kpi"><span>Portfolio maturity</span><strong id="pfMaturity">0.00 / 5</strong></div>
+              <div class="pf-kpi"><span>Assessment score</span><strong id="pfScore">0%</strong></div>
+              <div class="pf-kpi"><span>Completion</span><strong id="pfCompletion">0%</strong><em id="pfCoverage">0 / 300 answered</em></div>
+              <div class="pf-kpi"><span>Critical + major gaps</span><strong id="pfCritical">0</strong></div>
+            </div>
+            <div class="pf-panels">
+              <div class="pf-panel">
+                <h3>Maturity by department</h3>
+                <div id="pfDeptChart"></div>
+              </div>
+              <div class="pf-panel">
+                <h3>Severity mix</h3>
+                <div class="pf-donut-wrap">
+                  <div class="donut" id="pfSeverityDonut"></div>
+                  <div class="legend" id="pfSeverityLegend"></div>
+                </div>
+              </div>
+            </div>
+            <div class="pf-panel">
+              <h3>Top gaps across all departments</h3>
+              <div class="pf-gaps" id="pfTopGaps"></div>
+            </div>
+          </div>
+        </section>
         <div class="portal-section-head">
           <div><h2>Choose a Department</h2><p>Open an assessment or continue saved progress.</p></div>
           <div class="portal-legend"><span>Not started</span><span class="active">In progress</span><span class="complete">Complete</span></div>
@@ -1464,6 +1543,7 @@
           </svg>
         </button>
       </div>
+      <button class="back-home-btn" id="homeBtn" aria-label="Back to department home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M19 12H5"></path><path d="m12 19-7-7 7-7"></path></svg><span>Back to Home</span></button>
       <nav class="nav" aria-label="Main views">
         <button class="active" data-view="dashboard"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 13h6V4H4v9z"></path><path d="M14 20h6V4h-6v16z"></path><path d="M4 20h6v-3H4v3z"></path></svg></span><span>Dashboard</span></button>
         <button data-view="assessment"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 6h13"></path><path d="M8 12h13"></path><path d="M8 18h13"></path><path d="M3 6h.01"></path><path d="M3 12h.01"></path><path d="M3 18h.01"></path></svg></span><span>Assessment</span></button>
@@ -1489,7 +1569,7 @@
       </button>
       <div class="topbar">
         <div>
-          <button class="back-home-btn" id="homeBtn" aria-label="Back to department home">← Back to Home</button><h2 id="toolTitle">Department Assessment Tool</h2>
+          <h2 id="toolTitle">Department Assessment Tool</h2>
           <p class="subtitle" id="toolSubtitle">Department maturity, gap analysis, and roadmap governance.</p>
         </div>
         <div class="toolbar">
@@ -2318,15 +2398,14 @@
         "process": "Monitoring and Controlling SIPOC: 19th, 21st, 22nd-26th review cycle, 23rd submission.",
         "theme": "Governance",
         "impact": "Late reviews reduce visibility and accountability.",
-        "id": "cost-control-executive-review-cycle",
-        "answerDimension": "timeliness",
         "answers": [
-          "The required timeframe for “Executive Review Cycle” is not consistently recognized or followed.",
-          "“Executive Review Cycle” is completed on time only for selected or urgent cases.",
-          "“Executive Review Cycle” is completed within the required timeframe for most applicable cases.",
-          "“Executive Review Cycle” meets the required timeframe for all applicable cases except documented exceptions.",
-          "“Executive Review Cycle” consistently meets the required timeframe with no unresolved overdue cases."
+          "Monthly cost reports are submitted and signed, but no executive review of performance takes place.",
+          "Reviews occur occasionally or only for problem projects, and rarely result in agreed actions.",
+          "Monthly reviews examine cost performance for most projects and identify required corrective action.",
+          "Every monthly review assigns corrective actions with named owners and due dates, and previous actions are revisited.",
+          "Monthly reviews consistently drive corrective action to closure, with demonstrable impact on project cost performance."
         ],
+        "id": "cost-control-executive-review-cycle",
         "number": 21
       },
       {
@@ -3188,15 +3267,14 @@
         "process": "References; DC Logs; DC Folder Structure.",
         "theme": "Compliance",
         "impact": "Obsolete or inconsistent controls weaken compliance and traceability.",
-        "id": "document-control-policy-framework",
-        "answerDimension": "authorization",
         "answers": [
-          "“Policy Framework” can proceed without the required authorization.",
-          "The required authorization for “Policy Framework” is obtained only in selected cases.",
-          "The required authorization for “Policy Framework” is obtained for most applicable cases.",
-          "“Policy Framework” does not proceed without the required authorization, except through documented approved exceptions.",
-          "“Policy Framework” is consistently prevented from proceeding whenever the required authorization is missing."
+          "No approved document-control procedures or standard forms exist; teams create their own formats as needed.",
+          "Some procedures and forms are approved, but several are outdated and staff often work from uncontrolled local copies.",
+          "A controlled set of current procedures, forms, logs, and templates is published and used on most projects.",
+          "All required procedures and templates are current, approved, and accessible, and their use is verified with exceptions documented.",
+          "The controlled framework is applied on every project, with revisions issued on time and no uncontrolled forms in use."
         ],
+        "id": "document-control-policy-framework",
         "number": 2
       },
       {
@@ -3268,15 +3346,14 @@
         "process": "Procedures; Reporting; Escalation.",
         "theme": "Compliance",
         "impact": "Bypassing Document Control creates incomplete records and unauthorized distribution.",
-        "id": "document-control-stakeholder-compliance",
-        "answerDimension": "authorization",
         "answers": [
-          "“Stakeholder Compliance” can proceed without the required authorization.",
-          "The required authorization for “Stakeholder Compliance” is obtained only in selected cases.",
-          "The required authorization for “Stakeholder Compliance” is obtained for most applicable cases.",
-          "“Stakeholder Compliance” does not proceed without the required authorization, except through documented approved exceptions.",
-          "“Stakeholder Compliance” is consistently prevented from proceeding whenever the required authorization is missing."
+          "Documents reach Document Control through informal channels, and no one is held accountable for bypassing the process.",
+          "Requirements are communicated to stakeholders, but non-compliance is tolerated and rarely followed up.",
+          "Most submissions follow the approved channels, and repeated deviations are raised with the responsible party.",
+          "Deviations from the required submission route are logged, escalated to the accountable manager, and corrected.",
+          "Stakeholders consistently submit through approved channels, and the few deviations that occur are resolved without recurrence."
         ],
+        "id": "document-control-stakeholder-compliance",
         "number": 6
       },
       {
@@ -3348,15 +3425,14 @@
         "process": "Definitions; Receipt and Registration, paragraph 74.",
         "theme": "Compliance",
         "impact": "Incorrect status can cause unauthorized use or missed action.",
-        "id": "document-control-status-classification",
-        "answerDimension": "accuracy",
         "answers": [
-          "The result of “Status Classification” is not reliably checked against its approved source or basis.",
-          "The result of “Status Classification” is checked only for selected or high-risk cases.",
-          "The result of “Status Classification” is checked against its approved source for most applicable cases.",
-          "The result of “Status Classification” is checked for all applicable cases, with identified differences resolved or documented.",
-          "“Status Classification” consistently produces reliable results with no unresolved material differences."
+          "Document purpose and issue status are not recorded, so recipients cannot tell whether a document is for review, information, or construction.",
+          "Status codes exist but are applied inconsistently, and misclassified documents are found regularly.",
+          "Defined status codes such as IFA and IFC are applied correctly to most documents and recorded in the register.",
+          "Every issued document carries a verified purpose and status code, with misclassifications corrected before distribution.",
+          "Status classification is consistently accurate across all transmittals, and no document is worked to under an incorrect issue status."
         ],
+        "id": "document-control-status-classification",
         "number": 10
       },
       {
@@ -4458,15 +4534,14 @@
         "process": "MDP-PLN-BP01 Project Initiation and Planning Manager responsibilities 59-72.",
         "theme": "People",
         "impact": "Insufficient or poorly allocated capacity delays baselines and reduces update and analysis quality.",
-        "id": "planning-controlling-department-capacity-and-planner-assignment",
-        "answerDimension": "capability",
         "answers": [
-          "The resources or capability required for “Department Capacity and Planner Assignment” are not defined or reliably available.",
-          "The resources or capability required for “Department Capacity and Planner Assignment” are available only for selected priorities.",
-          "The required resources and capability support most applicable “Department Capacity and Planner Assignment” work.",
-          "The required resources and capability support all applicable “Department Capacity and Planner Assignment” work except documented constraints.",
-          "The required resources and capability consistently support the full “Department Capacity and Planner Assignment” workload without unresolved constraints."
+          "Planners are assigned as requests arrive, with no assessment of existing workload or incoming project demand.",
+          "Workload is considered informally when a shortage becomes urgent, but assignments remain reactive.",
+          "Planning capacity is assessed against current and forecast project demand before most assignment decisions.",
+          "A maintained workload model supports all planner assignment, hiring, and reallocation decisions, with shortfalls formally raised.",
+          "Planning capacity consistently matches portfolio demand, and no project is left without adequate planning support."
         ],
+        "id": "planning-controlling-department-capacity-and-planner-assignment",
         "number": 3
       },
       {
@@ -4558,15 +4633,14 @@
         "process": "MDP-PLN-BP01 Pre-Award SIPOC inputs.",
         "theme": "Process",
         "impact": "Missing or unsupported tender assumptions create unrealistic commitments and omitted scope.",
-        "id": "planning-controlling-tender-input-and-assumption-control",
-        "answerDimension": "traceability",
         "answers": [
-          "A complete and retrievable record of “Tender Input and Assumption Control” is not maintained.",
-          "Records for “Tender Input and Assumption Control” exist for selected cases but are incomplete or difficult to retrieve.",
-          "Records for “Tender Input and Assumption Control” are complete and retrievable for most applicable cases.",
-          "Records for “Tender Input and Assumption Control” are complete, current, and retrievable for all applicable cases except documented exceptions.",
-          "Every applicable “Tender Input and Assumption Control” record is complete and can be traced without unresolved gaps."
+          "Tender schedules are developed without a structured review of scope, BOQ, drawings, or the basis of estimate.",
+          "Key tender documents are reviewed informally, but assumptions and missing information are not recorded.",
+          "A tender input review covers scope, BOQ, drawings, and productivity data, and the main assumptions are recorded.",
+          "All tender inputs are reviewed against a checklist before schedule development, with assumptions, exclusions, and missing information formally logged.",
+          "Every tender schedule is traceable to a complete, recorded set of reviewed inputs and assumptions, with no unrecorded gaps at submission."
         ],
+        "id": "planning-controlling-tender-input-and-assumption-control",
         "number": 8
       },
       {
@@ -5728,15 +5802,14 @@
         "process": "JD-01 to JD-16.",
         "theme": "People",
         "impact": "Insufficient capacity weakens follow-up and delivery control.",
-        "id": "project-procurement-resource-allocation",
-        "answerDimension": "capability",
         "answers": [
-          "The resources or capability required for “Resource Allocation” are not defined or reliably available.",
-          "The resources or capability required for “Resource Allocation” are available only for selected priorities.",
-          "The required resources and capability support most applicable “Resource Allocation” work.",
-          "The required resources and capability support all applicable “Resource Allocation” work except documented constraints.",
-          "The required resources and capability consistently support the full “Resource Allocation” workload without unresolved constraints."
+          "Procurement staff are allocated without reference to project workload or the risk profile of the packages involved.",
+          "Allocation responds to immediate pressure, so high-risk packages are sometimes handled with insufficient support.",
+          "Workload and procurement risk inform resource allocation across most projects.",
+          "A maintained resource plan matches department capacity to project workload and package risk, with gaps formally addressed.",
+          "Resourcing consistently matches workload and risk across the portfolio, with no critical package left under-supported."
         ],
+        "id": "project-procurement-resource-allocation",
         "number": 4
       },
       {
@@ -5828,15 +5901,14 @@
         "process": "JD-01, JD-02.",
         "theme": "Data",
         "impact": "Poor traceability causes requests to be overlooked.",
-        "id": "project-procurement-procurement-requirements-register",
-        "answerDimension": "traceability",
         "answers": [
-          "A complete and retrievable record of “Procurement Requirements Register” is not maintained.",
-          "Records for “Procurement Requirements Register” exist for selected cases but are incomplete or difficult to retrieve.",
-          "Records for “Procurement Requirements Register” are complete and retrievable for most applicable cases.",
-          "Records for “Procurement Requirements Register” are complete, current, and retrievable for all applicable cases except documented exceptions.",
-          "Every applicable “Procurement Requirements Register” record is complete and can be traced without unresolved gaps."
+          "Procurement requirements are held in scattered emails and personal lists with no central register.",
+          "A register exists but is incomplete, and entries cannot always be traced to an approved source document.",
+          "Most procurement requirements are captured in the register and traceable to their source documents.",
+          "The register captures every project requirement with full revision history and traceability to approved sources.",
+          "The register is consistently complete and current, and no procurement proceeds against an unregistered requirement."
         ],
+        "id": "project-procurement-procurement-requirements-register",
         "number": 9
       },
       {
@@ -6938,15 +7010,14 @@
         "process": "MDP-TO-BP01 Section 6 Responsibilities and SIPOC responsibility fields.",
         "theme": "Governance",
         "impact": "Unclear authority delays reviews and weakens accountability.",
-        "id": "technical-office-roles-and-authority",
-        "answerDimension": "coverage",
         "answers": [
-          "The “Roles and Authority” requirement does not cover all required cases.",
-          "The “Roles and Authority” requirement covers only the highest-priority cases.",
-          "The “Roles and Authority” requirement covers most applicable cases using defined selection criteria.",
-          "The “Roles and Authority” requirement covers all applicable cases except documented exceptions.",
-          "The “Roles and Authority” requirement covers every applicable case with no unresolved coverage gaps."
+          "Responsibilities and decision authorities between Technical Office and the interfacing functions are undefined.",
+          "Roles are understood for some activities but vary by project, leaving overlaps and unowned decisions.",
+          "An approved RACI assigns responsibilities and authorities across most interfacing functions.",
+          "Responsibilities and decision authorities are documented and applied across all listed functions, with overlaps and gaps formally resolved.",
+          "Every interface operates with clear, agreed accountability, and role disputes do not delay technical decisions."
         ],
+        "id": "technical-office-roles-and-authority",
         "number": 2
       },
       {
@@ -7038,15 +7109,14 @@
         "process": "MDP-TO-BP01 3.1.1 Project Initiation.",
         "theme": "Process",
         "impact": "Missing inputs create incorrect plans, quantities, and technical submissions.",
-        "id": "technical-office-tender-handover",
-        "answerDimension": "accuracy",
         "answers": [
-          "The result of “Tender Handover” is not reliably checked against its approved source or basis.",
-          "The result of “Tender Handover” is checked only for selected or high-risk cases.",
-          "The result of “Tender Handover” is checked against its approved source for most applicable cases.",
-          "The result of “Tender Handover” is checked for all applicable cases, with identified differences resolved or documented.",
-          "“Tender Handover” consistently produces reliable results with no unresolved material differences."
+          "Technical Office begins work without a formal handover of tender and contract information.",
+          "Handover happens for some projects, but the information received is incomplete and is not verified.",
+          "Technical Office receives the required tender and contract documents at handover on most projects.",
+          "Every handover delivers the required scope, contract, BOQ, specification, and schedule information, and Technical Office verifies it against the contract.",
+          "No project starts with an unresolved handover deficiency, and verified tender information is available from day one."
         ],
+        "id": "technical-office-tender-handover",
         "number": 7
       },
       {
@@ -9528,15 +9598,28 @@
     function departmentSummary(config, savedState) {
       const local = savedState || { answers: [], domainWeights: Object.fromEntries(config.domains.map(d => [d.id, d.weight])), questionWeights: Object.fromEntries(config.questions.map((q, i) => [i, q.weight])) };
       let potential = 0, achieved = 0, maturityWeighted = 0, answered = 0;
+      const severityCounts = { Critical: 0, Major: 0, Moderate: 0, Minor: 0, "No Gap": 0 };
+      const gapRows = [];
       config.questions.forEach((question, index) => {
         const answer = local.answers?.[index] || {};
         const level = Number(answer.level || 0);
         const target = Number(answer.target || 4);
         const points = Number(local.domainWeights?.[question.domain] ?? config.domains.find(d => d.id === question.domain)?.weight ?? 0) * Number(local.questionWeights?.[index] ?? question.weight) / 100;
         potential += points;
-        if (level) { answered += 1; achieved += points * Math.min(level / 5, 1); maturityWeighted += points * level; }
+        if (level) {
+          answered += 1; achieved += points * Math.min(level / 5, 1); maturityWeighted += points * level;
+          const maturityGap = Math.max(target - level, 0);
+          const sev = severity(maturityGap);
+          if (severityCounts[sev] !== undefined) severityCounts[sev] += 1;
+          if (maturityGap > 0) {
+            gapRows.push({
+              department: config.name, category: question.category, text: question.text,
+              level, target, severity: sev, priorityScore: maturityGap * points
+            });
+          }
+        }
       });
-      return { answered, total: config.questions.length, completion: answered / config.questions.length * 100, achievement: potential ? achieved / potential * 100 : 0, maturity: potential ? maturityWeighted / potential : 0, updatedAt: local.updatedAt || "" };
+      return { answered, total: config.questions.length, completion: answered / config.questions.length * 100, achievement: potential ? achieved / potential * 100 : 0, maturity: potential ? maturityWeighted / potential : 0, updatedAt: local.updatedAt || "", severityCounts, gapRows };
     }
 
     function readDepartmentState(departmentId) {
@@ -9565,6 +9648,43 @@
         </button>`;
       }).join("");
       document.querySelectorAll("[data-department]").forEach(button => button.addEventListener("click", () => openDepartment(button.dataset.department)));
+      renderPortfolioDashboard(configs, summaries, accents, totalAnswered, totalQuestions);
+    }
+
+    function renderPortfolioDashboard(configs, summaries, accents, totalAnswered, totalQuestions) {
+      const hasData = totalAnswered > 0;
+      $("portfolioDashboard").hidden = false;
+      $("portfolioEmpty").hidden = hasData;
+      $("portfolioBody").hidden = !hasData;
+      if (!hasData) return;
+      const answeredSummaries = summaries.filter(s => s.answered > 0);
+      const maturity = answeredSummaries.reduce((sum, s) => sum + s.maturity * s.answered, 0) / totalAnswered;
+      const score = answeredSummaries.reduce((sum, s) => sum + s.achievement * s.answered, 0) / totalAnswered;
+      const counts = { Critical: 0, Major: 0, Moderate: 0, Minor: 0, "No Gap": 0 };
+      summaries.forEach(s => Object.entries(s.severityCounts).forEach(([key, value]) => { counts[key] += value; }));
+      $("pfMaturity").textContent = maturity.toFixed(2) + " / 5";
+      $("pfScore").textContent = score.toFixed(1) + "%";
+      $("pfCompletion").textContent = (totalAnswered / totalQuestions * 100).toFixed(0) + "%";
+      $("pfCoverage").textContent = totalAnswered + " / " + totalQuestions + " answered";
+      $("pfCritical").textContent = counts.Critical + counts.Major;
+      $("pfDeptChart").innerHTML = configs.map((config, index) => {
+        const s = summaries[index];
+        const label = s.answered ? s.maturity.toFixed(2) : "-";
+        return `<div class="chart-row">
+          <div class="chart-label">${esc(config.name)}</div>
+          <div class="chart-fill"><span style="width:${Math.max(0, Math.min(s.maturity / 5 * 100, 100))}%;background:${accents[index]}"></span></div>
+          <div>${label}</div>
+        </div>`;
+      }).join("");
+      renderDonutTo("pfSeverityDonut", "pfSeverityLegend", counts);
+      const topGaps = summaries.flatMap(s => s.gapRows).sort((a, b) => b.priorityScore - a.priorityScore).slice(0, 6);
+      $("pfTopGaps").innerHTML = topGaps.length
+        ? topGaps.map(row => `<div class="pf-gap">
+            <div class="pf-gap-head"><strong>${esc(row.category)}</strong>${tag(row.severity)}</div>
+            <p>${esc(row.text)}</p>
+            <div class="pf-gap-meta"><span>${esc(row.department)}</span><span>Level ${row.level} of ${row.target}</span></div>
+          </div>`).join("")
+        : `<p class="pf-note">No gaps recorded — every answered question meets its target.</p>`;
     }
 
     function openDepartment(departmentId) {
