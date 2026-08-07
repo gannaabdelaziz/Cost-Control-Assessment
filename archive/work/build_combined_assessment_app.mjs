@@ -242,7 +242,16 @@ const questionRewrites = {
         "All active projects are covered by a cost report every month."
       ]
     }
-  }
+  },
+  // Answer-enhancement scaffolds. To override the auto-generated maturity answers for a
+  // question, add an entry keyed by the question's `category`, e.g.:
+  //   "Some Category": { answers: ["level 1", "level 2", "level 3", "level 4", "level 5"] },
+  // `answers` must be exactly 5 non-empty strings (build enforces this). Categories left out
+  // fall back to the generic answerAnchors() template. See archive/HANDOFF.md.
+  "document-control": {},
+  "planning-controlling": {},
+  "project-procurement": {},
+  "technical-office": {}
 };
 
 function slug(value) {
@@ -382,7 +391,7 @@ function finalizeDepartment(department) {
 
 const departments = Object.fromEntries(sourceFiles.map(parseAssessment).map(finalizeDepartment).map(d => [d.id, d]));
 const basePath = path.join(root, sourceFiles[0].file);
-let html = fs.readFileSync(basePath, "utf8");
+let html = fs.readFileSync(basePath, "utf8").replace(/\r\n/g, "\n");
 
 const portalCss = `
     .portal { min-height: 100vh; padding: 30px 36px 48px; background:linear-gradient(180deg,#edf2fb 0,#f7f9fc 46%,#eef2f8 100%); }
@@ -528,6 +537,36 @@ const portalCss = `
     .answer { border-color:#ccd7e8 !important; background:#fff !important; }
     .answer:hover { border-color:#8ea7d8 !important; background:#f8faff !important; }
     .answer.selected { border-color:var(--blue) !important; background:#eef3ff !important; box-shadow:0 0 0 2px rgba(0,49,235,.08); }
+    /* Home layout: compact content-height left brand card + 3-per-row cards (last two centered) */
+    .portal-shell { grid-template-columns:320px minmax(0,1fr); gap:26px; align-items:start; }
+    .portal-hero { min-height:0; height:auto; position:sticky; top:24px; display:block; padding:24px 22px; }
+    .portal-header { display:block; }
+    .portal-brand { display:block; }
+    .portal-brand-mark { display:inline-flex; width:auto; height:auto; min-width:0; padding:9px 13px; border-radius:12px; background:rgba(255,255,255,.1); }
+    .portal-brand-mark img { width:100%; max-width:170px; height:auto; display:block; }
+    .portal-header > div:last-child { margin-top:16px; }
+    .portal-header h1 { font-size:22px; line-height:1.15; margin:0 0 7px; }
+    .portal-header p { font-size:12px; line-height:1.5; max-width:none; }
+    .portal-hero-divider { height:1px; margin:18px 0; background:rgba(255,255,255,.16); }
+    .portfolio-summary { display:grid; grid-template-columns:1fr; gap:1px; margin-top:0; }
+    .portfolio-summary-item:first-child { grid-column:auto; }
+    .portal-hero-actions { margin-top:18px; }
+    .portal-actions-label { text-align:left; margin-bottom:8px; }
+    .portal-export-menu summary { width:100%; box-sizing:border-box; }
+    .department-grid { grid-template-columns:repeat(6,minmax(0,1fr)); gap:18px; }
+    .department-card, .department-card:last-child { grid-column:span 2; width:auto; justify-self:stretch; min-height:0; }
+    .department-card:nth-last-child(2) { grid-column:2 / span 2; }
+    .department-card:nth-last-child(1) { grid-column:4 / span 2; }
+    @media(max-width:1100px){
+      .portal-shell{grid-template-columns:1fr}
+      .portal-hero{position:static}
+      .department-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .department-card,.department-card:nth-last-child(2),.department-card:nth-last-child(1),.department-card:last-child{grid-column:auto}
+    }
+    @media(max-width:650px){
+      .department-grid{grid-template-columns:1fr}
+      .department-card,.department-card:nth-last-child(2),.department-card:nth-last-child(1),.department-card:last-child{grid-column:auto}
+    }
 `;
 html = html.replace("  </style>", `${portalCss}  </style>`);
 html = html.replace(/<title>.*?<\/title>/, "<title>Madkour Department Assessment Portal</title>");
@@ -538,26 +577,27 @@ const portalHtml = `
       <div class="portal-hero">
         <div class="portal-header">
           <div class="portal-brand">
-            <div class="portal-brand-mark" aria-hidden="true"><strong>M</strong></div>
+            <div class="portal-brand-mark"><img alt="Madkour" id="portalBrandImg"></div>
             <div><div class="portal-eyebrow">Madkour · Operational Excellence</div><h1>Department Assessment Portal</h1><p>One structured workspace for department maturity, evidence, gaps, and improvement roadmaps.</p></div>
           </div>
-          <div>
-            <span class="portal-actions-label">Portfolio controls</span>
-            <details class="portal-export-menu">
-              <summary>Export All</summary>
-              <div class="portal-export-options">
-                <button class="btn" id="exportAllCsvBtn">Export Data</button>
-                <button class="btn" id="exportAllReportBtn">Management Report</button>
-                <button class="btn" id="exportAllJsonBtn">Backup All</button>
-                <button class="btn" id="loadAllJsonBtn">Restore</button>
-              </div>
-              <input id="allJsonFile" type="file" accept="application/json,.json" hidden>
-            </details>
-          </div>
         </div>
+        <div class="portal-hero-divider"></div>
         <div class="portfolio-summary">
           <div class="portfolio-summary-item"><span>Portfolio completion</span><strong id="portfolioCompletion">0%</strong><div class="portfolio-progress"><span id="portfolioProgressBar"></span></div></div>
           <div class="portfolio-summary-item"><span>Total progress</span><strong id="portfolioAnswered">0 / 300</strong></div>
+        </div>
+        <div class="portal-hero-actions">
+          <span class="portal-actions-label">Portfolio controls</span>
+          <details class="portal-export-menu">
+            <summary>Export All</summary>
+            <div class="portal-export-options">
+              <button class="btn" id="exportAllCsvBtn">Export Data</button>
+              <button class="btn" id="exportAllReportBtn">Management Report</button>
+              <button class="btn" id="exportAllJsonBtn">Backup All</button>
+              <button class="btn" id="loadAllJsonBtn">Restore</button>
+            </div>
+            <input id="allJsonFile" type="file" accept="application/json,.json" hidden>
+          </details>
         </div>
       </div>
       <div class="portal-main">
@@ -776,12 +816,15 @@ html = html.slice(0, endScript) + portalScript + `    $("homeBtn").addEventListe
     $("exportAllReportBtn").addEventListener("click", exportAllReport);
     $("loadAllJsonBtn").addEventListener("click", () => $("allJsonFile").click());
     $("allJsonFile").addEventListener("change", event => event.target.files[0] && restoreAll(event.target.files[0]));
+    const brandImg = document.getElementById("portalBrandImg");
+    const markSrc = document.querySelector(".mark img")?.src;
+    if (brandImg && markSrc) brandImg.src = markSrc;
     renderDepartmentPortal();
 ` + html.slice(endScript + "    loadState();\n    renderAll();".length);
 
 const outputPath = path.join(root, "publish", "index.html");
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 fs.writeFileSync(outputPath, html, "utf8");
-const siteEntryPath = path.join(root, "index.html");
+const siteEntryPath = path.join(root, "..", "index.html");
 fs.writeFileSync(siteEntryPath, html, "utf8");
 console.log(`Built ${path.relative(root, outputPath)} and ${path.relative(root, siteEntryPath)} with ${Object.keys(departments).length} departments and ${Object.values(departments).reduce((sum, d) => sum + d.questions.length, 0)} questions.`);
