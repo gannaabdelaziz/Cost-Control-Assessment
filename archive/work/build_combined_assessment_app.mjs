@@ -661,24 +661,26 @@ const portalCss = `
       .department-grid{grid-template-columns:1fr}
       .department-card,.department-card:nth-last-child(2),.department-card:nth-last-child(1),.department-card:last-child{grid-column:auto}
     }
-    /* Back to Home: solid navy, full sidebar width, high contrast */
-    .back-home-btn { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; margin:0 0 14px; padding:11px 14px; border:none; border-radius:10px; background:var(--brand-navy); color:#fff; font-size:13px; font-weight:800; letter-spacing:.01em; cursor:pointer; transition:.18s ease; }
+    /* Back to Home: solid navy, sits inline beside the page title */
+    .topbar-title-row { display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:4px; }
+    .topbar-title-row h2 { margin:0; }
+    .back-home-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; flex:0 0 auto; margin:0; padding:9px 15px; border:none; border-radius:999px; background:var(--brand-navy); color:#fff; font-size:12.5px; font-weight:800; letter-spacing:.01em; white-space:nowrap; cursor:pointer; transition:.18s ease; }
     .back-home-btn svg { width:16px; height:16px; stroke-width:2.4; flex:0 0 auto; }
     .back-home-btn:hover { background:var(--blue); color:#fff; transform:translateX(-2px); }
     .back-home-btn:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
-    /* Answer options: number circle is the selection indicator, native radio hidden */
-    .answer-grid { gap:12px; }
-    .answer { grid-template-columns:38px 1fr; gap:14px; align-items:center; padding:15px 17px; border:1.5px solid #d5dfee; border-radius:12px; transition:.16s ease; }
-    .answer input { position:absolute; opacity:0; width:0; height:0; pointer-events:none; }
-    .answer > span { display:flex; align-items:center; gap:0; }
-    .answer-title { display:inline-grid !important; place-items:center; width:38px; height:38px; margin:0; border:1.5px solid #c6d3e8; border-radius:50%; background:#fff; color:#5c6f8c; font-size:14px; font-weight:900; transition:.16s ease; }
-    .answer-desc { padding-top:0; color:#22334d !important; font-size:14.5px !important; font-weight:500 !important; line-height:1.55 !important; }
-    .answer:hover { border-color:#9db6e2 !important; background:#f7faff !important; }
-    .answer:hover .answer-title { border-color:#9db6e2; color:var(--blue); }
-    .answer.selected { border-color:var(--blue) !important; background:#eef3ff !important; box-shadow:0 0 0 3px rgba(0,49,235,.09); }
-    .answer.selected .answer-title { border-color:var(--blue); background:var(--blue); color:#fff; }
-    .answer.selected .answer-desc { color:#0d1f3c !important; font-weight:600 !important; }
-    /* Combined portfolio dashboard on home */
+    /* Portfolio Overview entry button (home) and its page header */
+    .overview-open-btn { display:flex; align-items:center; gap:15px; width:100%; margin:0 0 22px; padding:16px 20px; border:1px solid #cfdcf1; border-radius:16px; background:linear-gradient(120deg,#f4f8ff 0%,#eef3ff 100%); text-align:left; cursor:pointer; transition:.2s ease; }
+    .overview-open-btn:hover { border-color:#9eb3ff; background:linear-gradient(120deg,#eaf1ff 0%,#e2ebff 100%); transform:translateY(-2px); box-shadow:0 14px 30px rgba(0,49,235,.12); }
+    .overview-open-icon { display:grid; place-items:center; width:42px; height:42px; flex:0 0 auto; border-radius:12px; background:var(--brand-navy); color:#fff; }
+    .overview-open-icon svg { width:20px; height:20px; }
+    .overview-open-text { flex:1 1 auto; min-width:0; }
+    .overview-open-text strong { display:block; color:var(--brand-navy); font-size:15px; }
+    .overview-open-text small { display:block; margin-top:2px; color:var(--muted); font-size:11.5px; }
+    .overview-open-arrow { color:var(--blue); font-size:17px; font-weight:900; flex:0 0 auto; }
+    .overview-back-btn { display:inline-flex; align-items:center; gap:8px; margin:0 0 16px; padding:9px 15px; border:none; border-radius:999px; background:var(--brand-navy); color:#fff; font-size:12.5px; font-weight:800; cursor:pointer; transition:.18s ease; }
+    .overview-back-btn svg { width:16px; height:16px; stroke-width:2.4; }
+    .overview-back-btn:hover { background:var(--blue); transform:translateX(-2px); }
+    /* Combined portfolio dashboard */
     .portfolio-dashboard { margin-bottom:34px; }
     .pf-empty { margin:0; padding:26px; border:1px dashed #c9d6ea; border-radius:14px; background:#fff; color:var(--muted); font-size:13px; text-align:center; }
     .pf-kpis { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin-bottom:16px; }
@@ -743,7 +745,8 @@ const portalHtml = `
         </div>
       </div>
       <div class="portal-main">
-        <section class="portfolio-dashboard" id="portfolioDashboard">
+        <div id="portalOverviewView" hidden>
+          <button class="overview-back-btn" id="overviewBackBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M19 12H5"></path><path d="m12 19-7-7 7-7"></path></svg><span>Back to Home</span></button>
           <div class="portal-section-head">
             <div><h2>Portfolio Overview</h2><p>Combined assessment performance across all departments.</p></div>
           </div>
@@ -773,21 +776,26 @@ const portalHtml = `
               <div class="pf-gaps" id="pfTopGaps"></div>
             </div>
           </div>
-        </section>
-        <div class="portal-section-head">
-          <div><h2>Choose a Department</h2><p>Open an assessment or continue saved progress.</p></div>
-          <div class="portal-legend"><span>Not started</span><span class="active">In progress</span><span class="complete">Complete</span></div>
         </div>
-        <div class="department-grid" id="departmentGrid"></div>
+        <div id="portalHomeView">
+          <button class="overview-open-btn" id="openOverviewBtn">
+            <span class="overview-open-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 13h6V4H4v9z"></path><path d="M14 20h6V4h-6v16z"></path><path d="M4 20h6v-3H4v3z"></path></svg></span>
+            <span class="overview-open-text"><strong>Portfolio Overview</strong><small>Combined performance across all departments</small></span>
+            <span class="overview-open-arrow" aria-hidden="true">→</span>
+          </button>
+          <div class="portal-section-head">
+            <div><h2>Choose a Department</h2><p>Open an assessment or continue saved progress.</p></div>
+            <div class="portal-legend"><span>Not started</span><span class="active">In progress</span><span class="complete">Complete</span></div>
+          </div>
+          <div class="department-grid" id="departmentGrid"></div>
+        </div>
       </div>
     </div>
   </section>
 `;
 html = html.replace("<body>\n  <div class=\"app\">", `<body>\n${portalHtml}  <div class="app" id="assessmentApp" hidden>`);
 html = html.replace("<p>Cost Control Department</p>", '<p id="sidebarDepartmentName">Department</p>');
-html = html.replace("<h2>Cost Control Department Assessment Tool</h2>", '<h2 id="toolTitle">Department Assessment Tool</h2>');
-html = html.replace('<nav class="nav" aria-label="Main views">', `<button class="back-home-btn" id="homeBtn" aria-label="Back to department home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M19 12H5"></path><path d="m12 19-7-7 7-7"></path></svg><span>Back to Home</span></button>
-      <nav class="nav" aria-label="Main views">`);
+html = html.replace("<h2>Cost Control Department Assessment Tool</h2>", '<div class="topbar-title-row"><button class="back-home-btn" id="homeBtn" aria-label="Back to department home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M19 12H5"></path><path d="m12 19-7-7 7-7"></path></svg><span>Back to Home</span></button><h2 id="toolTitle">Department Assessment Tool</h2></div>');
 html = html.replace(/<p class="subtitle">.*?<\/p>/, '<p class="subtitle" id="toolSubtitle">Department maturity, gap analysis, and roadmap governance.</p>');
 html = html.replace('<button id="resetBtn" class="danger-item">Reset All Data</button>', '<button id="resetBtn" class="danger-item">Reset Current Department</button>');
 
@@ -932,7 +940,6 @@ function portalRuntime() {
 
     function renderPortfolioDashboard(configs, summaries, accents, totalAnswered, totalQuestions) {
       const hasData = totalAnswered > 0;
-      $("portfolioDashboard").hidden = false;
       $("portfolioEmpty").hidden = hasData;
       $("portfolioBody").hidden = !hasData;
       if (!hasData) return;
@@ -986,7 +993,20 @@ function portalRuntime() {
       if (state && activeDepartmentId) saveSilent();
       $("assessmentApp").hidden = true;
       $("departmentPortal").hidden = false;
+      closeOverview();
       renderDepartmentPortal();
+    }
+
+    function openOverview() {
+      renderDepartmentPortal();
+      $("portalHomeView").hidden = true;
+      $("portalOverviewView").hidden = false;
+      window.scrollTo(0, 0);
+    }
+
+    function closeOverview() {
+      $("portalOverviewView").hidden = true;
+      $("portalHomeView").hidden = false;
     }
 
     function exportAllJson() {
@@ -1041,6 +1061,8 @@ html = html.slice(0, endScript) + portalScript + `    $("homeBtn").addEventListe
     $("exportAllReportBtn").addEventListener("click", exportAllReport);
     $("loadAllJsonBtn").addEventListener("click", () => $("allJsonFile").click());
     $("allJsonFile").addEventListener("change", event => event.target.files[0] && restoreAll(event.target.files[0]));
+    $("openOverviewBtn").addEventListener("click", openOverview);
+    $("overviewBackBtn").addEventListener("click", closeOverview);
     const brandImg = document.getElementById("portalBrandImg");
     const markSrc = document.querySelector(".mark img")?.src;
     if (brandImg && markSrc) brandImg.src = markSrc;
