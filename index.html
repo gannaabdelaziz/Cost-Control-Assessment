@@ -140,11 +140,12 @@
       color: var(--ink);
       font-family: var(--font-sans);
       line-height: 1.45;
-      zoom: var(--app-scale);
     }
-    @media print { body { zoom: 1; } }
+    @media print { .app { zoom: 1; } }
     button, input, select, textarea { font: inherit; }
-    .app { min-height: calc(100vh / var(--app-scale)); display: grid; grid-template-columns: 280px 1fr; }
+    /* Zoom is scoped to the assessment app only. The portal home renders at
+       100% so its type matches the design spec. */
+    .app { zoom: var(--app-scale); min-height: calc(100vh / var(--app-scale)); display: grid; grid-template-columns: 280px 1fr; }
     body.sidebar-collapsed .app { grid-template-columns: 1fr; }
     body.sidebar-collapsed .sidebar { display: none; }
     .sidebar {
@@ -1328,179 +1329,139 @@
       body { background: var(--white); }
     }
 
-    .portal { min-height: 100vh; padding: 30px 36px 48px; background:linear-gradient(180deg,#edf2fb 0,#f7f9fc 46%,#eef2f8 100%); }
+    /* ============================================================
+       DEPARTMENT PORTAL HOME
+       Single consolidated pass. Everything below is scoped to the
+       portal landing page (.portal-*, .department-*, .portfolio-*,
+       .overview-open-*) so nothing leaks into the assessment app,
+       which reuses generic names like .card / .sidebar / .main.
+       ============================================================ */
+    .portal { min-height:100vh; padding:0; background:var(--bg); }
     .portal[hidden], .app[hidden] { display: none !important; }
-    .portal-shell { max-width: 1500px; margin: 0 auto; }
-    .portal-hero { position:relative; overflow:hidden; border-radius:28px; padding:var(--space-30) var(--space-34); color:var(--white); background:linear-gradient(125deg,var(--brand-navy) 0%,#082987 62%,var(--blue) 135%); box-shadow:0 22px 55px rgba(0,21,89,.22); }
-    .portal-hero:after { content:""; position:absolute; width:420px; height:420px; right:-150px; top:-250px; border-radius:var(--radius-circle); border:70px solid rgba(255,255,255,.08); }
-    .portal-header { position:relative; z-index:1; display:flex; justify-content:space-between; gap:32px; align-items:center; }
-    .portal-brand { display:flex; align-items:center; gap:var(--space-22); }
-    .portal-brand-mark { width:70px; height:70px; display:grid; place-items:center; border:1px solid var(--white-a24); background:var(--white-a10); border-radius:19px; }
-    .portal-brand-mark img { width:54px; height:auto; }
-    .portal-eyebrow { margin:0 0 var(--space-6); color:var(--nav-ink-dim); font-size:var(--fs-11); font-weight:var(--fw-extrabold); letter-spacing:.15em; text-transform:uppercase; }
-    .portal-header h1 { color:var(--white); font-size:34px; margin:0 0 var(--space-7); letter-spacing:-.025em; }
-    .portal-header p { color:#d9e2ff; margin:0; max-width:710px; }
-    .portal-actions-label { display:block; margin-bottom:var(--space-8); color:var(--nav-ink-dim); font-size:var(--fs-10); font-weight:var(--fw-extrabold); text-align:right; letter-spacing:.1em; text-transform:uppercase; }
-    .portal-actions { display:flex; flex-wrap:wrap; gap:var(--space-8); justify-content:flex-end; max-width:520px; }
-    .portal-actions .btn { color:var(--white); border-color:rgba(255,255,255,.28); background:var(--white-a10); }
-    .portal-actions .btn:hover { background:var(--white-a18); }
-    .portal-actions .primary { color:var(--brand-navy) !important; background:var(--white); border-color:var(--white); }
-    .portfolio-summary { position:relative; z-index:1; display:grid; grid-template-columns:1.25fr repeat(3,1fr); gap:var(--space-1); margin-top:var(--space-28); overflow:hidden; border:1px solid var(--white-a18); border-radius:17px; background:var(--white-a16); }
-    .portfolio-summary-item { padding:var(--space-15) var(--space-18); background:rgba(0,10,55,.22); }
-    .portfolio-summary-item span { display:block; color:var(--nav-ink-dim); font-size:var(--fs-10); font-weight:var(--fw-extrabold); letter-spacing:.08em; text-transform:uppercase; }
-    .portfolio-summary-item strong { display:block; margin-top:var(--space-5); color:var(--white); font-size:21px; }
-    .portfolio-progress { height:7px; margin-top:var(--space-10); overflow:hidden; border-radius:var(--radius-pill); background:var(--white-a16); }
-    .portfolio-progress span { display:block; height:100%; border-radius:var(--radius-pill); background:linear-gradient(90deg,var(--white),#85a5ff); }
-    .portal-section-head { display:flex; align-items:end; justify-content:space-between; gap:var(--space-20); margin:var(--space-30) var(--space-2) var(--space-17); }
-    .portal-section-head h2 { margin:0 0 var(--space-5); color:var(--brand-navy); font-size:var(--fs-23); }
-    .portal-section-head p { margin:0; color:var(--muted); }
-    .portal-legend { display:flex; align-items:center; gap:var(--space-15); color:var(--muted); font-size:var(--fs-11); font-weight:var(--fw-bold); }
-    .portal-legend span:before { content:""; display:inline-block; width:7px; height:7px; margin-right:var(--space-6); border-radius:var(--radius-circle); background:#cbd5e1; }
+    .portal-shell { max-width:1440px; margin:0 auto; padding:48px; min-height:100vh; display:grid; grid-template-columns:320px minmax(0,1fr); gap:32px; align-items:stretch; }
+
+    /* ---------- Sidebar ---------- */
+    /* Not sticky: pinning a near-viewport-height sidebar separates its top edge
+       from the main column by exactly the scroll distance, for no benefit. */
+    .portal-hero { align-self:start; display:flex; flex-direction:column; min-height:calc(100vh - 96px); padding:32px; border-radius:8px; color:var(--white); background:linear-gradient(165deg,var(--brand-navy) 0%,var(--brand-deep) 100%); box-shadow:0 12px 28px rgba(0,21,89,.12); overflow:hidden; }
+    .portal-hero:after { content:none; }
+    .portal-header { display:block; }
+    .portal-brand { display:block; }
+    .portal-brand-mark { display:inline-flex; align-items:center; gap:8px; width:auto; height:auto; padding:10px 16px; border:1px solid rgba(255,255,255,.14); border-radius:10px; background:rgba(255,255,255,.08); }
+    .portal-brand-mark img { display:block; width:100%; max-width:150px; height:auto; }
+    .portal-eyebrow { margin:24px 0 12px; color:var(--brand-sky); font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+    .portal-header h1 { margin:0; color:var(--white); font-size:26px; font-weight:800; line-height:1.15; letter-spacing:-.01em; }
+    .portal-header p { margin:12px 0 0; max-width:34ch; color:rgba(221,230,255,.8); font-size:13px; line-height:1.5; }
+    .portal-hero-divider { display:none; }
+
+    /* ---------- Sidebar stat card ---------- */
+    .portfolio-summary { display:block; margin-top:32px; padding:24px; border:1px solid rgba(255,255,255,.12); border-radius:8px; background:rgba(255,255,255,.06); }
+    .portfolio-summary-item { display:flex; flex-direction:column; padding:0; background:none; }
+    .portfolio-summary-item + .portfolio-summary-item { margin-top:24px; padding-top:24px; border-top:1px solid rgba(255,255,255,.12); }
+    .portfolio-summary-item > strong { display:block; order:1; margin:0; color:var(--white); font-weight:800; letter-spacing:-.02em; line-height:1; }
+    .portfolio-summary-item:first-child > strong { font-size:64px; }
+    .portfolio-summary-item + .portfolio-summary-item > strong { font-size:32px; }
+    .portfolio-summary-item > span { display:block; order:2; margin-top:16px; padding-top:12px; border-top:1px solid rgba(255,255,255,.18); color:rgba(221,230,255,.75); font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+    .portfolio-progress { order:3; height:6px; margin-top:16px; overflow:hidden; border-radius:99px; background:rgba(255,255,255,.14); }
+    .portfolio-progress > span { display:block; height:100%; border-radius:99px; background:linear-gradient(90deg,var(--nav-3),#7ea6ff); }
+
+    /* ---------- Sidebar controls ---------- */
+    .portal-hero-actions { margin-top:auto; padding-top:32px; }
+    .portal-actions-label { display:block; margin:0; color:rgba(221,230,255,.75); font-size:10px; font-weight:700; letter-spacing:.12em; text-align:left; text-transform:uppercase; }
+    .portal-export-menu { position:relative; margin-top:12px; }
+    .portal-export-menu summary { display:flex; align-items:center; justify-content:center; gap:8px; box-sizing:border-box; width:100%; padding:16px 24px; border:none; border-radius:8px; background:var(--white); color:var(--brand-navy); font-size:14px; font-weight:700; list-style:none; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease; }
+    .portal-export-menu summary:hover { transform:translateY(-1px); box-shadow:0 10px 22px rgba(0,0,0,.22); }
+    .portal-export-menu summary::-webkit-details-marker { display:none; }
+    .portal-export-menu summary:after { content:"▾"; font-size:10px; opacity:.7; }
+    .portal-export-menu[open] summary:after { content:"▴"; }
+    .portal-export-options { display:grid; gap:6px; margin-top:8px; padding:8px; border:1px solid rgba(255,255,255,.22); border-radius:8px; background:rgba(0,15,61,.45); }
+    .portal-export-options .btn { width:100%; min-height:34px; padding:7px 9px; font-size:var(--fs-10); color:var(--white); border-color:rgba(255,255,255,.28); background:rgba(255,255,255,.1); }
+    .portal-export-options .btn:hover { background:rgba(255,255,255,.18); }
+
+    /* ---------- Main column ---------- */
+    .portal-main { display:flex; flex-direction:column; gap:32px; min-width:0; padding:0; }
+
+    /* ---------- Portfolio Overview bar ---------- */
+    .overview-open-btn { display:flex; align-items:center; gap:24px; width:100%; margin:0; padding:24px 32px; border:1px solid var(--line); border-radius:8px; background:linear-gradient(105deg,#f2f5ff 0%,#ffffff 55%); box-shadow:0 8px 20px rgba(0,21,89,.05); text-align:left; cursor:pointer; transition:border-color .12s ease, box-shadow .12s ease; }
+    .overview-open-btn:hover { transform:none; border-color:var(--nav-3); box-shadow:0 12px 28px rgba(0,21,89,.12); background:linear-gradient(105deg,#f2f5ff 0%,#ffffff 55%); }
+    .overview-open-icon { display:grid; place-items:center; flex:none; width:48px; height:48px; border-radius:8px; background:var(--brand-navy); color:var(--white); }
+    .overview-open-icon svg { width:22px; height:22px; }
+    /* Must shrink: with flex:none the bar needs 698px but gets 559px at 1024,
+       pushing the arrow past the viewport and scrolling the whole page. */
+    .overview-open-text { flex:1 1 auto; min-width:0; }
+    .overview-open-text strong { display:block; margin:0; color:var(--ink); font-size:17px; font-weight:700; }
+    .overview-open-text small { display:block; margin:4px 0 0; color:var(--muted); font-size:13px; }
+    .overview-open-stats { display:flex; align-items:stretch; gap:32px; margin-left:auto; padding-right:8px; }
+    .overview-open-stat { display:flex; flex-direction:column; min-width:72px; }
+    .overview-open-stat strong { color:var(--ink); font-size:24px; font-weight:800; letter-spacing:-.01em; line-height:1; }
+    .overview-open-stat span { margin-top:12px; padding-top:8px; border-top:1px solid var(--line); color:var(--muted); font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
+    .overview-open-arrow { display:grid; place-items:center; flex:none; width:36px; height:36px; border-radius:99px; background:#eaefff; color:var(--blue); font-size:16px; font-weight:var(--fw-black); transition:transform .12s ease; }
+    .overview-open-btn:hover .overview-open-arrow { transform:translateX(3px); }
+
+    /* ---------- Section head ---------- */
+    .portal-section-head { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap; margin:0; }
+    .portal-section-head .portal-section-eyebrow { margin:0 0 8px; color:var(--nav-3); font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; }
+    .portal-section-head h2 { margin:0; color:var(--ink); font-size:28px; font-weight:700; letter-spacing:-.01em; }
+    .portal-section-head p { margin:8px 0 0; color:var(--muted); font-size:14px; }
+    .portal-legend { display:flex; align-items:center; gap:16px; }
+    .portal-legend span { display:inline-flex; align-items:center; gap:8px; color:var(--muted); font-size:12px; font-weight:600; }
+    .portal-legend span:before { content:""; display:inline-block; width:9px; height:9px; margin-right:0; border-radius:99px; background:#b9c4dc; }
     .portal-legend .active:before { background:var(--blue); }
     .portal-legend .complete:before { background:var(--green); }
-    .department-grid { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:var(--space-18); }
-    .department-card { position:relative; grid-column:span 2; min-height:260px; border:1px solid #d9e2f0; border-radius:var(--radius-23); background:var(--white); padding:var(--space-22); box-shadow:0 13px 30px rgba(0,21,89,.075); cursor:pointer; text-align:left; transition:.22s ease; }
-    .department-card:nth-last-child(2) { grid-column:2 / span 2; }
-    .department-card:nth-last-child(1) { grid-column:4 / span 2; }
-    .department-card:before { content:""; position:absolute; inset:0 auto 0 0; width:5px; border-radius:var(--radius-23) 0 0 var(--radius-23); background:var(--department-accent,var(--blue)); }
-    .department-card:hover { transform:translateY(-4px); border-color:var(--border-hover); box-shadow:0 20px 44px rgba(0,49,235,.14); }
-    .department-card-top { display:flex; justify-content:space-between; gap:var(--space-14); align-items:flex-start; }
-    .department-heading { display:flex; align-items:center; gap:var(--space-12); }
-    .department-index { width:39px; height:39px; display:grid; place-items:center; flex:0 0 auto; border-radius:var(--radius-12); color:var(--department-accent,var(--blue)); background:color-mix(in srgb,var(--department-accent,var(--blue)) 10%,white); font-size:var(--fs-12); font-weight:var(--fw-black); }
-    .department-card h2 { color:var(--brand-navy); font-size:19px; line-height:1.25; margin:0; }
-    .department-card small { display:block; margin-top:var(--space-3); color:var(--muted); font-size:var(--fs-11); }
-    .department-status { font-size:var(--fs-10); font-weight:var(--fw-extrabold); color:var(--blue); background:#edf2ff; border-radius:var(--radius-pill); padding:var(--space-6) var(--space-9); white-space:nowrap; }
-    .department-status.complete { color:#08784b; background:#e6f7ef; }
-    .department-progress-label { display:flex; justify-content:space-between; margin-top:var(--space-25); color:var(--muted); font-size:var(--fs-11); font-weight:var(--fw-bold); }
-    .department-progress-label strong { color:var(--brand-navy); }
-    .department-progress { height:8px; background:#edf1f7; border-radius:var(--radius-pill); overflow:hidden; margin:var(--space-8) 0 var(--space-17); }
-    .department-progress span { display:block; height:100%; background:linear-gradient(90deg,var(--department-accent,var(--blue)),#7390ff); }
-    .department-metrics { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-8); }
-    .department-metrics div { border:1px solid var(--line-soft); background:#f8fafd; padding:var(--space-10); border-radius:var(--radius-12); }
-    .department-metrics span { display:block; font-size:var(--fs-10); color:var(--muted); text-transform:uppercase; font-weight:var(--fw-extrabold); }
-    .department-metrics strong { display:block; color:var(--brand-navy); margin-top:var(--space-4); font-size:var(--fs-15); }
-    .department-card-footer { display:flex; align-items:center; justify-content:space-between; gap:var(--space-12); margin-top:var(--space-15); }
-    .department-updated { color:var(--muted); font-size:var(--fs-10); }
-    .department-open { color:var(--department-accent,var(--blue)); font-size:var(--fs-11); font-weight:var(--fw-black); white-space:nowrap; }
-    @media(max-width:1100px){.department-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.department-card,.department-card:nth-last-child(2),.department-card:nth-last-child(1){grid-column:auto}.portal-header{align-items:flex-start}.portfolio-summary{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:760px){.portal{padding:var(--space-16)}.portal-hero{padding:var(--space-22)}.portal-header{display:block}.portal-brand{align-items:flex-start}.portal-brand-mark{display:none}.portal-actions-label{text-align:left;margin-top:var(--space-22)}.portal-actions{justify-content:flex-start}.portfolio-summary{grid-template-columns:1fr 1fr}.department-grid{grid-template-columns:1fr}.portal-section-head{display:block}.portal-legend{margin-top:var(--space-12)}.department-metrics{grid-template-columns:repeat(3,1fr)}}
-    /* Final home composition: portfolio panel left, department workspace right */
-    .portal { padding:var(--space-24); }
-    .portal-shell { max-width:1560px; display:grid; grid-template-columns:minmax(330px, .36fr) minmax(650px, 1fr); gap:var(--space-26); align-items:start; }
-    .portal-hero { position:sticky; top:24px; min-height:calc(100vh / var(--app-scale) - 48px); padding:var(--space-34) var(--space-30); display:flex; flex-direction:column; }
-    .portal-header { display:block; }
-    .portal-brand { align-items:flex-start; }
-    .portal-brand-mark { flex:0 0 auto; }
-    .portal-header h1 { font-size:31px; line-height:1.12; }
-    .portal-header > div:last-child { margin-top:var(--space-34); }
-    .portal-actions-label { text-align:left; }
-    .portal-actions { display:grid; grid-template-columns:1fr 1fr; max-width:none; justify-content:stretch; }
-    .portal-actions .btn { width:100%; min-height:43px; }
-    .portfolio-summary { margin-top:auto; grid-template-columns:1fr 1fr; }
-    .portfolio-summary-item:first-child { grid-column:1 / -1; }
-    .portal-main { min-width:0; padding:10px 0 40px; }
-    .portal-section-head { margin:0 var(--space-2) var(--space-20); align-items:center; }
-    .department-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--space-18); }
-    .department-card,.department-card:nth-last-child(2),.department-card:nth-last-child(1) { grid-column:auto; min-height:263px; }
-    .department-card:last-child { grid-column:1 / -1; width:calc(50% - 9px); justify-self:center; }
-    .back-home-btn { display:inline-flex; align-items:center; gap:var(--space-7); margin:0 0 var(--space-10); padding:var(--space-7) var(--space-12); border:1px solid var(--line); border-radius:var(--radius-pill); background:var(--white); color:var(--brand-navy); font-size:var(--fs-12); font-weight:var(--fw-extrabold); cursor:pointer; }
-    .back-home-btn:hover { border-color:var(--border-hover); color:var(--blue); background:var(--brand-ice); }
+    /* ---------- Department grid ---------- */
+    .department-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px; }
+    .department-card { position:relative; display:flex; flex-direction:column; grid-column:auto; min-height:0; width:auto; padding:24px; border:1px solid var(--line); border-radius:8px; background:var(--panel); box-shadow:0 8px 20px rgba(0,21,89,.05); text-align:left; cursor:pointer; transition:transform .14s ease, box-shadow .14s ease, border-color .14s ease; }
+    .department-card:before { content:none; }
+    .department-card:hover { transform:translateY(-3px); border-color:var(--department-accent,var(--blue)); box-shadow:0 12px 28px rgba(0,21,89,.12); }
+    /* The status pill sits on its own row, right-aligned. Keeping it on the
+       header row leaves only ~90px for the title, which wraps every
+       department name (and "Planning and Controlling" to three lines). */
+    .department-card-top { display:flex; flex-wrap:wrap; align-items:flex-start; column-gap:16px; row-gap:12px; }
+    .department-heading { display:flex; align-items:flex-start; gap:16px; flex:1 1 100%; min-width:0; }
+    .department-status { margin-left:auto; }
+    .department-index { display:grid; place-items:center; flex:none; width:44px; height:44px; border-radius:8px; color:var(--department-accent,var(--blue)); background:color-mix(in srgb,var(--department-accent,var(--blue)) 10%,white); font-size:15px; font-weight:800; }
+    .department-card h2 { margin:0; color:var(--ink); font-size:20px; font-weight:700; line-height:1.25; letter-spacing:-.01em; }
+    .department-card small { display:block; margin:4px 0 0; color:var(--muted); font-size:12px; font-weight:500; }
+    .department-status { flex:none; padding:4px 12px; border-radius:99px; font-size:11px; font-weight:700; white-space:nowrap; color:var(--blue); background:#eaefff; }
+    .department-status.notstarted { color:var(--muted); background:#eef1fa; }
+    .department-status.complete { color:var(--green); background:#e3f7f4; }
+    .department-progress-label { display:flex; align-items:baseline; justify-content:space-between; margin-top:24px; font-size:12px; }
+    .department-progress-label span { color:var(--muted); font-weight:500; }
+    .department-progress-label strong { color:var(--ink); font-weight:700; }
+    .department-progress { height:6px; margin:8px 0 0; overflow:hidden; border-radius:99px; background:#eef1fa; }
+    .department-progress span { display:block; height:100%; border-radius:99px; background:var(--department-accent,var(--blue)); }
+    .department-card-footer { display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-top:auto; padding-top:16px; border-top:1px solid var(--line); }
+    .department-progress { margin-bottom:24px; }
+    .department-answer-count { display:block; color:var(--ink); font-size:13px; font-weight:700; }
+    .department-saved { display:block; margin-top:4px; color:var(--muted); font-size:12px; font-weight:400; }
+    .department-open { display:inline-flex; align-items:center; gap:6px; color:var(--department-accent,var(--blue)); font-size:13px; font-weight:700; white-space:nowrap; transition:gap .12s ease; }
+    .department-card:hover .department-open { gap:10px; }
+
+    /* ---------- Portal responsive ---------- */
+    @media(max-width:1160px){
+      .department-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+    @media(max-width:900px){
+      .portal-shell { grid-template-columns:1fr; padding:24px; }
+      .portal-hero { min-height:0; }
+      .department-grid { grid-template-columns:1fr; }
+      .overview-open-btn { flex-wrap:wrap; gap:16px; padding:20px 24px; }
+      .overview-open-arrow { order:1; margin-left:auto; }
+      .overview-open-stats { order:2; width:100%; margin-left:0; padding-right:0; }
+    }
+    @media(max-width:560px){
+      .portal-shell { padding:16px; }
+      .portal-hero { padding:24px; }
+      .portfolio-summary-item:first-child strong { font-size:48px; }
+      .portal-section-head h2 { font-size:23px; }
+    }
     .answer-title { display:inline-grid !important; place-items:center; width:30px; height:30px; margin-right:var(--space-11); border-radius:var(--radius-circle); background:var(--brand-ice); color:var(--blue); font-weight:var(--fw-black); flex:0 0 auto; }
     .answer > span { display:flex; align-items:flex-start; }
     .answer-desc { padding-top:var(--space-4); }
-    @media(max-width:1100px){
-      .portal-shell{grid-template-columns:1fr}.portal-hero{position:relative;top:auto;min-height:auto}.portal-header{display:flex}.portal-header>div:last-child{margin-top:0}.portfolio-summary{margin-top:var(--space-26);grid-template-columns:repeat(4,1fr)}.portfolio-summary-item:first-child{grid-column:auto}.portal-main{padding-top:0}.department-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-    }
-    @media(max-width:760px){
-      .portal{padding:var(--space-14)}.portal-hero{padding:var(--space-22)}.portal-header{display:block}.portal-header>div:last-child{margin-top:var(--space-24)}.portfolio-summary{grid-template-columns:1fr 1fr}.portfolio-summary-item:first-child{grid-column:1/-1}.department-grid{grid-template-columns:1fr}.department-card:last-child{grid-column:auto;width:auto}.portal-actions{grid-template-columns:1fr 1fr}
-    }
-    /* Compact approved home layout */
-    .portal-shell { grid-template-columns:300px minmax(0,1fr); gap:var(--space-28); }
-    .portal-hero { min-height:0; height:auto; padding:var(--space-25) var(--space-22); border-radius:24px; }
-    .portal-hero:after { width:310px; height:310px; right:-145px; top:-175px; border-width:48px; }
-    .portal-brand { gap:var(--space-13); }
-    .portal-brand-mark { width:50px; height:50px; border-radius:15px; }
-    .portal-eyebrow { font-size:var(--fs-8); letter-spacing:.12em; }
-    .portal-header h1 { font-size:var(--fs-25); line-height:1.08; margin-bottom:var(--space-7); }
-    .portal-header p { font-size:var(--fs-11); line-height:1.5; }
-    .portal-header > div:last-child { margin-top:var(--space-24); }
-    .portal-actions-label { margin-bottom:var(--space-7); font-size:var(--fs-8); }
-    .portal-actions { gap:var(--space-7); }
-    .portal-actions .btn { min-height:36px; padding:var(--space-7) var(--space-8); font-size:var(--fs-10); }
-    .portfolio-summary { margin-top:var(--space-22); grid-template-columns:1fr 1fr; border-radius:var(--radius-14); }
-    .portfolio-summary-item { padding:var(--space-11) var(--space-12); }
-    .portfolio-summary-item:first-child { grid-column:1 / -1; }
-    .portfolio-summary-item span { font-size:var(--fs-8); }
-    .portfolio-summary-item strong { margin-top:var(--space-3); font-size:var(--fs-16); }
-    .portfolio-progress { height:5px; margin-top:var(--space-7); }
-    .portal-main { padding-top:var(--space-4); }
-    .portal-section-head { margin-bottom:var(--space-17); }
-    .portal-section-head h2 { font-size:var(--fs-25); }
-    .portal-section-head p { font-size:var(--fs-12); }
-    .department-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--space-16); }
-    .department-card,.department-card:nth-last-child(2),.department-card:nth-last-child(1),.department-card:last-child { grid-column:auto; width:auto; min-height:245px; justify-self:stretch; padding:var(--space-20); }
-    .department-card h2 { font-size:var(--fs-17); }
-    .department-heading { gap:var(--space-10); }
-    .department-index { width:35px; height:35px; }
-    .department-progress-label { margin-top:21px; }
-    @media(max-width:1350px){
-      .portal-shell{grid-template-columns:280px minmax(0,1fr)}.department-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-    }
-    @media(max-width:960px){
-      .portal-shell{grid-template-columns:1fr}.portal-hero{position:relative;top:auto}.portal-header{display:flex}.portal-header>div:last-child{margin-top:0}.portfolio-summary{grid-template-columns:repeat(4,1fr)}.portfolio-summary-item:first-child{grid-column:auto}.department-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-    }
-    @media(max-width:650px){
-      .portal-header{display:block}.portal-header>div:last-child{margin-top:var(--space-20)}.portfolio-summary{grid-template-columns:1fr 1fr}.portfolio-summary-item:first-child{grid-column:1/-1}.department-grid{grid-template-columns:1fr}
-    }
-    /* Clarity pass: one home action, compact cards, readable assessment answers */
-    .portal-export-menu { position:relative; }
-    .portal-export-menu summary { list-style:none; width:100%; padding:var(--space-10) var(--space-14); border:1px solid rgba(255,255,255,.35); border-radius:var(--radius-pill); background:var(--white); color:var(--brand-navy); text-align:center; font-size:var(--fs-11); font-weight:var(--fw-black); cursor:pointer; }
-    .portal-export-menu summary::-webkit-details-marker { display:none; }
-    .portal-export-menu summary:after { content:" ▾"; }
-    .portal-export-menu[open] summary:after { content:" ▴"; }
-    .portal-export-options { display:grid; gap:var(--space-6); margin-top:var(--space-8); padding:var(--space-8); border:1px solid var(--white-a22); border-radius:var(--radius-14); background:rgba(0,15,61,.45); }
-    .portal-export-options .btn { width:100%; min-height:34px; padding:var(--space-7) var(--space-9); font-size:var(--fs-10); }
-    .portfolio-summary { grid-template-columns:1fr; }
-    .portfolio-summary-item:first-child { grid-column:auto; }
-    .department-card,.department-card:nth-last-child(2),.department-card:nth-last-child(1),.department-card:last-child { min-height:180px; }
-    .department-progress-label { margin-top:var(--space-18); }
-    .department-card-footer { margin-top:var(--space-14); padding-top:var(--space-12); border-top:1px solid var(--line-soft); }
-    .department-answer-count { color:var(--brand-navy); font-size:var(--fs-11); font-weight:var(--fw-extrabold); }
-    .department-saved { display:block; margin-top:var(--space-4); color:var(--muted); font-size:9px; font-weight:var(--fw-medium); }
     .answer-desc { color:#243653 !important; font-size:var(--fs-15) !important; font-weight:var(--fw-semibold) !important; line-height:1.55 !important; }
     .answer { border-color:#ccd7e8 !important; background:var(--white) !important; }
     .answer:hover { border-color:#8ea7d8 !important; background:#f8faff !important; }
     .answer.selected { border-color:var(--blue) !important; background:var(--surface-selected) !important; box-shadow:0 0 0 2px rgba(0,49,235,.08); }
-    /* Home layout: compact content-height left brand card + 3-per-row cards (last two centered) */
-    .portal-shell { grid-template-columns:320px minmax(0,1fr); gap:var(--space-26); align-items:start; }
-    .portal-hero { min-height:0; height:auto; position:sticky; top:24px; display:block; padding:var(--space-24) var(--space-22); }
-    .portal-header { display:block; }
-    .portal-brand { display:block; }
-    .portal-brand-mark { display:inline-flex; width:auto; height:auto; min-width:0; padding:var(--space-9) var(--space-13); border-radius:var(--radius-12); background:var(--white-a10); }
-    .portal-brand-mark img { width:100%; max-width:170px; height:auto; display:block; }
-    .portal-header > div:last-child { margin-top:var(--space-16); }
-    .portal-header h1 { font-size:var(--fs-22); line-height:1.15; margin:0 0 var(--space-7); }
-    .portal-header p { font-size:var(--fs-12); line-height:1.5; max-width:none; }
-    .portal-hero-divider { height:1px; margin:var(--space-18) 0; background:var(--white-a16); }
-    .portfolio-summary { display:grid; grid-template-columns:1fr; gap:var(--space-1); margin-top:0; }
-    .portfolio-summary-item:first-child { grid-column:auto; }
-    .portal-hero-actions { margin-top:var(--space-18); }
-    .portal-actions-label { text-align:left; margin-bottom:var(--space-8); }
-    .portal-export-menu summary { width:100%; box-sizing:border-box; }
-    .department-grid { grid-template-columns:repeat(6,minmax(0,1fr)); gap:var(--space-18); }
-    .department-card, .department-card:last-child { grid-column:span 2; width:auto; justify-self:stretch; min-height:0; }
-    .department-card:nth-last-child(2) { grid-column:2 / span 2; }
-    .department-card:nth-last-child(1) { grid-column:4 / span 2; }
-    @media(max-width:1100px){
-      .portal-shell{grid-template-columns:1fr}
-      .portal-hero{position:static}
-      .department-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .department-card,.department-card:nth-last-child(2),.department-card:nth-last-child(1),.department-card:last-child{grid-column:auto}
-    }
-    @media(max-width:650px){
-      .department-grid{grid-template-columns:1fr}
-      .department-card,.department-card:nth-last-child(2),.department-card:nth-last-child(1),.department-card:last-child{grid-column:auto}
-    }
     /* Back to Home: solid navy, sits inline beside the page title */
     .topbar-title-row { display:flex; align-items:center; gap:var(--space-14); flex-wrap:wrap; margin-bottom:var(--space-4); }
     .topbar-title-row h2 { margin:0; }
@@ -1508,15 +1469,15 @@
     .back-home-btn svg { width:16px; height:16px; stroke-width:2.4; flex:0 0 auto; }
     .back-home-btn:hover { background:var(--blue); color:var(--white); transform:translateX(-2px); }
     .back-home-btn:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
-    /* Portfolio Overview entry button (home) and its page header */
-    .overview-open-btn { display:flex; align-items:center; gap:var(--space-15); width:100%; margin:0 0 var(--space-22); padding:var(--space-16) var(--space-20); border:1px solid #cfdcf1; border-radius:var(--radius-16); background:linear-gradient(120deg,#f4f8ff 0%,var(--surface-selected) 100%); text-align:left; cursor:pointer; transition:.2s ease; }
-    .overview-open-btn:hover { border-color:var(--border-hover); background:linear-gradient(120deg,#eaf1ff 0%,#e2ebff 100%); transform:translateY(-2px); box-shadow:0 14px 30px rgba(0,49,235,.12); }
-    .overview-open-icon { display:grid; place-items:center; width:42px; height:42px; flex:0 0 auto; border-radius:var(--radius-12); background:var(--brand-navy); color:var(--white); }
-    .overview-open-icon svg { width:20px; height:20px; }
-    .overview-open-text { flex:1 1 auto; min-width:0; }
-    .overview-open-text strong { display:block; color:var(--brand-navy); font-size:var(--fs-15); }
-    .overview-open-text small { display:block; margin-top:var(--space-2); color:var(--muted); font-size:11.5px; }
-    .overview-open-arrow { color:var(--blue); font-size:var(--fs-17); font-weight:var(--fw-black); flex:0 0 auto; }
+    /* Names the dimension the five answer levels vary along */
+    .answer-ladder { grid-column:1/-1; margin:0 0 var(--space-12); padding:var(--space-10) var(--space-14); border-left:3px solid var(--blue); border-radius:0 var(--radius-8) var(--radius-8) 0; background:var(--brand-ice); color:#334b71; font-size:var(--fs-12); line-height:1.5; }
+    .answer-ladder strong { color:var(--brand-navy); }
+    .answer-ladder strong .dim { text-transform:capitalize; }
+    /* Shown only when localStorage writes fail (private mode, quota exceeded) */
+    .storage-warning { margin:0 0 var(--space-16); padding:var(--space-13) var(--space-16); border:1px solid #f0b8a8; border-left:4px solid var(--red); border-radius:var(--radius-11); background:var(--soft-red); color:#7a2410; font-size:var(--fs-13); line-height:1.5; }
+    .storage-warning[hidden] { display:none; }
+    .storage-warning strong { color:#5e1a0b; }
+    /* Portfolio Overview page header */
     .overview-back-btn { display:inline-flex; align-items:center; gap:var(--space-8); margin:0 0 var(--space-16); padding:var(--space-9) var(--space-15); border:none; border-radius:var(--radius-pill); background:var(--brand-navy); color:var(--white); font-size:var(--fs-12-5); font-weight:var(--fw-extrabold); cursor:pointer; transition:.18s ease; }
     .overview-back-btn svg { width:16px; height:16px; stroke-width:2.4; }
     .overview-back-btn:hover { background:var(--blue); transform:translateX(-2px); }
@@ -1620,10 +1581,14 @@
           <button class="overview-open-btn" id="openOverviewBtn">
             <span class="overview-open-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 13h6V4H4v9z"></path><path d="M14 20h6V4h-6v16z"></path><path d="M4 20h6v-3H4v3z"></path></svg></span>
             <span class="overview-open-text"><strong>Portfolio Overview</strong><small>Combined performance across all departments</small></span>
+            <span class="overview-open-stats">
+              <span class="overview-open-stat"><strong>5</strong><span>Departments</span></span>
+              <span class="overview-open-stat"><strong id="overviewInProgress">0</strong><span>In Progress</span></span>
+            </span>
             <span class="overview-open-arrow" aria-hidden="true">→</span>
           </button>
           <div class="portal-section-head">
-            <div><h2>Choose a Department</h2><p>Open an assessment or continue saved progress.</p></div>
+            <div><p class="portal-section-eyebrow">Assessments</p><h2>Choose a Department</h2><p>Open an assessment or continue saved progress.</p></div>
             <div class="portal-legend"><span>Not started</span><span class="active">In progress</span><span class="complete">Complete</span></div>
           </div>
           <div class="department-grid" id="departmentGrid"></div>
@@ -1691,6 +1656,12 @@
           <button class="btn primary" id="reportBtn">Executive Brief</button>
         </div>
       </div>
+
+      <p class="storage-warning" id="storageWarning" role="alert" hidden>
+        <strong>Progress is not being saved.</strong>
+        Browser storage is unavailable or full — answers will be lost when you close this tab.
+        Use <em>Backup &rsaquo; Export Backup JSON</em> to keep your work.
+      </p>
 
       <section class="view active" id="dashboardView">
         <div class="dashboard-hero panel">
@@ -2050,6 +2021,19 @@
       { value: 4 },
       { value: 5 }
     ];
+    // The dimension each question's five levels actually vary along. Shown above
+    // the options so the respondent knows what is being graded. Display only —
+    // no effect on scoring. Questions without a dimension render no label.
+    const dimensionLadders = {
+      coverage:      "how many cases are covered — none → selected → most → all → every case",
+      formality:     "how it is recorded — verbal → ad hoc notes → standard document → defined rule set → systemized",
+      consistency:   "how often it happens — never → only when forced → at milestones → every cycle → every cycle with full trace",
+      evidence:      "what can be produced later — nothing → partial → retrievable → complete → independently reproducible",
+      ownership:     "who is accountable — nobody → informal → named but advisory → named with escalation → accountable and enforced",
+      accuracy:      "how it is checked — unchecked → checked after failure → reconciled → reconciled and resolved → trusted without re-checking",
+      timeliness:    "when it happens — deadline unknown → urgent cases only → mostly on time → on time with documented exceptions → predictable",
+      authorization: "how the gate holds — bypassable → high value only → depends on the person → mandatory with exceptions → system-enforced"
+    };
     const departmentConfigs = {
   "cost-control": {
     "id": "cost-control",
@@ -2304,13 +2288,13 @@
         "theme": "Process",
         "impact": "Weak indirect planning hides future cost exposure.",
         "id": "cost-control-indirect-plan",
-        "answerDimension": "risk",
+        "answerDimension": "coverage",
         "answers": [
-          "Risks related to “Indirect Plan” are not consistently identified or addressed.",
-          "Only immediate or high-impact risks related to “Indirect Plan” are addressed.",
-          "Most material risks related to “Indirect Plan” are identified and assigned for treatment.",
-          "All material risks related to “Indirect Plan” are identified, assigned, and monitored, with exceptions documented.",
-          "All material risks related to “Indirect Plan” remain within approved exposure limits with no unresolved treatment actions."
+          "Indirect costs are absorbed into general project overhead — accommodation, transportation, and deployment are not planned as separate lines, so future support cost cannot be seen.",
+          "An indirect plan exists for the largest items only (typically accommodation or transport), covering the current phase rather than the full project lifecycle.",
+          "The plan covers most support-cost categories with a monthly spending profile, but the horizon stops at the current budget year, or it is not agreed with the PM.",
+          "All indirect categories — accommodation, transportation, deployment, site support — are planned to project completion with a monthly profile agreed with the PM; gaps are documented.",
+          "Every indirect category is profiled to completion and reviewed with the PM each cycle; no material support cost appears that was outside the plan."
         ],
         "number": 11
       },
@@ -2324,13 +2308,13 @@
         "theme": "Risk",
         "impact": "Risk values that are not controlled distort EAC and contingency decisions.",
         "id": "cost-control-risk-amount-validation",
-        "answerDimension": "accuracy",
+        "answerDimension": "consistency",
         "answers": [
-          "The result of “Risk Amount Validation” is not reliably checked against its approved source or basis.",
-          "The result of “Risk Amount Validation” is checked only for selected or high-risk cases.",
-          "The result of “Risk Amount Validation” is checked against its approved source for most applicable cases.",
-          "The result of “Risk Amount Validation” is checked for all applicable cases, with identified differences resolved or documented.",
-          "“Risk Amount Validation” consistently produces reliable results with no unresolved material differences."
+          "Risk amounts stay at their tender values for the life of the project — nobody revisits them once the budget is loaded.",
+          "Risk amounts are revisited only when a major event forces it: a claim, a large variation, or an overrun escalation.",
+          "Risk amounts are reviewed with the PM at defined milestones, but the review is not tied to the risk register or reflected in EAC assumptions.",
+          "Risk amounts are reviewed with the PM every reporting cycle, reconciled to the risk register, and released or retained with a stated reason.",
+          "Every cycle, risk-amount movements are agreed with the PM, traced to register entries, and carried into EAC assumptions, with no drawdown left unexplained."
         ],
         "number": 12
       },
@@ -2344,13 +2328,13 @@
         "theme": "Systems",
         "impact": "Budget upload errors create reporting and approval problems later.",
         "id": "cost-control-budget-upload-control",
-        "answerDimension": "timeliness",
+        "answerDimension": "accuracy",
         "answers": [
-          "The required timeframe for “Budget Upload Control” is not consistently recognized or followed.",
-          "“Budget Upload Control” is completed on time only for selected or urgent cases.",
-          "“Budget Upload Control” is completed within the required timeframe for most applicable cases.",
-          "“Budget Upload Control” meets the required timeframe for all applicable cases except documented exceptions.",
-          "“Budget Upload Control” consistently meets the required timeframe with no unresolved overdue cases."
+          "The ERP budget is uploaded from whatever spreadsheet is current at the time, and differences against the approved Tasks & Resources Sheet surface later during reporting.",
+          "The upload is checked against the approved sheet only when a reporting problem or a rejected transaction exposes an error.",
+          "The upload is reconciled to the approved sheet for most projects, but task and resource coding differences are corrected informally without a record.",
+          "Every upload is reconciled line-by-line to the approved sheet before release, with coding differences corrected and the approval evidence retained.",
+          "ERP values match the approved baseline at all times; reconciliation finds no material differences, and management uses ERP figures without a parallel spreadsheet check."
         ],
         "number": 13
       },
@@ -2364,13 +2348,13 @@
         "theme": "Commercial",
         "impact": "Weak pre-award review can allow avoidable budget overruns.",
         "id": "cost-control-comparison-sheet-review",
-        "answerDimension": "risk",
+        "answerDimension": "ownership",
         "answers": [
-          "Risks related to “Comparison Sheet Review” are not consistently identified or addressed.",
-          "Only immediate or high-impact risks related to “Comparison Sheet Review” are addressed.",
-          "Most material risks related to “Comparison Sheet Review” are identified and assigned for treatment.",
-          "All material risks related to “Comparison Sheet Review” are identified, assigned, and monitored, with exceptions documented.",
-          "All material risks related to “Comparison Sheet Review” remain within approved exposure limits with no unresolved treatment actions."
+          "Comparison sheets reach Cost Control after the award decision, if at all — the first sight of the committed value is when the PO or subcontract appears.",
+          "Cost Control is copied on comparison sheets and comments when someone asks, but no one is named as reviewer and comments carry no weight.",
+          "A named Cost Control reviewer comments on comparison sheets before award, but the comments are advisory and procurement may proceed without resolving them.",
+          "A named reviewer must clear every comparison sheet against budget before award; unresolved exposure is escalated to a defined authority rather than absorbed.",
+          "No award proceeds with unresolved Cost Control objections; challenges are recorded with their outcome, and escalations close within the defined response time."
         ],
         "number": 14
       },
@@ -2386,11 +2370,11 @@
         "id": "cost-control-po-budget-validation",
         "answerDimension": "authorization",
         "answers": [
-          "“PO Budget Validation” can proceed without the required authorization.",
-          "The required authorization for “PO Budget Validation” is obtained only in selected cases.",
-          "The required authorization for “PO Budget Validation” is obtained for most applicable cases.",
-          "“PO Budget Validation” does not proceed without the required authorization, except through documented approved exceptions.",
-          "“PO Budget Validation” is consistently prevented from proceeding whenever the required authorization is missing."
+          "POs can be issued before Cost Control checks rate, quantity, task number, and expenditure code — errors are corrected after the commitment exists.",
+          "Validation is applied to high-value POs; below the informal threshold, POs are issued on the buyer's judgement.",
+          "Most POs are validated for rate, quantity, task and expenditure coding before issue, but the control depends on the buyer routing it rather than a system block.",
+          "No PO can be issued without recorded Cost Control validation of all four fields; the only exceptions are documented and approved.",
+          "The system prevents PO issue without validation; no unvalidated commitment has entered the ledger, and exception approvals are reviewed for recurrence."
         ],
         "number": 15
       },
@@ -2404,13 +2388,13 @@
         "theme": "Commercial",
         "impact": "Subcontract exposure is a major driver of cost risk.",
         "id": "cost-control-subcontract-validation",
-        "answerDimension": "authorization",
+        "answerDimension": "formality",
         "answers": [
-          "“Subcontract Validation” can proceed without the required authorization.",
-          "The required authorization for “Subcontract Validation” is obtained only in selected cases.",
-          "The required authorization for “Subcontract Validation” is obtained for most applicable cases.",
-          "“Subcontract Validation” does not proceed without the required authorization, except through documented approved exceptions.",
-          "“Subcontract Validation” is consistently prevented from proceeding whenever the required authorization is missing."
+          "Subcontract commercial terms are agreed in meetings and emails; there is no standard review record showing what Cost Control checked.",
+          "Cost Control's view is captured in ad hoc emails or meeting notes that vary by reviewer and are not kept with the subcontract file.",
+          "A standard review is documented for most subcontracts, but overrun rules and USE comments are applied by judgement rather than a defined rule set.",
+          "Every subcontract carries a completed review record against defined overrun rules, with USE comments and the approve/reject decision filed with the contract.",
+          "The review is embedded in the subcontract workflow — it cannot be skipped, its rule set is version-controlled, and rejected cases trace to the rule that triggered them."
         ],
         "number": 16
       },
@@ -2462,13 +2446,13 @@
         "theme": "Reporting",
         "impact": "Reports should support decisions, not only present numbers.",
         "id": "cost-control-cost-report-quality",
-        "answerDimension": "timeliness",
+        "answerDimension": "ownership",
         "answers": [
-          "The required timeframe for “Cost Report Quality” is not consistently recognized or followed.",
-          "“Cost Report Quality” is completed on time only for selected or urgent cases.",
-          "“Cost Report Quality” is completed within the required timeframe for most applicable cases.",
-          "“Cost Report Quality” meets the required timeframe for all applicable cases except documented exceptions.",
-          "“Cost Report Quality” consistently meets the required timeframe with no unresolved overdue cases."
+          "The monthly report presents cost tables and variance figures; what to do about them is left to whoever reads it.",
+          "Significant variances get a written explanation, but no corrective action is named and nothing carries forward to the next report.",
+          "The report proposes corrective actions for major variances, but the actions have no named owner or due date and are not revisited.",
+          "Each material variance carries a corrective action with a named owner and due date, and the next report shows its status.",
+          "Actions are tracked to closure with evidence of effect; overdue actions escalate automatically, and recurring variances trigger a root-cause review."
         ],
         "number": 19
       },
@@ -2482,13 +2466,13 @@
         "theme": "Forecasting",
         "impact": "Weak EAC forecasting reduces executive confidence and recovery decisions.",
         "id": "cost-control-eac-forecasting",
-        "answerDimension": "accuracy",
+        "answerDimension": "evidence",
         "answers": [
-          "The result of “EAC Forecasting” is not reliably checked against its approved source or basis.",
-          "The result of “EAC Forecasting” is checked only for selected or high-risk cases.",
-          "The result of “EAC Forecasting” is checked against its approved source for most applicable cases.",
-          "The result of “EAC Forecasting” is checked for all applicable cases, with identified differences resolved or documented.",
-          "“EAC Forecasting” consistently produces reliable results with no unresolved material differences."
+          "The EAC number is produced each month, but the assumptions behind it live in the preparer's spreadsheet and cannot be reconstructed by anyone else.",
+          "Key assumptions are noted in the EAC file, but there is no trend log, so movement between months cannot be explained.",
+          "Assumptions and month-on-month movements are logged and retrievable, but the link to the risk register and the approval record are incomplete.",
+          "Every EAC carries a retrievable assumptions log, trend history, risk-register links, and the approval record for the issued figure.",
+          "Any EAC movement traces end-to-end to its driver and approval on request, and independent review reproduces the figure without the preparer's help."
         ],
         "number": 20
       },
@@ -2521,13 +2505,13 @@
         "theme": "Reporting",
         "impact": "Weak cost planning reduces management ability to prevent overruns.",
         "id": "cost-control-cost-planning-governance",
-        "answerDimension": "accuracy",
+        "answerDimension": "coverage",
         "answers": [
-          "The result of “Cost Planning Governance” is not reliably checked against its approved source or basis.",
-          "The result of “Cost Planning Governance” is checked only for selected or high-risk cases.",
-          "The result of “Cost Planning Governance” is checked against its approved source for most applicable cases.",
-          "The result of “Cost Planning Governance” is checked for all applicable cases, with identified differences resolved or documented.",
-          "“Cost Planning Governance” consistently produces reliable results with no unresolved material differences."
+          "The cost plan reports what has been spent to date; there is no projection of remaining budget consumption.",
+          "A forward projection exists for the largest projects or the current quarter; the rest of the portfolio is reported on actuals only.",
+          "Most projects carry a forward cost plan to completion, but sector consolidation is assembled manually and lags the project-level plans.",
+          "Every project has a forward plan to completion, consolidated by sector on the same cycle, with forecast exposure and required actions stated.",
+          "The consolidated forward view covers the full portfolio to completion each cycle, and no material exposure has surfaced that the plan did not project."
         ],
         "number": 22
       },
@@ -2543,11 +2527,11 @@
         "id": "cost-control-cash-flow-planning-and-review",
         "answerDimension": "accuracy",
         "answers": [
-          "The result of “Cash Flow Planning and Review” is not reliably checked against its approved source or basis.",
-          "The result of “Cash Flow Planning and Review” is checked only for selected or high-risk cases.",
-          "The result of “Cash Flow Planning and Review” is checked against its approved source for most applicable cases.",
-          "The result of “Cash Flow Planning and Review” is checked for all applicable cases, with identified differences resolved or documented.",
-          "“Cash Flow Planning and Review” consistently produces reliable results with no unresolved material differences."
+          "Cash flow is projected from the payment schedule without reconciling to Finance's actual cash-out, so plan and reality diverge without anyone noticing.",
+          "Plan versus actual cash-out is compared when a funding problem arises, but not as a routine step.",
+          "Cash-out variances are reviewed each cycle against Finance inputs, but causes are not analysed and the next plan repeats them.",
+          "Each cycle reconciles planned to actual cash-out with Finance, explains material timing variances, and adjusts the forward plan accordingly.",
+          "Cash-out forecasts hold within the agreed tolerance, variances are explained by known causes, and Finance and Cost Control work from a single agreed figure."
         ],
         "number": 23
       },
@@ -2563,11 +2547,11 @@
         "id": "cost-control-overrun-approval",
         "answerDimension": "authorization",
         "answers": [
-          "“Overrun Approval” can proceed without the required authorization.",
-          "The required authorization for “Overrun Approval” is obtained only in selected cases.",
-          "The required authorization for “Overrun Approval” is obtained for most applicable cases.",
-          "“Overrun Approval” does not proceed without the required authorization, except through documented approved exceptions.",
-          "“Overrun Approval” is consistently prevented from proceeding whenever the required authorization is missing."
+          "Overruns are absorbed into the forecast and approval is sought afterwards, if at all — commitments change before anyone with authority has seen them.",
+          "Large overruns go to the authorization matrix; smaller ones are settled between the PM and Cost Control without a form.",
+          "Most overruns follow the approval matrix before the commitment or forecast changes, but the required approval level is judged case by case.",
+          "No commitment or forecast changes without the matrix-defined approval (8.A, 8.B, 8.C, 9, 10) recorded on the overrun form; exceptions are documented and approved.",
+          "The approval level is enforced by the form and log — no overrun has changed a commitment or forecast without its required authorization, and repeat overruns trigger review."
         ],
         "number": 24
       },
@@ -2583,11 +2567,11 @@
         "id": "cost-control-ccvcr-control",
         "answerDimension": "accuracy",
         "answers": [
-          "The result of “CCVCR Control” is not reliably checked against its approved source or basis.",
-          "The result of “CCVCR Control” is checked only for selected or high-risk cases.",
-          "The result of “CCVCR Control” is checked against its approved source for most applicable cases.",
-          "The result of “CCVCR Control” is checked for all applicable cases, with identified differences resolved or documented.",
-          "“CCVCR Control” consistently produces reliable results with no unresolved material differences."
+          "A CCVCR is raised for the contract value, but budget, ERP and forecast assumptions are updated later by whoever notices the gap.",
+          "Revenue and budget are updated together; ERP records and EAC assumptions catch up only when a reporting difference exposes them.",
+          "Most CCVCRs update revenue, budget and ERP, but forecast assumptions are revised separately and can disagree with the approved change.",
+          "Every approved CCVCR updates revenue, budget, ERP contract records and EAC assumptions in the same cycle, with differences reconciled and signed off.",
+          "Contract value, budget, ERP and forecast agree at all times; a CCVCR cannot close with any of the four out of step."
         ],
         "number": 25
       },
@@ -2601,13 +2585,13 @@
         "theme": "Process",
         "impact": "Duration changes can increase indirect cost exposure.",
         "id": "cost-control-der-and-duration-change",
-        "answerDimension": "accuracy",
+        "answerDimension": "coverage",
         "answers": [
-          "The result of “DER and Duration Change” is not reliably checked against its approved source or basis.",
-          "The result of “DER and Duration Change” is checked only for selected or high-risk cases.",
-          "The result of “DER and Duration Change” is checked against its approved source for most applicable cases.",
-          "The result of “DER and Duration Change” is checked for all applicable cases, with identified differences resolved or documented.",
-          "“DER and Duration Change” consistently produces reliable results with no unresolved material differences."
+          "Duration extensions are approved on schedule grounds alone; the indirect cost they carry is discovered later in the monthly report.",
+          "Only large extensions — typically those beyond a month, or with an obvious cost — get an indirect impact assessment.",
+          "Most duration changes are assessed for indirect cost, but the forecast impact is estimated informally and not carried into the EAC.",
+          "Every DER carries an assessed indirect cost and forecast impact before acceptance, with the indirect plan and Oracle duration updated on approval.",
+          "No schedule extension is accepted without its indirect and forecast impact quantified and absorbed into the plan; no unassessed extension has reached the forecast."
         ],
         "number": 26
       },
@@ -2621,13 +2605,13 @@
         "theme": "Risk",
         "impact": "Quality issues can create cost exposure if not measured and assigned.",
         "id": "cost-control-ncr-cost-impact",
-        "answerDimension": "closure",
+        "answerDimension": "ownership",
         "answers": [
-          "Items arising from “NCR Cost Impact” are not consistently assigned or followed to closure.",
-          "Only urgent items arising from “NCR Cost Impact” are actively followed to closure.",
-          "Most items arising from “NCR Cost Impact” have an owner and are followed to closure.",
-          "All items arising from “NCR Cost Impact” are assigned and followed to closure, with overdue exceptions documented.",
-          "All items arising from “NCR Cost Impact” are closed within their required dates with no unresolved overdue actions."
+          "NCRs are handled as a quality matter; their cost impact is absorbed into project cost without being identified or assigned to anyone.",
+          "Cost impact is estimated for major NCRs, but no one is named to recover it and the estimate is not tracked.",
+          "Most NCRs have a costed impact with a named owner, but recovery actions are not followed to closure and lapse quietly.",
+          "Every NCR carries a costed impact, a named cost owner, and a recovery action tracked to closure; overdue items are documented.",
+          "NCR cost exposure is owned and recovered within required dates; unrecovered impact is escalated rather than absorbed, and repeat causes are reviewed."
         ],
         "number": 27
       },
@@ -2643,11 +2627,11 @@
         "id": "cost-control-erp-and-use-discipline",
         "answerDimension": "accuracy",
         "answers": [
-          "The result of “ERP and USE Discipline” is not reliably checked against its approved source or basis.",
-          "The result of “ERP and USE Discipline” is checked only for selected or high-risk cases.",
-          "The result of “ERP and USE Discipline” is checked against its approved source for most applicable cases.",
-          "The result of “ERP and USE Discipline” is checked for all applicable cases, with identified differences resolved or documented.",
-          "“ERP and USE Discipline” consistently produces reliable results with no unresolved material differences."
+          "ERP figures are treated as indicative — Cost Control keeps a separate spreadsheet because transaction coding cannot be relied on.",
+          "ERP data is corrected when a specific report or approval exposes a coding or commitment error.",
+          "Transactions are reviewed for coding and commitment accuracy on most projects, but corrections are made without a record of what changed.",
+          "All ERP and USE transactions are reviewed against source documents each cycle, with coding corrections logged and commitments reconciled.",
+          "Actuals, commitments, budget status and contract exposure can be read directly from ERP and USE with no parallel record and no material corrections."
         ],
         "number": 28
       },
@@ -2661,13 +2645,13 @@
         "theme": "Data",
         "impact": "Poor data quality makes dashboards and forecasts unreliable.",
         "id": "cost-control-data-quality-ownership",
-        "answerDimension": "accuracy",
+        "answerDimension": "ownership",
         "answers": [
-          "The result of “Data Quality Ownership” is not reliably checked against its approved source or basis.",
-          "The result of “Data Quality Ownership” is checked only for selected or high-risk cases.",
-          "The result of “Data Quality Ownership” is checked against its approved source for most applicable cases.",
-          "The result of “Data Quality Ownership” is checked for all applicable cases, with identified differences resolved or documented.",
-          "“Data Quality Ownership” consistently produces reliable results with no unresolved material differences."
+          "No one owns cost data quality — when a dashboard figure is wrong it is corrected by whoever spots it, with no record of the cause.",
+          "Data problems are chased informally by Cost Control across Finance, Planning and Procurement, depending on who is available.",
+          "A data owner is named for each main data set, but the owner has no defined validation duty and corrections are not logged.",
+          "Every cost data set has a named owner with defined validation checks, and corrections are logged against the owner and the cause.",
+          "Data owners are accountable for the figures in published dashboards; recurring quality issues escalate and are fixed at source, not in the report."
         ],
         "number": 29
       },
@@ -2681,13 +2665,13 @@
         "theme": "Systems",
         "impact": "Manual work increases cycle time and reporting risk.",
         "id": "cost-control-automation-and-dashboards",
-        "answerDimension": "accuracy",
+        "answerDimension": "coverage",
         "answers": [
-          "The result of “Automation and Dashboards” is not reliably checked against its approved source or basis.",
-          "The result of “Automation and Dashboards” is checked only for selected or high-risk cases.",
-          "The result of “Automation and Dashboards” is checked against its approved source for most applicable cases.",
-          "The result of “Automation and Dashboards” is checked for all applicable cases, with identified differences resolved or documented.",
-          "“Automation and Dashboards” consistently produces reliable results with no unresolved material differences."
+          "Monthly reporting is rebuilt by hand each cycle — figures are copied between spreadsheets and the same manual steps repeat every month.",
+          "Standard templates exist, but data still has to be pasted in manually and reconciled by eye.",
+          "The main reports pull data automatically, but consolidation, variance commentary and distribution remain manual.",
+          "The reporting chain from ERP to consolidated dashboard is automated end to end, with manual effort limited to analysis and commentary.",
+          "Reports refresh on schedule without intervention; management reads current figures directly, and manual steps remain only where judgement is required."
         ],
         "number": 30
       },
@@ -2701,13 +2685,13 @@
         "theme": "Compliance",
         "impact": "Missing records weaken auditability and management assurance.",
         "id": "cost-control-document-control-and-retention",
-        "answerDimension": "authorization",
+        "answerDimension": "evidence",
         "answers": [
-          "“Document Control and Retention” can proceed without the required authorization.",
-          "The required authorization for “Document Control and Retention” is obtained only in selected cases.",
-          "The required authorization for “Document Control and Retention” is obtained for most applicable cases.",
-          "“Document Control and Retention” does not proceed without the required authorization, except through documented approved exceptions.",
-          "“Document Control and Retention” is consistently prevented from proceeding whenever the required authorization is missing."
+          "Signed approvals and cost records live on individual drives and in mailboxes; producing them for an audit or claim depends on who still has them.",
+          "Key documents are saved to the project server, but naming and folder use vary, so retrieval means searching.",
+          "Records follow the filing policy and are generally retrievable, but retention periods and access rights are not enforced.",
+          "All approvals, cost records and claims documents are filed to policy with controlled naming, retention and access, and retrieval is verified.",
+          "Any approval or cost record can be produced on request within the required time; audit and claim requests have not found a missing document."
         ],
         "number": 31
       },
@@ -2723,11 +2707,11 @@
         "id": "cost-control-finance-reconciliation",
         "answerDimension": "accuracy",
         "answers": [
-          "The result of “Finance Reconciliation” is not reliably checked against its approved source or basis.",
-          "The result of “Finance Reconciliation” is checked only for selected or high-risk cases.",
-          "The result of “Finance Reconciliation” is checked against its approved source for most applicable cases.",
-          "The result of “Finance Reconciliation” is checked for all applicable cases, with identified differences resolved or documented.",
-          "“Finance Reconciliation” consistently produces reliable results with no unresolved material differences."
+          "Cost Control and Finance issue different actual-cost figures for the same period, and the difference is explained after the reports have gone out.",
+          "Reconciliation happens when a figure is challenged, usually during executive review.",
+          "Actuals are reconciled with Finance most months, but the reconciliation happens after the cost report is issued.",
+          "Every reporting cycle reconciles Cost Control actuals to Finance closure before the report is issued, with differences explained and cleared.",
+          "One agreed actual-cost figure is used by both functions; reconciliation finds no material difference and no report has been reissued for a Finance variance."
         ],
         "number": 32
       },
@@ -2741,13 +2725,13 @@
         "theme": "Planning",
         "impact": "Cost performance needs progress and schedule context.",
         "id": "cost-control-planning-integration",
-        "answerDimension": "accuracy",
+        "answerDimension": "coverage",
         "answers": [
-          "The result of “Planning Integration” is not reliably checked against its approved source or basis.",
-          "The result of “Planning Integration” is checked only for selected or high-risk cases.",
-          "The result of “Planning Integration” is checked against its approved source for most applicable cases.",
-          "The result of “Planning Integration” is checked for all applicable cases, with identified differences resolved or documented.",
-          "“Planning Integration” consistently produces reliable results with no unresolved material differences."
+          "Cost is reported against budget only; schedule progress and forecast finish dates sit in a separate Planning report that is never joined to it.",
+          "Schedule context is added to the cost report for troubled projects when management asks for it.",
+          "Most cost reports show progress alongside spend, but forecast finish dates and completion risk are not linked to the cost forecast.",
+          "Every cost report presents spend, earned progress, completion risk and forecast finish from the updated schedule, reconciled to the EAC.",
+          "Cost and schedule are read as one view across the portfolio; no EAC is issued without the schedule position that supports it."
         ],
         "number": 33
       },
@@ -2763,11 +2747,11 @@
         "id": "cost-control-technical-office-and-quantity-inputs",
         "answerDimension": "accuracy",
         "answers": [
-          "The result of “Technical Office and Quantity Inputs” is not reliably checked against its approved source or basis.",
-          "The result of “Technical Office and Quantity Inputs” is checked only for selected or high-risk cases.",
-          "The result of “Technical Office and Quantity Inputs” is checked against its approved source for most applicable cases.",
-          "The result of “Technical Office and Quantity Inputs” is checked for all applicable cases, with identified differences resolved or documented.",
-          "“Technical Office and Quantity Inputs” consistently produces reliable results with no unresolved material differences."
+          "Quantities are taken from whatever the site or Technical Office last sent; they are not checked against QS records before being used for progress or payment.",
+          "Quantities are verified only where a payment is disputed or a figure looks obviously wrong.",
+          "Most performed quantities are checked against QS and Technical Office records, but differences are settled verbally and not recorded.",
+          "All quantity inputs are reconciled to QS and Technical Office records before use in progress, payment or EAC, with differences resolved and logged.",
+          "Earned progress, interim payments and forecast exposure all rest on one verified quantity set, with no post-payment quantity corrections."
         ],
         "number": 34
       },
@@ -2781,13 +2765,13 @@
         "theme": "Interfaces",
         "impact": "Forecasts are incomplete without cross-functional inputs.",
         "id": "cost-control-procurement-and-resource-inputs",
-        "answerDimension": "alignment",
+        "answerDimension": "coverage",
         "answers": [
-          "“Procurement and Resource Inputs” is performed separately from the related functions or information it depends on.",
-          "“Procurement and Resource Inputs” is coordinated with related functions only for selected or urgent cases.",
-          "“Procurement and Resource Inputs” is coordinated with the required functions and information for most applicable cases.",
-          "“Procurement and Resource Inputs” is coordinated across all required functions, with differences identified and resolved.",
-          "“Procurement and Resource Inputs” remains fully aligned across the required functions with no unresolved interface differences."
+          "ETC and EAC are built from Cost Control's own figures; procurement commitments, deployment plans and manpower forecasts are not brought in.",
+          "Major procurement commitments are included; resource, deployment and material inputs are added only when someone flags a gap.",
+          "Most forward-cost inputs are collected, but manpower or material inputs arrive after the EAC is fixed and are carried to the next cycle.",
+          "Every ETC and EAC includes current procurement, deployment, manpower and material inputs from the responsible functions in the same cycle.",
+          "The forward-cost view is complete each cycle; no material cost has emerged later from a function whose input was missing."
         ],
         "number": 35
       },
@@ -2801,13 +2785,13 @@
         "theme": "Closure",
         "impact": "Closure discipline preserves learning and final cost accountability.",
         "id": "cost-control-project-closure",
-        "answerDimension": "accuracy",
+        "answerDimension": "consistency",
         "answers": [
-          "The result of “Project Closure” is not reliably checked against its approved source or basis.",
-          "The result of “Project Closure” is checked only for selected or high-risk cases.",
-          "The result of “Project Closure” is checked against its approved source for most applicable cases.",
-          "The result of “Project Closure” is checked for all applicable cases, with identified differences resolved or documented.",
-          "“Project Closure” consistently produces reliable results with no unresolved material differences."
+          "Projects stop being reported when activity ends; there is no closure step, and the cost centre stays open in Oracle indefinitely.",
+          "Closure happens when Finance or an audit chases it, sometimes months after the last transaction.",
+          "Most projects are formally closed with a final cost report, but variance analysis is skipped and no lessons are captured.",
+          "Every project completes closure on the defined trigger, with final direct and indirect variances analysed and the Oracle status set to closed.",
+          "Closure runs to the same standard on every project; final variances are explained, lessons are recorded, and no project remains open past its closure date."
         ],
         "number": 36
       },
@@ -2821,13 +2805,13 @@
         "theme": "Improvement",
         "impact": "Recurring cost issues continue when learning is not reused.",
         "id": "cost-control-lessons-learned",
-        "answerDimension": "application",
+        "answerDimension": "ownership",
         "answers": [
-          "The required “Lessons Learned” practice is not performed for applicable work.",
-          "The required “Lessons Learned” practice is performed only for selected or urgent cases.",
-          "The required “Lessons Learned” practice is performed for most applicable cases.",
-          "The required “Lessons Learned” practice is performed for all applicable cases except documented exceptions.",
-          "The required “Lessons Learned” practice is consistently fulfilled with no unresolved exceptions."
+          "Lessons are written into a closure report that no one reads again; nothing changes in tender assumptions or budget practice as a result.",
+          "Strong lessons are raised verbally with the tender team when the same people happen to be involved in the next bid.",
+          "Lessons are logged and shared with Tendering, but no one owns making the change and the same cost issues recur.",
+          "Each material lesson is assigned to a named owner with a specific change to a tender norm, budget assumption, procedure or control, tracked to completion.",
+          "Lessons demonstrably change tender pricing, budget structure and governance; recurrence of a logged cost issue triggers review of why the change did not hold."
         ],
         "number": 37
       },
@@ -2841,13 +2825,13 @@
         "theme": "Improvement",
         "impact": "Transformation requires a managed improvement pipeline, not isolated fixes.",
         "id": "cost-control-continuous-improvement",
-        "answerDimension": "capability",
+        "answerDimension": "formality",
         "answers": [
-          "The resources or capability required for “Continuous Improvement” are not defined or reliably available.",
-          "The resources or capability required for “Continuous Improvement” are available only for selected priorities.",
-          "The required resources and capability support most applicable “Continuous Improvement” work.",
-          "The required resources and capability support all applicable “Continuous Improvement” work except documented constraints.",
-          "The required resources and capability consistently support the full “Continuous Improvement” workload without unresolved constraints."
+          "Improvements happen when someone has spare time and a specific irritation; there is no list of what the department is trying to improve.",
+          "Improvement ideas are collected in meeting notes or an informal list, but nothing is prioritised or resourced.",
+          "An improvement roadmap exists with owners and dates, but progress is not reviewed and benefits are not measured.",
+          "Improvements are managed through a tracked roadmap with owners, dates, resourcing, and a benefits log reviewed at defined intervals.",
+          "The improvement pipeline is part of normal department governance — items are prioritised against KPI gaps, benefits are verified after implementation, and stalled items escalate."
         ],
         "number": 38
       },
@@ -2863,11 +2847,11 @@
         "id": "cost-control-decision-rights",
         "answerDimension": "authorization",
         "answers": [
-          "“Decision Rights” can proceed without the required authorization.",
-          "The required authorization for “Decision Rights” is obtained only in selected cases.",
-          "The required authorization for “Decision Rights” is obtained for most applicable cases.",
-          "“Decision Rights” does not proceed without the required authorization, except through documented approved exceptions.",
-          "“Decision Rights” is consistently prevented from proceeding whenever the required authorization is missing."
+          "Whether Cost Control can challenge a cost decision or must simply record it depends on the individual and the project manager involved.",
+          "Approval limits are known for large values; for everything else, who decides is settled case by case.",
+          "A decision-rights matrix covers acceptance, challenge, escalation and approval, but it is set aside when following it would be inconvenient.",
+          "The matrix governs every material cost matter, with approval limits enforced and escalations recorded against the defined authority.",
+          "Decision rights hold under pressure — no material cost decision has been taken outside the matrix, and boundary disputes resolve through the defined route."
         ],
         "number": 39
       },
@@ -2883,11 +2867,11 @@
         "id": "cost-control-escalation-timeliness",
         "answerDimension": "timeliness",
         "answers": [
-          "The required timeframe for “Escalation Timeliness” is not consistently recognized or followed.",
-          "“Escalation Timeliness” is completed on time only for selected or urgent cases.",
-          "“Escalation Timeliness” is completed within the required timeframe for most applicable cases.",
-          "“Escalation Timeliness” meets the required timeframe for all applicable cases except documented exceptions.",
-          "“Escalation Timeliness” consistently meets the required timeframe with no unresolved overdue cases."
+          "Cost risks surface in the monthly report; there is no expectation that a material risk should be raised before then.",
+          "Serious risks are escalated quickly when the individual judges it necessary, but no time limit is defined.",
+          "A time limit for escalation is defined and mostly met for major risks, but smaller material risks drift.",
+          "Every material cost risk is escalated to the defined management level within its time limit, with late cases documented.",
+          "Escalation timing is met consistently and tracked; management receives risks with time to act, and no corrective action has been lost to late notice."
         ],
         "number": 40
       },
@@ -2903,11 +2887,11 @@
         "id": "cost-control-segregation-of-duties",
         "answerDimension": "authorization",
         "answers": [
-          "“Segregation of Duties” can proceed without the required authorization.",
-          "The required authorization for “Segregation of Duties” is obtained only in selected cases.",
-          "The required authorization for “Segregation of Duties” is obtained for most applicable cases.",
-          "“Segregation of Duties” does not proceed without the required authorization, except through documented approved exceptions.",
-          "“Segregation of Duties” is consistently prevented from proceeding whenever the required authorization is missing."
+          "The same person can prepare a cost entry, approve it, and post it to the system without anyone else involved.",
+          "Preparation and approval are usually done by different people, but leave cover and peak periods remove the separation.",
+          "Roles for preparation, review, approval and system posting are documented, but the system does not stop one person performing more than one.",
+          "Incompatible duties are separated in the role matrix and enforced by workflow configuration; combined-role exceptions are approved and time-limited.",
+          "The system prevents any user from performing incompatible cost duties; periodic access review confirms no accumulated combined rights."
         ],
         "number": 41
       },
@@ -2921,13 +2905,13 @@
         "theme": "People",
         "impact": "Knowledge loss disrupts reporting and control continuity.",
         "id": "cost-control-knowledge-continuity",
-        "answerDimension": "capability",
+        "answerDimension": "evidence",
         "answers": [
-          "The resources or capability required for “Knowledge Continuity” are not defined or reliably available.",
-          "The resources or capability required for “Knowledge Continuity” are available only for selected priorities.",
-          "The required resources and capability support most applicable “Knowledge Continuity” work.",
-          "The required resources and capability support all applicable “Knowledge Continuity” work except documented constraints.",
-          "The required resources and capability consistently support the full “Knowledge Continuity” workload without unresolved constraints."
+          "How each project's cost model works is in one person's head; when they leave or move, the next person rebuilds it from the files.",
+          "Departing staff give a verbal handover and pass on their spreadsheets; nothing is written down about how the work is actually done.",
+          "Handover notes are produced for role changes, but they are person-written, vary in depth, and are not retained afterwards.",
+          "Standard work is documented for each Cost Control role, with named backups and handover records retained for every change.",
+          "Any role can be picked up from documented standard work without the previous holder; backup cover is exercised, not just assigned."
         ],
         "number": 42
       },
@@ -2941,13 +2925,13 @@
         "theme": "Process",
         "impact": "Unmapped scope creates omissions and unreliable control baselines.",
         "id": "cost-control-scope-to-budget-mapping",
-        "answerDimension": "authorization",
+        "answerDimension": "coverage",
         "answers": [
-          "“Scope-to-Budget Mapping” can proceed without the required authorization.",
-          "The required authorization for “Scope-to-Budget Mapping” is obtained only in selected cases.",
-          "The required authorization for “Scope-to-Budget Mapping” is obtained for most applicable cases.",
-          "“Scope-to-Budget Mapping” does not proceed without the required authorization, except through documented approved exceptions.",
-          "“Scope-to-Budget Mapping” is consistently prevented from proceeding whenever the required authorization is missing."
+          "Parts of the approved scope have no budget line, and the gap is only discovered when a cost arrives with nowhere to book it.",
+          "Major scope items are mapped to the budget; minor works, provisional sums and preliminaries sit inside general allowances.",
+          "Most scope is mapped to the WBS/CBS structure, but the mapping is never reconciled back to the contract scope register.",
+          "The entire approved scope is mapped to budget lines and reconciled to the scope register, with unmapped items resolved before baseline approval.",
+          "Scope and budget reconcile completely at all times; scope changes update the mapping in the same cycle, and no unbudgeted scope has surfaced."
         ],
         "number": 43
       },
@@ -2961,13 +2945,13 @@
         "theme": "Governance",
         "impact": "Uncontrolled versions undermine baseline integrity.",
         "id": "cost-control-budget-version-control",
-        "answerDimension": "authorization",
+        "answerDimension": "formality",
         "answers": [
-          "“Budget Version Control” can proceed without the required authorization.",
-          "The required authorization for “Budget Version Control” is obtained only in selected cases.",
-          "The required authorization for “Budget Version Control” is obtained for most applicable cases.",
-          "“Budget Version Control” does not proceed without the required authorization, except through documented approved exceptions.",
-          "“Budget Version Control” is consistently prevented from proceeding whenever the required authorization is missing."
+          "Budget files are saved with names like \"final\" and \"final revised\"; which one is the approved baseline is settled by asking around.",
+          "Versions are distinguished by date in the filename, but no register says which version was approved, or by whom.",
+          "A version register records each approved budget, but the files remain editable and changes between versions are not always logged.",
+          "Every budget version carries a unique identifier, a recorded approver and controlled access; changes create a new version rather than editing the old.",
+          "The approved baseline cannot be altered — superseded versions are retained, and any change is traceable to its approval and access history."
         ],
         "number": 44
       },
@@ -2983,11 +2967,11 @@
         "id": "cost-control-contingency-governance",
         "answerDimension": "authorization",
         "answers": [
-          "“Contingency Governance” can proceed without the required authorization.",
-          "The required authorization for “Contingency Governance” is obtained only in selected cases.",
-          "The required authorization for “Contingency Governance” is obtained for most applicable cases.",
-          "“Contingency Governance” does not proceed without the required authorization, except through documented approved exceptions.",
-          "“Contingency Governance” is consistently prevented from proceeding whenever the required authorization is missing."
+          "Contingency is drawn down as costs arise; the remaining balance is discovered at the next report rather than approved before use.",
+          "Large contingency releases are approved; smaller draws are absorbed into the forecast without a decision.",
+          "Release conditions are defined and usually followed, but approval is sought after the cost has already been committed.",
+          "No contingency is released without approval against the defined conditions, with the release, its trigger and the remaining balance recorded.",
+          "Contingency cannot move without its approval; the register reconciles to the forecast at all times, and unused balance is formally released at closure."
         ],
         "number": 45
       },
@@ -3001,13 +2985,13 @@
         "theme": "Commercial",
         "impact": "Late budget checks allow unaffordable requests to progress.",
         "id": "cost-control-purchase-request-budget-check",
-        "answerDimension": "authorization",
+        "answerDimension": "timeliness",
         "answers": [
-          "“Purchase Request Budget Check” can proceed without the required authorization.",
-          "The required authorization for “Purchase Request Budget Check” is obtained only in selected cases.",
-          "The required authorization for “Purchase Request Budget Check” is obtained for most applicable cases.",
-          "“Purchase Request Budget Check” does not proceed without the required authorization, except through documented approved exceptions.",
-          "“Purchase Request Budget Check” is consistently prevented from proceeding whenever the required authorization is missing."
+          "Purchase requests go through approval first and meet the budget check at PO stage, by which time the requester expects it to proceed.",
+          "Budget is checked before approval only for high-value requests; the rest are checked after the workflow has started.",
+          "Most requests are budget-checked before entering approval, but urgent items are allowed to start and be checked in parallel.",
+          "Every purchase request is validated against available budget before it enters the approval workflow; exceptions are documented and approved.",
+          "The workflow cannot start without a passed budget check; requests without budget are returned at source and never reach approvers."
         ],
         "number": 46
       },
@@ -3023,11 +3007,11 @@
         "id": "cost-control-commitment-coding",
         "answerDimension": "accuracy",
         "answers": [
-          "The result of “Commitment Coding” is not reliably checked against its approved source or basis.",
-          "The result of “Commitment Coding” is checked only for selected or high-risk cases.",
-          "The result of “Commitment Coding” is checked against its approved source for most applicable cases.",
-          "The result of “Commitment Coding” is checked for all applicable cases, with identified differences resolved or documented.",
-          "“Commitment Coding” consistently produces reliable results with no unresolved material differences."
+          "Commitments are coded to whatever task and expenditure code looks close enough; miscoding surfaces when a budget line reports an impossible balance.",
+          "Coding is checked when a variance or a rejected transaction points to an error.",
+          "Most PO and subcontract coding is checked against the budget structure before posting, but corrections are made silently in ERP.",
+          "Every commitment is verified against the correct project task, resource and expenditure code before posting, with corrections logged.",
+          "Commitment coding is right first time; available budget and forecast can be read per task without adjusting for known miscoding."
         ],
         "number": 47
       },
@@ -3041,13 +3025,13 @@
         "theme": "Finance",
         "impact": "Unreconciled commitments create incomplete cost exposure.",
         "id": "cost-control-commitment-reconciliation",
-        "answerDimension": "authorization",
+        "answerDimension": "consistency",
         "answers": [
-          "“Commitment Reconciliation” can proceed without the required authorization.",
-          "The required authorization for “Commitment Reconciliation” is obtained only in selected cases.",
-          "The required authorization for “Commitment Reconciliation” is obtained for most applicable cases.",
-          "“Commitment Reconciliation” does not proceed without the required authorization, except through documented approved exceptions.",
-          "“Commitment Reconciliation” is consistently prevented from proceeding whenever the required authorization is missing."
+          "ERP commitment balances are taken as given; no one compares them against the approved POs and subcontracts behind them.",
+          "Commitments are reconciled when a project shows an obviously wrong committed value, or when an open order blocks a payment.",
+          "Reconciliation is done at quarter or year end, so open-order errors sit inside reported exposure for months.",
+          "ERP commitments are reconciled to approved POs and subcontracts every reporting cycle, with corrections evidenced.",
+          "Reconciliation runs every cycle as standard work; open-order differences are cleared before reporting and none carry forward."
         ],
         "number": 48
       },
@@ -3061,13 +3045,13 @@
         "theme": "Finance",
         "impact": "Missing accruals overstate performance and weaken forecasts.",
         "id": "cost-control-accrual-completeness",
-        "answerDimension": "accuracy",
+        "answerDimension": "coverage",
         "answers": [
-          "The result of “Accrual Completeness” is not reliably checked against its approved source or basis.",
-          "The result of “Accrual Completeness” is checked only for selected or high-risk cases.",
-          "The result of “Accrual Completeness” is checked against its approved source for most applicable cases.",
-          "The result of “Accrual Completeness” is checked for all applicable cases, with identified differences resolved or documented.",
-          "“Accrual Completeness” consistently produces reliable results with no unresolved material differences."
+          "Cost is recognised when the invoice arrives; work done but not yet invoiced is simply absent from the period's reported cost.",
+          "Accruals are raised for large known items that someone remembers; smaller received goods and services are missed.",
+          "Accruals cover most received goods and subcontract work, but services, hire and site-consumed materials are inconsistently included.",
+          "All incurred but uninvoiced costs — goods received, subcontract progress, services and hire — are accrued in the correct period from receiving and confirmation records.",
+          "Every category of incurred cost is accrued each period; invoices arriving later match the accrual without material adjustment."
         ],
         "number": 49
       },
@@ -3081,13 +3065,13 @@
         "theme": "Reporting",
         "impact": "Unsupported explanations prevent effective corrective action.",
         "id": "cost-control-variance-root-cause",
-        "answerDimension": "coverage",
+        "answerDimension": "evidence",
         "answers": [
-          "The “Variance Root Cause” requirement does not cover all required cases.",
-          "The “Variance Root Cause” requirement covers only the highest-priority cases.",
-          "The “Variance Root Cause” requirement covers most applicable cases using defined selection criteria.",
-          "The “Variance Root Cause” requirement covers all applicable cases except documented exceptions.",
-          "The “Variance Root Cause” requirement covers every applicable case with no unresolved coverage gaps."
+          "Variances are explained with a phrase such as \"market conditions\" or \"site delays\", with nothing behind it that could be checked.",
+          "Explanations reference a specific event, but the supporting quantities, rates or correspondence are not kept with the register.",
+          "Root causes are documented in the variance register, but the supporting analysis stays with the preparer and is not retrievable later.",
+          "Every material variance carries a root cause with retrievable supporting analysis attached to the register entry.",
+          "Any variance explanation can be substantiated on request; management review tests the evidence, not just the wording."
         ],
         "number": 50
       },
@@ -3101,13 +3085,13 @@
         "theme": "Forecasting",
         "impact": "Hidden assumptions make forecasts difficult to challenge.",
         "id": "cost-control-forecast-assumptions",
-        "answerDimension": "accuracy",
+        "answerDimension": "ownership",
         "answers": [
-          "The result of “Forecast Assumptions” is not reliably checked against its approved source or basis.",
-          "The result of “Forecast Assumptions” is checked only for selected or high-risk cases.",
-          "The result of “Forecast Assumptions” is checked against its approved source for most applicable cases.",
-          "The result of “Forecast Assumptions” is checked for all applicable cases, with identified differences resolved or documented.",
-          "“Forecast Assumptions” consistently produces reliable results with no unresolved material differences."
+          "Forecast assumptions are held in the preparer's head; challenging a number means arguing with the person rather than the assumption.",
+          "Major assumptions are stated in the report narrative, but no one outside Cost Control has confirmed or accepted them.",
+          "Assumptions are listed in a log, but the owner is a function rather than a person and no one confirms them each cycle.",
+          "Each material assumption names the individual responsible for it, and that owner confirms or revises it every forecast cycle.",
+          "Assumption owners are accountable for their inputs; a forecast miss traces to a named assumption and its owner, and repeated misses are reviewed."
         ],
         "number": 51
       },
@@ -3121,13 +3105,13 @@
         "theme": "Forecasting",
         "impact": "Weak ETC methods produce unreliable final-cost forecasts.",
         "id": "cost-control-estimate-to-complete",
-        "answerDimension": "coverage",
+        "answerDimension": "accuracy",
         "answers": [
-          "The “Estimate to Complete” requirement does not cover all required cases.",
-          "The “Estimate to Complete” requirement covers only the highest-priority cases.",
-          "The “Estimate to Complete” requirement covers most applicable cases using defined selection criteria.",
-          "The “Estimate to Complete” requirement covers all applicable cases except documented exceptions.",
-          "The “Estimate to Complete” requirement covers every applicable case with no unresolved coverage gaps."
+          "ETC is calculated as budget minus actual, which assumes the remaining work will cost exactly what was originally allowed.",
+          "ETC is adjusted by a judgement percentage where the project is already known to be in trouble.",
+          "ETC is built from remaining quantities, but uses original tender rates and productivity rather than the rates actually being achieved.",
+          "ETC is built from current remaining scope using achieved rates and productivity, with known execution conditions applied.",
+          "The ETC basis is tested against actual performance each cycle; systematic differences between forecast and outturn are corrected in the method."
         ],
         "number": 52
       },
@@ -3143,11 +3127,11 @@
         "id": "cost-control-report-timeliness",
         "answerDimension": "timeliness",
         "answers": [
-          "The required timeframe for “Report Timeliness” is not consistently recognized or followed.",
-          "“Report Timeliness” is completed on time only for selected or urgent cases.",
-          "“Report Timeliness” is completed within the required timeframe for most applicable cases.",
-          "“Report Timeliness” meets the required timeframe for all applicable cases except documented exceptions.",
-          "“Report Timeliness” consistently meets the required timeframe with no unresolved overdue cases."
+          "Reports go out when the numbers are finally ready; there is no published issue date that management relies on.",
+          "The timetable is met when the month is straightforward; a late input or a difficult variance pushes issue by a week or more.",
+          "Most months meet the issue date, but approval is compressed at the end and reviewers sign off under time pressure.",
+          "Every report is issued within the defined timetable with full review completed; late cases are logged with their cause.",
+          "The issue date is met every month and management plans around it; late inputs are handled by exception without moving the date."
         ],
         "number": 53
       },
@@ -3161,13 +3145,13 @@
         "theme": "Change",
         "impact": "Unrecorded changes create hidden exposure.",
         "id": "cost-control-change-register-completeness",
-        "answerDimension": "traceability",
+        "answerDimension": "coverage",
         "answers": [
-          "A complete and retrievable record of “Change Register Completeness” is not maintained.",
-          "Records for “Change Register Completeness” exist for selected cases but are incomplete or difficult to retrieve.",
-          "Records for “Change Register Completeness” are complete and retrievable for most applicable cases.",
-          "Records for “Change Register Completeness” are complete, current, and retrievable for all applicable cases except documented exceptions.",
-          "Every applicable “Change Register Completeness” record is complete and can be traced without unresolved gaps."
+          "Changes are tracked in project correspondence and individual spreadsheets; with no single register, no one can say how many exist.",
+          "Formal variations are registered; instructions, site directives and scope creep are picked up only if they later become claims.",
+          "Most cost-impacting changes are registered, but changes originating outside Cost Control's line of sight arrive late or not at all.",
+          "Every change with a cost impact — variation, instruction, NCR, directive or scope change — is entered in the controlled register from its source notice.",
+          "The register is complete and reconciled against source notices; no cost-impacting change has been found that was not already registered."
         ],
         "number": 54
       },
@@ -3181,13 +3165,13 @@
         "theme": "Commercial",
         "impact": "Approved recovery that is not realized still erodes margin.",
         "id": "cost-control-change-recovery-tracking",
-        "answerDimension": "authorization",
+        "answerDimension": "ownership",
         "answers": [
-          "“Change Recovery Tracking” can proceed without the required authorization.",
-          "The required authorization for “Change Recovery Tracking” is obtained only in selected cases.",
-          "The required authorization for “Change Recovery Tracking” is obtained for most applicable cases.",
-          "“Change Recovery Tracking” does not proceed without the required authorization, except through documented approved exceptions.",
-          "“Change Recovery Tracking” is consistently prevented from proceeding whenever the required authorization is missing."
+          "Once a recovery is approved in principle it is treated as achieved; whether the money was ever invoiced or received is not checked.",
+          "Large recoveries are followed up by whoever raised them, usually only when the project comes under margin pressure.",
+          "Approved recoveries are listed with owners, but tracking stops at invoice submission rather than payment.",
+          "Every approved recovery has a named owner and is tracked to financial realization, with shortfalls against the approved value explained.",
+          "Recovery is owned through to cash; unrealised recoveries are written back to the forecast rather than left inflating it."
         ],
         "number": 55
       },
@@ -3201,13 +3185,13 @@
         "theme": "Data",
         "impact": "Poor master data causes systemic reporting errors.",
         "id": "cost-control-cost-master-data",
-        "answerDimension": "alignment",
+        "answerDimension": "formality",
         "answers": [
-          "“Cost Master Data” is performed separately from the related functions or information it depends on.",
-          "“Cost Master Data” is coordinated with related functions only for selected or urgent cases.",
-          "“Cost Master Data” is coordinated with the required functions and information for most applicable cases.",
-          "“Cost Master Data” is coordinated across all required functions, with differences identified and resolved.",
-          "“Cost Master Data” remains fully aligned across the required functions with no unresolved interface differences."
+          "Tasks, resources and codes are added directly in the system by whoever needs one, producing duplicates and unused entries.",
+          "New codes are requested by email or verbally; there is no naming or structure standard and no record of who approved them.",
+          "A master-data request process exists, but it is bypassed under time pressure and no one validates the resulting structure.",
+          "All master-data changes go through a controlled request with a named owner, defined naming rules, and validation before release.",
+          "Master data is governed as a controlled asset — changes are versioned and validated, and periodic reports confirm no orphaned or duplicate entries."
         ],
         "number": 56
       },
@@ -3223,11 +3207,11 @@
         "id": "cost-control-system-access-control",
         "answerDimension": "authorization",
         "answers": [
-          "“System Access Control” can proceed without the required authorization.",
-          "The required authorization for “System Access Control” is obtained only in selected cases.",
-          "The required authorization for “System Access Control” is obtained for most applicable cases.",
-          "“System Access Control” does not proceed without the required authorization, except through documented approved exceptions.",
-          "“System Access Control” is consistently prevented from proceeding whenever the required authorization is missing."
+          "Access is granted by copying an existing user's profile; several people can change budgets or approvals their role does not require.",
+          "Access requests are approved case by case, but rights are never removed when people change role or leave.",
+          "An access matrix defines the roles, but actual system rights have drifted from it and the two are never compared.",
+          "System access matches the approved role matrix for budgets, forecasts, commitments and approvals, with removals actioned on role change and leaving.",
+          "Access is reviewed on a defined cycle against the matrix; the last review found no excess rights, and every change requires documented approval."
         ],
         "number": 57
       },
@@ -3241,13 +3225,13 @@
         "theme": "Interfaces",
         "impact": "Unowned inputs create repeated reporting delays.",
         "id": "cost-control-input-accountability",
-        "answerDimension": "timeliness",
+        "answerDimension": "ownership",
         "answers": [
-          "The required timeframe for “Input Accountability” is not consistently recognized or followed.",
-          "“Input Accountability” is completed on time only for selected or urgent cases.",
-          "“Input Accountability” is completed within the required timeframe for most applicable cases.",
-          "“Input Accountability” meets the required timeframe for all applicable cases except documented exceptions.",
-          "“Input Accountability” consistently meets the required timeframe with no unresolved overdue cases."
+          "Cost Control chases each month's inputs individually, working out who to ask depending on who responded last time.",
+          "The main inputs have understood providers, but nothing is written down and cover during absence is arranged ad hoc.",
+          "A responsibility matrix lists input owners and due dates, but it is not maintained and several entries name people who have moved on.",
+          "Every monthly input has a named owner and due date in a current matrix, with submission tracked and non-delivery escalated.",
+          "Input owners deliver to their dates without chasing; missed inputs escalate automatically and repeat failures are addressed with the function."
         ],
         "number": 58
       },
@@ -3261,13 +3245,13 @@
         "theme": "Interfaces",
         "impact": "Uncontrolled exceptions reduce report reliability.",
         "id": "cost-control-cut-off-exception-control",
-        "answerDimension": "timeliness",
+        "answerDimension": "formality",
         "answers": [
-          "The required timeframe for “Cut-off Exception Control” is not consistently recognized or followed.",
-          "“Cut-off Exception Control” is completed on time only for selected or urgent cases.",
-          "“Cut-off Exception Control” is completed within the required timeframe for most applicable cases.",
-          "“Cut-off Exception Control” meets the required timeframe for all applicable cases except documented exceptions.",
-          "“Cut-off Exception Control” consistently meets the required timeframe with no unresolved overdue cases."
+          "Missing inputs are filled with last month's figure or an estimate, and the report does not show that anything was substituted.",
+          "The preparer knows which figures were provisional, but this is not written down and is lost once the report is issued.",
+          "Exceptions are noted in the report narrative, but there is no log and no defined treatment for provisional figures.",
+          "Every late or incomplete input is recorded in an exception log with an approved provisional treatment and a resolution date before issue.",
+          "Exceptions are controlled and closed — provisional figures are approved, tracked, and corrected in the following cycle with the impact stated."
         ],
         "number": 59
       },
@@ -3281,13 +3265,13 @@
         "theme": "Closure",
         "impact": "Unreconciled closure leaves inaccurate final performance.",
         "id": "cost-control-final-cost-reconciliation",
-        "answerDimension": "authorization",
+        "answerDimension": "accuracy",
         "answers": [
-          "“Final Cost Reconciliation” can proceed without the required authorization.",
-          "The required authorization for “Final Cost Reconciliation” is obtained only in selected cases.",
-          "The required authorization for “Final Cost Reconciliation” is obtained for most applicable cases.",
-          "“Final Cost Reconciliation” does not proceed without the required authorization, except through documented approved exceptions.",
-          "“Final Cost Reconciliation” is consistently prevented from proceeding whenever the required authorization is missing."
+          "The project is closed on its last actual transaction; the final cost is whatever the ledger happens to show at that point.",
+          "Actuals and budget are compared at closure, but open commitments and outstanding accruals are left to clear on their own.",
+          "Most closure reconciliations cover budget, actuals and commitments, but approved changes and accruals are reconciled inconsistently.",
+          "Final cost is reconciled across budget, commitments, actuals, accruals and approved changes before closure, with unresolved items logged and approved.",
+          "Closure cannot complete with an unreconciled element; the final cost is confirmed against all five and does not move after closure."
         ],
         "number": 60
       }
@@ -8782,7 +8766,11 @@
         <span class="chip">Domain ${pct(row.domainWeight, 1)}</span>
         <span class="chip">Question ${pct(row.questionWeight, 1)}</span>`;
       $("questionText").textContent = qn.text;
-      $("answerOptions").innerHTML = maturityScale.map(item => { const answerText = qn.answers[item.value - 1]; return `
+      const ladder = dimensionLadders[qn.answerDimension];
+      const ladderLabel = ladder
+        ? `<p class="answer-ladder"><strong>Rated on <span class="dim">${esc(qn.answerDimension)}</span>:</strong> ${esc(ladder)}</p>`
+        : "";
+      $("answerOptions").innerHTML = ladderLabel + maturityScale.map(item => { const answerText = qn.answers[item.value - 1]; return `
         <label class="answer ${Number(ans.level) === item.value ? "selected" : ""}">
           <input type="radio" name="maturity" value="${item.value}" ${Number(ans.level) === item.value ? "checked" : ""}>
           <span><span class="answer-title">${item.value}</span><span class="answer-desc">${esc(answerText)}</span></span>
@@ -9228,9 +9216,28 @@
       el.value = old;
     }
 
+    let storageBlocked = false;
+
+    function setStorageBlocked(blocked) {
+      if (storageBlocked === blocked) return;
+      storageBlocked = blocked;
+      const banner = $("storageWarning");
+      if (banner) banner.hidden = !blocked;
+    }
+
+    // Returns false instead of throwing: localStorage.setItem raises
+    // QuotaExceededError / SecurityError in private mode or when full, and an
+    // uncaught throw here kills the answer handler mid-click with no feedback.
     function saveSilent() {
       state.updatedAt = new Date().toISOString();
-      localStorage.setItem(storageKey(activeDepartmentId), JSON.stringify(state));
+      try {
+        localStorage.setItem(storageKey(activeDepartmentId), JSON.stringify(state));
+        setStorageBlocked(false);
+        return true;
+      } catch (error) {
+        setStorageBlocked(true);
+        return false;
+      }
     }
 
     function loadState() {
@@ -9654,7 +9661,12 @@
       state.settings.sidebarCollapsed = false;
       renderAll();
     });
-    $("saveBtn").addEventListener("click", () => { recordSnapshot(); saveSilent(); alert("Progress saved in this browser."); });
+    $("saveBtn").addEventListener("click", () => {
+      recordSnapshot();
+      alert(saveSilent()
+        ? "Progress saved in this browser."
+        : "Could not save — browser storage is unavailable or full. Export a backup JSON to avoid losing your work.");
+    });
     $("reportBtn").addEventListener("click", saveExecutiveBrief);
     $("execBriefBtn").addEventListener("click", saveExecutiveBrief);
     $("reportBtn2").addEventListener("click", saveReport);
@@ -9731,7 +9743,7 @@
 
     function renderDepartmentPortal() {
       const configs = Object.values(departmentConfigs);
-      const accents = ["#0031eb", "#6d4aff", "#008a83", "#d66a16", "#176bba"];
+      const accents = ["#336aea", "#0031eb", "#0b7d73", "#d97706", "#0031eb"];
       const summaries = configs.map(config => departmentSummary(config, readDepartmentState(config.id)));
       const totalAnswered = summaries.reduce((sum, item) => sum + item.answered, 0);
       const totalQuestions = summaries.reduce((sum, item) => sum + item.total, 0);
@@ -9739,12 +9751,14 @@
       $("portfolioCompletion").textContent = portfolioCompletion.toFixed(0) + "%";
       $("portfolioProgressBar").style.width = portfolioCompletion + "%";
       $("portfolioAnswered").textContent = totalAnswered + " / " + totalQuestions;
+      $("overviewInProgress").textContent = summaries.filter(item => item.answered > 0 && item.answered < item.total).length;
       $("departmentGrid").innerHTML = configs.map((config, index) => {
         const summary = summaries[index];
         const status = summary.answered === 0 ? "Not Started" : summary.answered === summary.total ? "Complete" : "In Progress";
+        const statusClass = summary.answered === 0 ? "notstarted" : summary.answered === summary.total ? "complete" : "progress";
         const savedText = summary.updatedAt ? "Saved " + new Date(summary.updatedAt).toLocaleDateString() : "No saved data";
         return `<button class="department-card" data-department="${config.id}" style="--department-accent:${accents[index]}">
-          <div class="department-card-top"><div class="department-heading"><span class="department-index">${String(index + 1).padStart(2,"0")}</span><div><h2>${esc(config.name)}</h2><small>60 control questions</small></div></div><span class="department-status ${status === "Complete" ? "complete" : ""}">${status}</span></div>
+          <div class="department-card-top"><div class="department-heading"><span class="department-index">${String(index + 1).padStart(2,"0")}</span><div><h2>${esc(config.name)}</h2><small>60 control questions</small></div></div><span class="department-status ${statusClass}">${status}</span></div>
           <div class="department-progress-label"><span>Assessment completion</span><strong>${summary.completion.toFixed(0)}%</strong></div>
           <div class="department-progress"><span style="width:${summary.completion}%"></span></div>
           <div class="department-card-footer"><span><strong class="department-answer-count">${summary.answered} / ${summary.total} questions answered</strong><small class="department-saved">${savedText}</small></span><span class="department-open">Open assessment →</span></div>
@@ -9859,7 +9873,24 @@
         try {
           const payload = JSON.parse(reader.result);
           if (!payload.states || typeof payload.states !== "object") throw new Error("Missing states");
-          Object.entries(payload.states).forEach(([id, saved]) => { if (departmentConfigs[id] && saved) localStorage.setItem(storageKey(id), JSON.stringify(saved)); });
+          const incoming = Object.keys(payload.states).filter(id => departmentConfigs[id] && payload.states[id]);
+          if (!incoming.length) throw new Error("No matching departments");
+
+          // Name what gets overwritten before doing it — this replaces saved
+          // answers across every department in the file and cannot be undone.
+          const atRisk = incoming
+            .map(id => ({ name: departmentConfigs[id].name, summary: departmentSummary(departmentConfigs[id], readDepartmentState(id)) }))
+            .filter(item => item.summary.answered > 0);
+          const message = "Restore will replace saved data for " + incoming.length + " department(s):\n"
+            + incoming.map(id => "• " + departmentConfigs[id].name).join("\n")
+            + (atRisk.length
+              ? "\n\nThis ERASES answers you already have in:\n"
+                + atRisk.map(item => "• " + item.name + " (" + item.summary.answered + " of " + item.summary.total + " answered)").join("\n")
+              : "")
+            + "\n\nThis cannot be undone. Continue?";
+          if (!confirm(message)) return;
+
+          incoming.forEach(id => localStorage.setItem(storageKey(id), JSON.stringify(payload.states[id])));
           renderDepartmentPortal();
           alert("All department data restored.");
         } catch (error) { alert("This is not a valid all-departments backup."); }
@@ -9871,7 +9902,12 @@
     $("exportAllCsvBtn").addEventListener("click", exportAllCsv);
     $("exportAllReportBtn").addEventListener("click", exportAllReport);
     $("loadAllJsonBtn").addEventListener("click", () => $("allJsonFile").click());
-    $("allJsonFile").addEventListener("change", event => event.target.files[0] && restoreAll(event.target.files[0]));
+    $("allJsonFile").addEventListener("change", event => {
+      const file = event.target.files[0];
+      // Reset so cancelling the confirm and re-picking the same file still fires.
+      event.target.value = "";
+      if (file) restoreAll(file);
+    });
     $("openOverviewBtn").addEventListener("click", openOverview);
     $("overviewBackBtn").addEventListener("click", closeOverview);
     const brandImg = document.getElementById("portalBrandImg");
