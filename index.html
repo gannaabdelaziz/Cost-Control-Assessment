@@ -1788,7 +1788,7 @@
               <label class="field">Notes / Evidence Comments
                 <textarea id="notesText" placeholder="Add current status, evidence location, exceptions, or management comments."></textarea>
               </label>
-              <div class="info-box">
+              <div class="info-box" id="processRefBox">
                 <strong>Process Reference</strong>
                 <span id="processRef"></span>
               </div>
@@ -8275,6 +8275,10 @@
     let state = null;
 
     function storageKey(departmentId) { return "madkourDepartmentAssessment:" + departmentId + ":v3"; }
+
+    // Placeholder written into the appended second-pass questions instead of a
+    // real SIPOC/procedure reference. Used to suppress the Process Reference box.
+    const GENERIC_PROCESS_REF = "Department control framework and approved operating procedures.";
     function createInitialState() {
       return {
         departmentId: activeDepartmentId,
@@ -8782,7 +8786,12 @@
       $("targetSelect").value = ans.target || state.settings.defaultTarget;
       $("evidenceSelect").value = ans.evidence;
       $("notesText").value = ans.notes;
-      $("processRef").textContent = qn.process;
+      // 70 questions across the five departments carry a boilerplate process
+      // string instead of a real procedure reference. Showing it is worse than
+      // showing nothing, so hide the box until those references are filled in.
+      const genericProcess = (qn.process || "").trim() === GENERIC_PROCESS_REF;
+      $("processRefBox").hidden = genericProcess;
+      $("processRef").textContent = genericProcess ? "" : qn.process;
       $("evidenceExpected").textContent = qn.evidence;
       const questionAchievement = row.level ? clamp(row.achievementRatio * 100, 0, 100) : 0;
       $("questionScoreBar").style.width = `${questionAchievement}%`;
@@ -9743,7 +9752,11 @@
 
     function renderDepartmentPortal() {
       const configs = Object.values(departmentConfigs);
-      const accents = ["#336aea", "#0031eb", "#0b7d73", "#d97706", "#0031eb"];
+      // Accents must clear 4.5:1 twice: as the "Open assessment" link on white,
+      // and as the index badge on its own color-mix(accent 10%, white) tint —
+      // the tint is the tighter constraint. Measured badge ratios: 4.74 / 6.66 /
+      // 4.78 / 4.55 / 6.66. Was #336aea (4.19), #0b7d73 (4.38), #d97706 (3.19).
+      const accents = ["#2f62d8", "#0031eb", "#0a766c", "#a8570a", "#0031eb"];
       const summaries = configs.map(config => departmentSummary(config, readDepartmentState(config.id)));
       const totalAnswered = summaries.reduce((sum, item) => sum + item.answered, 0);
       const totalQuestions = summaries.reduce((sum, item) => sum + item.total, 0);
