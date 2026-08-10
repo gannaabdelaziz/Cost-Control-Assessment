@@ -8274,6 +8274,27 @@
     let questions = [];
     let state = null;
 
+    // Each assessment area is split across two authoring passes, so walking the
+    // raw array visits every area twice (9 areas -> 18 runs in Cost Control).
+    // Reorder the WALK only: displayOrder holds indices into `questions`, sorted
+    // by declared area. The array itself must not be reordered — saved state
+    // (questionWeights, answers[], state.current) is keyed by array index.
+    let displayOrder = [];
+
+    function buildDisplayOrder() {
+      const rank = domainId => {
+        const i = domains.findIndex(d => d.id === domainId);
+        return i === -1 ? Number.MAX_SAFE_INTEGER : i;   // unknown areas sort last
+      };
+      return questions
+        .map((q, i) => i)
+        .sort((a, b) => rank(questions[a].domain) - rank(questions[b].domain) || a - b);
+    }
+
+    // Position of a question index within the walk, and the inverse.
+    function displayPos(index) { const p = displayOrder.indexOf(index); return p === -1 ? 0 : p; }
+    function questionAtDisplay(pos) { return displayOrder[clamp(pos, 0, displayOrder.length - 1)]; }
+
     function storageKey(departmentId) { return "madkourDepartmentAssessment:" + departmentId + ":v3"; }
 
     // Placeholder written into the appended second-pass questions instead of a
@@ -8764,7 +8785,7 @@
         renderAll();
       }));
       $("questionMeta").innerHTML = `
-        <span class="chip">Question ${state.current + 1} of ${questions.length}</span>
+        <span class="chip">Question ${displayPos(state.current) + 1} of ${questions.length}</span>
         <span class="chip">${esc(row.domainName)}</span>
         <span class="chip">${esc(qn.category)}</span>
         <span class="chip">Domain ${pct(row.domainWeight, 1)}</span>
@@ -8811,8 +8832,8 @@
           <tr><td>Severity</td><td>${tag(row.severity)}</td></tr>
           <tr><td>Weighted Gap</td><td>${pct(row.weightedGap, 2)}</td></tr>
         </tbody></table>` : `<div class="empty">Select a maturity level to calculate the gap.</div>`;
-      $("prevQuestion").disabled = state.current === 0;
-      $("nextQuestion").textContent = state.current === questions.length - 1 ? "Go to Gaps" : "Next";
+      $("prevQuestion").disabled = displayPos(state.current) === 0;
+      $("nextQuestion").textContent = displayPos(state.current) === displayOrder.length - 1 ? "Go to Gaps" : "Next";
     }
 
     function renderGapAnalysis() {
@@ -9657,9 +9678,13 @@
     $("targetSelect").addEventListener("change", e => { state.answers[state.current].target = Number(e.target.value); renderAll(); });
     $("evidenceSelect").addEventListener("change", e => { state.answers[state.current].evidence = e.target.value; renderAll(); });
     $("notesText").addEventListener("input", e => { state.answers[state.current].notes = e.target.value; saveSilent(); });
-    $("prevQuestion").addEventListener("click", () => { if (state.current > 0) { state.current -= 1; renderAll(); } });
+    $("prevQuestion").addEventListener("click", () => {
+      const pos = displayPos(state.current);
+      if (pos > 0) { state.current = questionAtDisplay(pos - 1); renderAll(); }
+    });
     $("nextQuestion").addEventListener("click", () => {
-      if (state.current < questions.length - 1) { state.current += 1; renderAll(); }
+      const pos = displayPos(state.current);
+      if (pos < displayOrder.length - 1) { state.current = questionAtDisplay(pos + 1); renderAll(); }
       else { document.querySelector("[data-view='gaps']").click(); }
     });
     $("sidebarToggle").addEventListener("click", () => {
@@ -9821,6 +9846,7 @@
       const config = departmentConfigs[departmentId];
       domains = config.domains;
       questions = config.questions;
+      displayOrder = buildDisplayOrder();
       state = createInitialState();
       loadState();
       $("sidebarDepartmentName").textContent = config.name + " Department";
